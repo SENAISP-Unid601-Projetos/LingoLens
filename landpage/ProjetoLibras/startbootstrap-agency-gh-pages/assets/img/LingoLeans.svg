@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="200" viewBox="0 0 1600 200" preserveAspectRatio="xMidYMid meet">
+  
+
+  <!-- Balão de conversa amarelo -->
+  <g transform="translate(250, 40)">
+    <rect x="0" y="0" width="150" height="90" rx="15" ry="15" fill="#fed136"/>
+    <polygon points="130,70 80,80 140,125" fill="#fed136"/>
+  </g>
+
+  <!-- Texto LingoLeans preenchendo horizontalmente -->
+  <text x="400" y="150" font-family="Arial, sans-serif" font-size="200" fill="#fed136" font-weight="bold">
+    LingoLeans
+  </text>
+</svg>
