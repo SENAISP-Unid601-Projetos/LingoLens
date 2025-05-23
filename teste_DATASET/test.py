@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Caminho para o dataset
-caminho_dataset = r'C:\Users\Aluno\Desktop\archive'
+caminho_dataset = r'C:\Users\Aluno\LingoLens\teste_DATASET'
 
 # Configurações
 img_height, img_width = 128, 128
