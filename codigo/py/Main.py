@@ -81,7 +81,7 @@ class GestureRecognizer:
         self.error_message_timer = 0
         self.error_message_duration = 90  # 3 segundos a 30 FPS
         
-        # 🔧 MOD: Tela 15.6 - Exibir resolução atual
+        # MOD: Tela 15.6 - Exibir resolução atual
         self.current_resolution = (0, 0)
         
         self.init_db()
@@ -268,7 +268,7 @@ class GestureRecognizer:
 
     def calculate_ui_scale(self, screen_width, screen_height):
         """Calcula a escala da UI com base na resolução da tela."""
-        # 🔧 MOD: Tela 15.6 - Ajustar escala para resoluções comuns (1366x768, 1920x1080)
+        #  MOD: Tela 15.6 - Ajustar escala para resoluções comuns (1366x768, 1920x1080)
         base_width = 1366  # Otimizado para HD, comum em 15,6"
         scale = screen_width / base_width
         # Ajustar para Full HD (1920x1080) ou resoluções menores
@@ -278,17 +278,17 @@ class GestureRecognizer:
 
     def draw_ui_elements(self, image, screen_width, screen_height):
         """Desenha elementos da interface do usuário otimizados para tela de 15,6 polegadas."""
-        # 🔧 MOD: Tela 15.6 - Passar altura para ui_scale
+        #  MOD: Tela 15.6 - Passar altura para ui_scale
         self.ui_scale = self.calculate_ui_scale(screen_width, screen_height)
         height, width = image.shape[:2]
 
-        # 🔧 MOD: Tela 15.6 - Seções otimizadas
+        #  MOD: Tela 15.6 - Seções otimizadas
         top_bar_height = int(50 * self.ui_scale)
         bottom_bar_height = int(60 * self.ui_scale)
         left_panel_width = int(width * 0.25)  # Reduzido para evitar sobreposição
         right_panel_width = int(width * 0.25)
 
-        # 🔧 MOD: Tela 15.6 - Barra superior (status)
+        #  MOD: Tela 15.6 - Barra superior (status)
         cv2.rectangle(image, (0, 0), (width, top_bar_height), (30, 30, 30), -1)
         status_text = f'Modo: {"Treino" if self.training_mode else "Reconhecimento"} | '
         status_text += f'Entrada: {"Número" if self.number_mode else "Letra"}'
@@ -297,14 +297,14 @@ class GestureRecognizer:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9 * self.ui_scale,
                     (255, 255, 255), int(2 * self.ui_scale), lineType=cv2.LINE_AA)
 
-        # 🔧 MOD: Tela 15.6 - Indicador de resolução
+        #  MOD: Tela 15.6 - Indicador de resolução
         res_text = f"Res: {self.current_resolution[0]}x{self.current_resolution[1]}"
         cv2.putText(image, res_text,
                     (width - int(150 * self.ui_scale), int(35 * self.ui_scale)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7 * self.ui_scale,
                     (200, 200, 200), int(2 * self.ui_scale), lineType=cv2.LINE_AA)
 
-        # 🔧 MOD: Tela 15.6 - Palavra formada (centro superior)
+        #  MOD: Tela 15.6 - Palavra formada (centro superior)
         cv2.rectangle(image, (width//2 - int(150 * self.ui_scale), top_bar_height),
                       (width//2 + int(150 * self.ui_scale), top_bar_height + int(60 * self.ui_scale)),
                       (50, 50, 50, 200), -1)
@@ -313,7 +313,7 @@ class GestureRecognizer:
                     cv2.FONT_HERSHEY_SIMPLEX, 1.2 * self.ui_scale,
                     (255, 255, 255), int(3 * self.ui_scale), lineType=cv2.LINE_AA)
 
-        # 🔧 MOD: Tela 15.6 - Painel inferior (instruções compactas)
+        #  MOD: Tela 15.6 - Painel inferior (instruções compactas)
         cv2.rectangle(image, (0, height - bottom_bar_height), (width, height), (30, 30, 30), -1)
         instructions = "Q:Sair C:Limpar N:Num/Letra T:Treino S:Gesto E:Exportar H:Ajuda"
         cv2.putText(image, instructions,
@@ -321,7 +321,7 @@ class GestureRecognizer:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7 * self.ui_scale,
                     (200, 200, 200), int(2 * self.ui_scale), lineType=cv2.LINE_AA)
 
-        # 🔧 MOD: Tela 15.6 - Retângulo de foco menor
+        #  MOD: Tela 15.6 - Retângulo de foco menor
         focus_size = int(min(width, height) * 0.35)  # Reduzido para telas menores
         focus_x = (width - focus_size) // 2
         focus_y = (height - focus_size) // 2
@@ -332,7 +332,7 @@ class GestureRecognizer:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6 * self.ui_scale,
                     (255, 255, 255), int(2 * self.ui_scale), lineType=cv2.LINE_AA)
 
-        # 🔧 MOD: Tela 15.6 - Barra de progresso para cooldown (maior)
+        #  MOD: Tela 15.6 - Barra de progresso para cooldown (maior)
         if self.cooldown_counter > 0:
             bar_width = int(150 * self.ui_scale)
             bar_height = int(15 * self.ui_scale)
@@ -345,7 +345,7 @@ class GestureRecognizer:
                           (int(10 * self.ui_scale) + filled_width, int(80 * self.ui_scale) + bar_height),
                           (255, 165, 0), -1)
 
-        # 🔧 MOD: Tela 15.6 - Menu de ajuda compacto
+        #  MOD: Tela 15.6 - Menu de ajuda compacto
         if self.show_help:
             overlay = image.copy()
             cv2.rectangle(overlay, (0, 0), (width, height), (0, 0, 0), -1)
@@ -368,7 +368,7 @@ class GestureRecognizer:
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7 * self.ui_scale,
                             (255, 255, 255), int(2 * self.ui_scale), lineType=cv2.LINE_AA)
 
-        # 🔧 MOD: Tela 15.6 - Mensagem de erro temporária
+        #  MOD: Tela 15.6 - Mensagem de erro temporária
         if self.error_message_timer > 0:
             cv2.rectangle(image, (0, height - bottom_bar_height - int(40 * self.ui_scale)),
                           (width, height - bottom_bar_height), (200, 50, 50), -1)
@@ -568,7 +568,7 @@ class GestureRecognizer:
                 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 results = self.hands.process(image_rgb)
 
-                # 🔧 MOD: Tela 15.6 - Obter resolução atual
+                #  MOD: Tela 15.6 - Obter resolução atual
                 _, _, screen_width, screen_height = cv2.getWindowImageRect('Reconhecimento de Gestos')
                 self.current_resolution = (screen_width, screen_height)
 
@@ -607,7 +607,7 @@ if __name__ == "__main__":
     app = GestureRecognizer()
     app.run()
 
-# 🔧 Seção de Testes Unitários
+#  Seção de Testes Unitários
 import unittest
 
 class TestGestureRecognizer(unittest.TestCase):
