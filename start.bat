@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: Configurações
-set "SCRIPT_NAME=hand_finger_counter.py"
+set "SCRIPT_NAME=Main.py"
 set "SCRIPT_PATH=codigo\py\%SCRIPT_NAME%"
 set "SCRIPT_DIR=%~dp0"
 set "FULL_SCRIPT_PATH=%SCRIPT_DIR%%SCRIPT_PATH%"
