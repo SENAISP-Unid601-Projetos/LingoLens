@@ -20,23 +20,23 @@ echo  INICIANDO TRADUTOR DE LIBRAS
 echo ===========================
 echo.
 
-echo Verificando dependências...
+echo Verificando dependencias...
 echo.
 
-:: Verificar se o Python está instalado
+:: Verificar se o Python esta instalado
 where python >nul 2>&1
 if %errorlevel% neq 0 (
-    echo %RED%Erro: Python não está instalado ou não está no PATH.%RESET%
+    echo %RED%Erro: Python nao esta instalado ou nao esta no PATH.%RESET%
     echo Por favor, instale Python antes de executar este script.
     pause
     exit /b 1
 )
 
-:: Verificar e instalar pacotes necessários
+:: Verificar e instalar pacotes necessarios
 for %%P in (%REQUIRED_PACKAGES%) do (
     pip show %%P >nul 2>&1
     if !errorlevel! equ 0 (
-        echo %GREEN%%%P já está instalado.%RESET%
+        echo %GREEN%%%P ja esta instalado.%RESET%
     ) else (
         echo Instalando %%P...
         pip install %%P --quiet
@@ -48,7 +48,7 @@ for %%P in (%REQUIRED_PACKAGES%) do (
 )
 
 if defined INSTALL_ERROR (
-    echo %RED%Erro: Falha ao instalar algumas dependências.%RESET%
+    echo %RED%Erro: Falha ao instalar algumas dependencias.%RESET%
     pause
     exit /b 1
 )
@@ -61,8 +61,8 @@ echo.
 
 :: Verificar se o arquivo principal existe
 if not exist "%SCRIPT_PATH%" (
-    echo %RED%Erro: Arquivo %SCRIPT_PATH% não encontrado.%RESET%
-    echo Certifique-se de que a estrutura de pastas está correta.
+    echo %RED%Erro: Arquivo %SCRIPT_PATH% nao encontrado.%RESET%
+    echo Certifique-se de que a estrutura de pastas esta correta.
     pause
     exit /b 1
 )
@@ -73,7 +73,7 @@ python "%SCRIPT_PATH%"
 
 if %errorlevel% neq 0 (
     echo %RED%Erro: O script falhou com código de erro %errorlevel%.%RESET%
-    echo Verifique se todos os requisitos estão instalados corretamente.
+    echo Verifique se todos os requisitos estao instalados corretamente.
 )
 
 pause
