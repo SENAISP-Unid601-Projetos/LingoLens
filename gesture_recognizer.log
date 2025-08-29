@@ -188,3 +188,1304 @@
 2025-08-23 00:31:33,953 - INFO - Modelo KNN inicializado
 2025-08-23 00:31:36,871 - INFO - Resolução da câmera definida para 640x480
 2025-08-23 00:31:37,713 - INFO - Recursos liberados
+2025-08-29 14:01:49,507 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:01:49,523 - INFO - Banco de dados inicializado
+2025-08-29 14:01:49,523 - INFO - Carregando dados do banco de dados
+2025-08-29 14:01:50,322 - INFO - Modelo KNN inicializado
+2025-08-29 14:01:53,977 - INFO - Resolução da câmera definida para 640x480
+2025-08-29 14:03:01,130 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:03:10,871 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 14:03:13,523 - INFO - Recursos liberados
+2025-08-29 14:03:13,524 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:03:13,529 - INFO - Banco de dados inicializado
+2025-08-29 14:03:13,529 - INFO - Carregando dados do banco de dados
+2025-08-29 14:03:13,643 - INFO - Modelo KNN inicializado
+2025-08-29 14:03:17,014 - INFO - Resolução da câmera definida para 640x480
+2025-08-29 14:03:17,832 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:03:17,847 - INFO - 2 gestos exportados para test_export_003.json
+2025-08-29 14:03:17,864 - INFO - Recursos liberados
+2025-08-29 14:03:17,864 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:03:17,882 - INFO - Banco de dados inicializado
+2025-08-29 14:03:17,882 - INFO - Carregando dados do banco de dados
+2025-08-29 14:03:17,980 - INFO - Modelo KNN inicializado
+2025-08-29 14:03:21,064 - INFO - Resolução da câmera definida para 640x480
+2025-08-29 14:03:22,583 - INFO - Recursos liberados
+2025-08-29 14:08:42,943 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:08:42,958 - INFO - Banco de dados inicializado
+2025-08-29 14:08:42,958 - INFO - Carregando dados do banco de dados
+2025-08-29 14:08:43,160 - INFO - Modelo KNN inicializado
+2025-08-29 14:08:46,910 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:08:49,521 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:09:30,068 - INFO - Novo gesto criado: E
+2025-08-29 14:10:04,112 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 14:10:04,112 - INFO - Modelo treinado e salvo
+2025-08-29 14:10:04,141 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:10:07,531 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:10:09,104 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:10:10,217 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:10:11,035 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:10:14,702 - INFO - Tentando exportar gestos para gestures_export.json
+2025-08-29 14:10:15,268 - INFO - 6033 gestos exportados para gestures_export_001.json
+2025-08-29 14:10:53,370 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:10:56,170 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:11:01,187 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:11:03,055 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:12:34,295 - INFO - Gesto reconhecido: G (100.0%)
+2025-08-29 14:12:35,890 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:12:37,491 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:12:43,993 - INFO - Gesto reconhecido: G (100.0%)
+2025-08-29 14:12:45,555 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 14:12:51,927 - INFO - Gesto reconhecido: G (100.0%)
+2025-08-29 14:12:56,981 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:13:19,009 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:13:43,879 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:15:04,008 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:15:04,008 - INFO - Banco de dados inicializado
+2025-08-29 14:15:04,008 - INFO - Carregando dados do banco de dados
+2025-08-29 14:15:04,218 - INFO - Modelo KNN inicializado
+2025-08-29 14:15:07,155 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:15:10,708 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:15:18,117 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:15:19,119 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:15:30,228 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:15:33,316 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:16:20,472 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:16:24,021 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:16:37,458 - INFO - Novo gesto criado: S
+2025-08-29 14:17:30,051 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 14:17:30,051 - INFO - Modelo treinado e salvo
+2025-08-29 14:17:30,075 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:17:39,266 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:17:41,914 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:17:47,691 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 14:17:47,691 - INFO - Modelo treinado e salvo
+2025-08-29 14:17:53,311 - INFO - Novo gesto criado: A
+2025-08-29 14:18:34,577 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 14:18:34,577 - INFO - Modelo treinado e salvo
+2025-08-29 14:18:35,955 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:18:36,919 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:18:39,088 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:18:39,998 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:18:42,839 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:18:45,531 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:18:47,838 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:18:50,715 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:18:51,603 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:18:52,865 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:18:53,727 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:18:54,597 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:18:57,045 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:00,104 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:01,428 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:02,626 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:03,770 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:04,679 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:06,146 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:07,258 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:08,619 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:09,517 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:10,961 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:13,102 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:13,988 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:19,141 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:20,702 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:21,716 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:24,394 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:25,357 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:29,100 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:30,202 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:19:31,101 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:31,993 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:34,164 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:52,807 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:19:54,526 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:19:59,006 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:20:01,567 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:20:06,014 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:20:08,108 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:20:08,982 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:20:10,922 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:21:01,082 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:21:03,615 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:21:19,752 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:21:20,763 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:21:21,705 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:21:22,882 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:21:23,651 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:536: error: (-27:Null pointer) NULL window: 'Reconhecimento de Gestos' in function 'cvGetWindowRect_W32'
+
+2025-08-29 14:21:23,935 - INFO - Recursos liberados
+2025-08-29 14:21:23,940 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:21:23,940 - INFO - Banco de dados inicializado
+2025-08-29 14:21:23,940 - INFO - Carregando dados do banco de dados
+2025-08-29 14:21:24,124 - INFO - Modelo KNN inicializado
+2025-08-29 14:21:26,941 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:21:27,824 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:21:27,824 - INFO - 2 gestos exportados para test_export.json
+2025-08-29 14:21:27,839 - INFO - Recursos liberados
+2025-08-29 14:21:27,855 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:21:27,855 - INFO - Banco de dados inicializado
+2025-08-29 14:21:27,855 - INFO - Carregando dados do banco de dados
+2025-08-29 14:21:28,028 - INFO - Modelo KNN inicializado
+2025-08-29 14:21:43,420 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:21:43,436 - INFO - Banco de dados inicializado
+2025-08-29 14:21:43,436 - INFO - Carregando dados do banco de dados
+2025-08-29 14:21:43,681 - INFO - Modelo KNN inicializado
+2025-08-29 14:21:46,566 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:21:49,263 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:21:51,219 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:21:53,060 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:21:53,931 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:21:58,701 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:21:59,576 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:22:00,458 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:22:04,743 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:22:05,659 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:22:06,543 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:22:07,461 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:22:08,678 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:22:09,579 - INFO - Gesto reconhecido: S (100.0%)
+2025-08-29 14:22:14,718 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 14:22:15,619 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:22:21,196 - INFO - Gesto reconhecido: F (100.0%)
+2025-08-29 14:22:22,110 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4211: error: (-215:Assertion failed) inv_scale_x > 0 in function 'cv::resize'
+
+2025-08-29 14:22:22,391 - INFO - Recursos liberados
+2025-08-29 14:22:22,391 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:22:22,391 - INFO - Banco de dados inicializado
+2025-08-29 14:22:22,391 - INFO - Carregando dados do banco de dados
+2025-08-29 14:22:22,559 - INFO - Modelo KNN inicializado
+2025-08-29 14:22:25,463 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:22:26,343 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:22:26,343 - INFO - 2 gestos exportados para test_export.json
+2025-08-29 14:22:26,359 - INFO - Recursos liberados
+2025-08-29 14:22:26,359 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:22:26,374 - INFO - Banco de dados inicializado
+2025-08-29 14:22:26,374 - INFO - Carregando dados do banco de dados
+2025-08-29 14:22:26,548 - INFO - Modelo KNN inicializado
+2025-08-29 14:22:31,513 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:22:33,133 - INFO - Recursos liberados
+2025-08-29 14:22:52,922 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:22:52,924 - INFO - Banco de dados inicializado
+2025-08-29 14:22:52,924 - INFO - Carregando dados do banco de dados
+2025-08-29 14:22:55,743 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:22:59,803 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4211: error: (-215:Assertion failed) inv_scale_x > 0 in function 'cv::resize'
+
+2025-08-29 14:23:00,104 - INFO - Recursos liberados
+2025-08-29 14:23:00,104 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:23:00,109 - INFO - Banco de dados inicializado
+2025-08-29 14:23:00,109 - INFO - Carregando dados do banco de dados
+2025-08-29 14:23:03,001 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:23:03,923 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:23:03,923 - INFO - 2 gestos exportados para test_export.json
+2025-08-29 14:23:03,955 - INFO - Recursos liberados
+2025-08-29 14:23:03,955 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:23:03,955 - INFO - Banco de dados inicializado
+2025-08-29 14:23:03,955 - INFO - Carregando dados do banco de dados
+2025-08-29 14:23:07,485 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:23:09,318 - INFO - Recursos liberados
+2025-08-29 14:23:24,471 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:23:24,477 - INFO - Banco de dados inicializado
+2025-08-29 14:23:24,477 - INFO - Carregando dados do banco de dados
+2025-08-29 14:23:27,416 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:23:49,059 - INFO - Novo gesto criado: A
+2025-08-29 14:26:11,343 - INFO - Tentando exportar gestos para gestures_export.json
+2025-08-29 14:26:11,453 - INFO - 1150 gestos exportados para gestures_export.json
+2025-08-29 14:27:19,367 - INFO - Tentando exportar gestos para gestures_export.json
+2025-08-29 14:27:19,477 - INFO - 1231 gestos exportados para gestures_export_001.json
+2025-08-29 14:28:13,952 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:536: error: (-27:Null pointer) NULL window: 'Reconhecimento de Gestos' in function 'cvGetWindowRect_W32'
+
+2025-08-29 14:28:14,247 - INFO - Recursos liberados
+2025-08-29 14:28:14,250 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:28:14,258 - INFO - Banco de dados inicializado
+2025-08-29 14:28:14,258 - INFO - Carregando dados do banco de dados
+2025-08-29 14:28:17,454 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:28:18,596 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:28:18,597 - INFO - 2 gestos exportados para test_export_001.json
+2025-08-29 14:28:18,625 - INFO - Recursos liberados
+2025-08-29 14:28:18,625 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:28:18,629 - INFO - Banco de dados inicializado
+2025-08-29 14:28:18,630 - INFO - Carregando dados do banco de dados
+2025-08-29 14:28:21,552 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:28:22,483 - INFO - Recursos liberados
+2025-08-29 14:31:30,414 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:31:30,419 - INFO - Banco de dados inicializado
+2025-08-29 14:31:30,419 - INFO - Carregando dados do banco de dados
+2025-08-29 14:31:33,420 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:31:49,140 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:31:49,140 - INFO - Banco de dados inicializado
+2025-08-29 14:31:49,140 - INFO - Carregando dados do banco de dados
+2025-08-29 14:31:52,058 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:32:42,499 - INFO - Modo de treinamento ativado
+2025-08-29 14:32:46,026 - INFO - Novo gesto criado: A
+2025-08-29 14:33:35,148 - INFO - Modo de treinamento desativado e gravação parada
+2025-08-29 14:33:40,673 - INFO - Modo de treinamento ativado
+2025-08-29 14:33:43,109 - INFO - Modo de treinamento desativado e gravação parada
+2025-08-29 14:33:47,956 - INFO - Tentando exportar gestos para gestures_export.json
+2025-08-29 14:33:48,050 - INFO - 1139 gestos exportados para gestures_export.json
+2025-08-29 14:35:04,786 - INFO - Tentando exportar gestos para teste.json
+2025-08-29 14:35:04,896 - INFO - 1139 gestos exportados para teste.json
+2025-08-29 14:35:10,773 - INFO - Modo de treinamento ativado
+2025-08-29 14:35:12,055 - INFO - Modo de treinamento desativado e gravação parada
+2025-08-29 14:35:15,043 - INFO - Recursos liberados
+2025-08-29 14:35:15,053 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:35:15,054 - INFO - Banco de dados inicializado
+2025-08-29 14:35:15,054 - INFO - Carregando dados do banco de dados
+2025-08-29 14:35:17,926 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:35:18,949 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:35:18,949 - INFO - 2 gestos exportados para test_export.json
+2025-08-29 14:35:18,964 - INFO - Recursos liberados
+2025-08-29 14:35:18,964 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:35:18,969 - INFO - Banco de dados inicializado
+2025-08-29 14:35:18,969 - INFO - Carregando dados do banco de dados
+2025-08-29 14:35:23,297 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:35:24,258 - INFO - Recursos liberados
+2025-08-29 14:39:25,419 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:39:25,426 - INFO - Banco de dados inicializado
+2025-08-29 14:39:25,426 - INFO - Carregando dados do banco de dados
+2025-08-29 14:39:28,620 - INFO - Resolucao da camera definida para 1280x720
+2025-08-29 14:39:38,114 - INFO - Modo de treino ativado
+2025-08-29 14:40:06,893 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:40:07,519 - INFO - Modo de treino ativado
+2025-08-29 14:40:48,423 - INFO - Novo gesto criado: A
+2025-08-29 14:40:53,358 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:42:41,455 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:42:41,461 - INFO - Banco de dados inicializado
+2025-08-29 14:42:41,462 - INFO - Carregando dados do banco de dados
+2025-08-29 14:42:44,461 - INFO - Resolucao da camera definida para 1280x720
+2025-08-29 14:42:45,466 - ERROR - Falha na captura de video
+2025-08-29 14:42:45,484 - INFO - Recursos liberados
+2025-08-29 14:43:19,986 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:43:19,992 - INFO - Banco de dados inicializado
+2025-08-29 14:43:19,992 - INFO - Carregando dados do banco de dados
+2025-08-29 14:43:23,050 - INFO - Resolucao da camera definida para 1280x720
+2025-08-29 14:43:23,967 - ERROR - Falha na captura de video
+2025-08-29 14:43:24,042 - INFO - Recursos liberados
+2025-08-29 14:44:01,119 - INFO - Modo de treino ativado
+2025-08-29 14:44:05,195 - INFO - Novo gesto criado: A
+2025-08-29 14:44:09,867 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:11,899 - INFO - Modo de treino ativado
+2025-08-29 14:44:12,046 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:12,208 - INFO - Modo de treino ativado
+2025-08-29 14:44:12,379 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:12,538 - INFO - Modo de treino ativado
+2025-08-29 14:44:12,691 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:12,837 - INFO - Modo de treino ativado
+2025-08-29 14:44:12,981 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:13,125 - INFO - Modo de treino ativado
+2025-08-29 14:44:13,272 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:13,434 - INFO - Modo de treino ativado
+2025-08-29 14:44:13,599 - INFO - Modo de treino desativado e gravacao parada
+2025-08-29 14:44:16,460 - INFO - Tentando exportar gestos para gestures_export.json
+2025-08-29 14:44:16,491 - INFO - 209 gestos exportados para gestures_export_001.json
+2025-08-29 14:44:30,112 - INFO - Tentando exportar gestos para a.json
+2025-08-29 14:44:30,128 - INFO - 209 gestos exportados para a.json
+2025-08-29 14:44:34,713 - INFO - Recursos liberados
+2025-08-29 14:44:34,719 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:44:34,725 - INFO - Banco de dados inicializado
+2025-08-29 14:44:34,725 - INFO - Carregando dados do banco de dados
+2025-08-29 14:44:37,787 - INFO - Resolucao da camera definida para 1280x720
+2025-08-29 14:44:38,621 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:44:38,621 - INFO - 2 gestos exportados para test_export_001.json
+2025-08-29 14:44:38,653 - INFO - Recursos liberados
+2025-08-29 14:44:38,653 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:44:38,653 - INFO - Banco de dados inicializado
+2025-08-29 14:44:38,653 - INFO - Carregando dados do banco de dados
+2025-08-29 14:44:41,491 - INFO - Resolucao da camera definida para 1280x720
+2025-08-29 14:44:42,340 - INFO - Recursos liberados
+2025-08-29 14:46:03,493 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:46:03,509 - INFO - Banco de dados inicializado
+2025-08-29 14:46:03,509 - INFO - Carregando dados do banco de dados
+2025-08-29 14:46:06,697 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:46:15,832 - INFO - Novo gesto criado: A
+2025-08-29 14:46:32,862 - INFO - Recursos liberados
+2025-08-29 14:46:32,862 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:46:32,862 - INFO - Banco de dados inicializado
+2025-08-29 14:46:32,862 - INFO - Carregando dados do banco de dados
+2025-08-29 14:46:35,757 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:46:36,543 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:46:36,543 - INFO - 2 gestos exportados para test_export_002.json
+2025-08-29 14:46:36,575 - INFO - Recursos liberados
+2025-08-29 14:46:36,575 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:46:36,575 - INFO - Banco de dados inicializado
+2025-08-29 14:46:36,575 - INFO - Carregando dados do banco de dados
+2025-08-29 14:46:40,383 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:46:41,268 - INFO - Recursos liberados
+2025-08-29 14:46:59,438 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:46:59,442 - INFO - Banco de dados inicializado
+2025-08-29 14:46:59,442 - INFO - Carregando dados do banco de dados
+2025-08-29 14:47:03,026 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:47:20,779 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:536: error: (-27:Null pointer) NULL window: 'Reconhecimento de Gestos' in function 'cvGetWindowRect_W32'
+
+2025-08-29 14:47:21,068 - INFO - Recursos liberados
+2025-08-29 14:47:21,075 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:47:21,076 - INFO - Banco de dados inicializado
+2025-08-29 14:47:21,076 - INFO - Carregando dados do banco de dados
+2025-08-29 14:47:23,884 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:47:24,947 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:47:24,947 - INFO - 2 gestos exportados para test_export_003.json
+2025-08-29 14:47:25,029 - INFO - Recursos liberados
+2025-08-29 14:47:25,029 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:47:25,029 - INFO - Banco de dados inicializado
+2025-08-29 14:47:25,029 - INFO - Carregando dados do banco de dados
+2025-08-29 14:47:28,513 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:47:29,350 - INFO - Recursos liberados
+2025-08-29 14:47:38,144 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:47:38,149 - INFO - Banco de dados inicializado
+2025-08-29 14:47:38,150 - INFO - Carregando dados do banco de dados
+2025-08-29 14:47:41,206 - INFO - Resolução da câmera definida para 640x480
+2025-08-29 14:47:53,975 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:536: error: (-27:Null pointer) NULL window: 'Reconhecimento de Gestos' in function 'cvGetWindowRect_W32'
+
+2025-08-29 14:47:54,258 - INFO - Recursos liberados
+2025-08-29 14:47:54,258 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:47:54,265 - INFO - Banco de dados inicializado
+2025-08-29 14:47:54,265 - INFO - Carregando dados do banco de dados
+2025-08-29 14:47:57,193 - INFO - Resolução da câmera definida para 640x480
+2025-08-29 14:47:58,058 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:47:58,058 - INFO - 2 gestos exportados para test_export_004.json
+2025-08-29 14:47:58,080 - INFO - Recursos liberados
+2025-08-29 14:47:58,080 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:47:58,080 - INFO - Banco de dados inicializado
+2025-08-29 14:47:58,080 - INFO - Carregando dados do banco de dados
+2025-08-29 14:48:01,348 - INFO - Resolução da câmera definida para 640x480
+2025-08-29 14:48:02,402 - INFO - Recursos liberados
+2025-08-29 14:49:42,714 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:49:42,714 - INFO - Banco de dados inicializado
+2025-08-29 14:49:42,714 - INFO - Carregando dados do banco de dados
+2025-08-29 14:49:45,830 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:49:54,875 - INFO - Novo gesto criado: A
+2025-08-29 14:50:24,451 - INFO - Tentando exportar gestos para gestures_export.json
+2025-08-29 14:50:24,498 - INFO - 590 gestos exportados para gestures_export_002.json
+2025-08-29 14:50:40,209 - ERROR - Erro durante a execução: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4211: error: (-215:Assertion failed) inv_scale_x > 0 in function 'cv::resize'
+
+2025-08-29 14:50:40,496 - INFO - Recursos liberados
+2025-08-29 14:50:40,497 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:50:40,502 - INFO - Banco de dados inicializado
+2025-08-29 14:50:40,502 - INFO - Carregando dados do banco de dados
+2025-08-29 14:50:43,459 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:50:44,379 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 14:50:44,383 - INFO - 2 gestos exportados para test_export_005.json
+2025-08-29 14:50:44,429 - INFO - Recursos liberados
+2025-08-29 14:50:44,429 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:50:44,429 - INFO - Banco de dados inicializado
+2025-08-29 14:50:44,429 - INFO - Carregando dados do banco de dados
+2025-08-29 14:50:48,869 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:50:50,149 - INFO - Recursos liberados
+2025-08-29 14:56:10,231 - INFO - Inicializando GestureRecognizer
+2025-08-29 14:56:10,247 - INFO - Banco de dados inicializado
+2025-08-29 14:56:10,247 - INFO - Carregando dados do banco de dados
+2025-08-29 14:56:14,010 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 14:56:28,370 - INFO - Novo gesto criado: A
+2025-08-29 14:58:00,023 - INFO - Novo gesto criado: B
+2025-08-29 14:58:11,005 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 14:58:11,005 - INFO - Modelo treinado e salvo
+2025-08-29 14:58:12,379 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:58:13,262 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:58:27,327 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:58:31,128 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:58:35,713 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 14:58:37,317 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:58:45,665 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:58:47,145 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:58:48,166 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:58:49,043 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:58:49,908 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:58:50,967 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:59:05,401 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:59:05,950 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:59:06,394 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:59:08,622 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 14:59:09,121 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 14:59:09,554 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:59:09,976 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 14:59:16,077 - INFO - Novo gesto criado: S
+2025-08-29 14:59:22,404 - INFO - Novo gesto criado: E
+2025-08-29 14:59:24,308 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 14:59:55,227 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 14:59:55,227 - INFO - Modelo treinado e salvo
+2025-08-29 14:59:55,269 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 14:59:57,974 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 14:59:59,238 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:01,852 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:02,298 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:03,732 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:05,601 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:08,422 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:09,820 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:11,658 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:12,986 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:14,234 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:15,584 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:00:16,047 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:17,191 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:18,788 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:19,274 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:20,449 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:22,552 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:23,062 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:00:23,546 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:25,614 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:26,793 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:00:33,146 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:36,127 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:00:37,626 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:00:41,396 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:00:42,613 - ERROR - Falha na captura de vídeo
+2025-08-29 15:00:42,615 - INFO - Recursos liberados
+2025-08-29 15:00:42,615 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:00:42,629 - INFO - Banco de dados inicializado
+2025-08-29 15:00:42,629 - INFO - Carregando dados do banco de dados
+2025-08-29 15:00:42,661 - INFO - Modelo KNN inicializado
+2025-08-29 15:00:42,716 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 15:00:42,716 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:00:42,716 - INFO - 2 gestos exportados para test_export_006.json
+2025-08-29 15:00:42,724 - INFO - Recursos liberados
+2025-08-29 15:00:42,724 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:00:42,724 - INFO - Banco de dados inicializado
+2025-08-29 15:00:42,724 - INFO - Carregando dados do banco de dados
+2025-08-29 15:00:42,755 - INFO - Modelo KNN inicializado
+2025-08-29 15:00:42,818 - INFO - Resolução da câmera definida para 1280x720
+2025-08-29 15:00:42,818 - INFO - Recursos liberados
+2025-08-29 15:04:13,657 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:04:13,657 - INFO - Banco de dados inicializado
+2025-08-29 15:04:13,657 - INFO - Carregando dados do banco de dados
+2025-08-29 15:04:13,790 - INFO - Modelo KNN inicializado
+2025-08-29 15:04:16,645 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:04:29,373 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:04:31,500 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:04:36,274 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:04:39,552 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:04:39,962 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:04:41,288 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:04:42,971 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:04:43,386 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:04:44,900 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:04:45,452 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:04:45,857 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:04:46,279 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:04:46,938 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:04:49,303 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:04:50,414 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:04:59,305 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:05:07,334 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:08,145 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:05:08,586 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:05:09,010 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:12,263 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:14,675 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:17,919 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:30,103 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:05:30,538 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:37,729 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:05:40,345 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:41,078 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:41,524 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:46,887 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:49,755 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:05:51,398 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:51,838 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:05:52,265 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:53,079 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:05:53,609 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:54,079 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:54,763 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:05:55,215 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:05:55,644 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:05:57,181 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:00,296 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:01,302 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:02,808 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:07,468 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:07,885 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:08,542 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:08,971 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:13,806 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:14,266 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:14,676 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:16,759 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:18,835 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:19,273 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:20,174 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:20,783 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:21,870 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:22,548 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:23,008 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:23,488 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:24,728 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:06:25,174 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:25,830 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:26,274 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:41,181 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:06:41,648 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:42,941 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:43,677 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:44,120 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:44,938 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:45,444 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:06:45,865 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:46,299 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:46,747 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:47,182 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:51,743 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:06:52,352 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:06:54,034 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:07:02,985 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:07:04,185 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:07:04,629 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:07:05,876 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:07:06,317 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:07:06,748 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:07:11,404 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:07:11,849 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:07:18,672 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:07:19,107 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:07:19,607 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:07:20,287 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:07:21,058 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:07:27,951 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:07:31,424 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:07:32,391 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:07:33,424 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:07:54,779 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:01,026 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:02,627 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:16,631 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:17,097 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:17,544 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:18,600 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:21,155 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:21,733 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:08:22,190 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:22,626 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:23,059 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:23,505 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:24,678 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:25,109 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:27,549 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:08:27,974 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:37,581 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:40,582 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:42,391 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:43,196 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:08:50,597 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:08:52,370 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:09:15,637 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:21,821 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:09:26,277 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:09:35,932 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:09:35,949 - INFO - Banco de dados inicializado
+2025-08-29 15:09:35,949 - INFO - Carregando dados do banco de dados
+2025-08-29 15:09:36,067 - INFO - Modelo KNN inicializado
+2025-08-29 15:09:38,997 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:09:44,571 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:45,008 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:09:45,430 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:48,599 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:09:49,017 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:50,131 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:09:50,542 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:50,969 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:09:51,399 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:52,843 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:09:56,469 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:57,563 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:09:58,171 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:09:59,110 - ERROR - Falha na captura de video
+2025-08-29 15:09:59,120 - INFO - Recursos liberados
+2025-08-29 15:09:59,122 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:09:59,128 - INFO - Banco de dados inicializado
+2025-08-29 15:09:59,128 - INFO - Carregando dados do banco de dados
+2025-08-29 15:09:59,160 - INFO - Modelo KNN inicializado
+2025-08-29 15:09:59,211 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:09:59,211 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:09:59,211 - INFO - 2 gestos exportados para test_export_007.json
+2025-08-29 15:09:59,211 - INFO - Recursos liberados
+2025-08-29 15:09:59,211 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:09:59,228 - INFO - Banco de dados inicializado
+2025-08-29 15:09:59,228 - INFO - Carregando dados do banco de dados
+2025-08-29 15:09:59,262 - INFO - Modelo KNN inicializado
+2025-08-29 15:09:59,311 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:09:59,317 - INFO - Recursos liberados
+2025-08-29 15:11:50,785 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:11:50,787 - INFO - Banco de dados inicializado
+2025-08-29 15:11:50,787 - INFO - Carregando dados do banco de dados
+2025-08-29 15:11:50,888 - INFO - Modelo KNN inicializado
+2025-08-29 15:11:54,018 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:11:58,205 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:11:59,381 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:11:59,816 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:01,569 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:12:02,180 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:07,122 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:12:07,918 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:08,810 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:10,163 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:10,574 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:11,156 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:15,046 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:15,459 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:20,025 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:12:22,141 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:12:22,557 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:12:22,962 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:12:23,373 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:12:25,123 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:25,541 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:34,178 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:34,913 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:12:35,449 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:12:37,521 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:12:38,135 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:12:38,601 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:12:39,051 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:13:30,608 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:13:31,370 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:13:32,170 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:13:32,924 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:13:39,243 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:13:40,012 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:13:51,736 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:13:54,223 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:13:55,360 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:13:56,062 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:13:57,048 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:13:59,635 - INFO - Recursos liberados
+2025-08-29 15:13:59,643 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:13:59,643 - INFO - Banco de dados inicializado
+2025-08-29 15:13:59,643 - INFO - Carregando dados do banco de dados
+2025-08-29 15:13:59,683 - INFO - Modelo KNN inicializado
+2025-08-29 15:14:02,417 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:14:03,514 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:14:03,514 - INFO - 2 gestos exportados para test_export_008.json
+2025-08-29 15:14:03,546 - INFO - Recursos liberados
+2025-08-29 15:14:03,546 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:14:03,546 - INFO - Banco de dados inicializado
+2025-08-29 15:14:03,546 - INFO - Carregando dados do banco de dados
+2025-08-29 15:14:03,585 - INFO - Modelo KNN inicializado
+2025-08-29 15:14:06,521 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:14:07,382 - INFO - Recursos liberados
+2025-08-29 15:14:14,382 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:14:14,382 - INFO - Banco de dados inicializado
+2025-08-29 15:14:14,382 - INFO - Carregando dados do banco de dados
+2025-08-29 15:14:14,498 - INFO - Modelo KNN inicializado
+2025-08-29 15:14:17,356 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:14:20,212 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:14:20,619 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:14:21,039 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:14:21,524 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:14:21,984 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:14:22,391 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:14:23,186 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:14:23,603 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:14:24,033 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:14:24,439 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:14:29,620 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:14:33,682 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:14:36,851 - ERROR - Erro durante a execuçao: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4211: error: (-215:Assertion failed) inv_scale_x > 0 in function 'cv::resize'
+
+2025-08-29 15:14:37,139 - INFO - Recursos liberados
+2025-08-29 15:14:37,139 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:14:37,154 - INFO - Banco de dados inicializado
+2025-08-29 15:14:37,154 - INFO - Carregando dados do banco de dados
+2025-08-29 15:14:37,187 - INFO - Modelo KNN inicializado
+2025-08-29 15:14:40,385 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:14:41,305 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:14:41,305 - INFO - 2 gestos exportados para test_export_009.json
+2025-08-29 15:14:41,337 - INFO - Recursos liberados
+2025-08-29 15:14:41,337 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:14:41,352 - INFO - Banco de dados inicializado
+2025-08-29 15:14:41,352 - INFO - Carregando dados do banco de dados
+2025-08-29 15:14:41,391 - INFO - Modelo KNN inicializado
+2025-08-29 15:14:47,575 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:14:47,591 - INFO - Banco de dados inicializado
+2025-08-29 15:14:47,591 - INFO - Carregando dados do banco de dados
+2025-08-29 15:14:47,696 - INFO - Modelo KNN inicializado
+2025-08-29 15:14:50,593 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:14:54,237 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:14:55,463 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:14:59,461 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:15:01,844 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:15:02,256 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:15:04,187 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:15:04,608 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:15:09,958 - INFO - Recursos liberados
+2025-08-29 15:15:09,959 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:15:09,959 - INFO - Banco de dados inicializado
+2025-08-29 15:15:09,959 - INFO - Carregando dados do banco de dados
+2025-08-29 15:15:09,999 - INFO - Modelo KNN inicializado
+2025-08-29 15:15:12,704 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:15:13,585 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:15:13,585 - INFO - 2 gestos exportados para test_export_010.json
+2025-08-29 15:15:13,601 - INFO - Recursos liberados
+2025-08-29 15:15:13,601 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:15:13,616 - INFO - Banco de dados inicializado
+2025-08-29 15:15:13,616 - INFO - Carregando dados do banco de dados
+2025-08-29 15:15:13,653 - INFO - Modelo KNN inicializado
+2025-08-29 15:15:16,725 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:15:17,549 - INFO - Recursos liberados
+2025-08-29 15:15:28,233 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:15:28,233 - INFO - Banco de dados inicializado
+2025-08-29 15:15:28,233 - INFO - Carregando dados do banco de dados
+2025-08-29 15:15:28,353 - INFO - Modelo KNN inicializado
+2025-08-29 15:15:31,297 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:15:36,194 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:15:37,329 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:15:37,751 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:15:39,047 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:16:13,205 - INFO - Novo gesto criado: D
+2025-08-29 15:16:58,575 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 15:16:58,575 - INFO - Modelo treinado e salvo
+2025-08-29 15:16:58,870 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:00,424 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:17:01,596 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:02,026 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:17:03,902 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:08,229 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:17:13,890 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:16,115 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:17:16,945 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:21,476 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:17:22,684 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:17:23,250 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:17:23,701 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:25,093 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:17:26,533 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:17:34,432 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:17:36,341 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:41,152 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:17:41,600 - INFO - Gesto reconhecido: D (66.7%)
+2025-08-29 15:17:42,016 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:17:43,353 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:17:44,468 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:17:46,714 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:17:47,942 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:17:48,386 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:17:51,145 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:17:51,950 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:17:57,044 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:18:01,021 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 15:18:01,021 - INFO - Modelo treinado e salvo
+2025-08-29 15:18:01,070 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:14,310 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:14,733 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:17,990 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:18:18,679 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:18:19,458 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:22,873 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:23,343 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:24,004 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:18:28,202 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:28,700 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:18:31,513 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:32,895 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:18:35,347 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:36,191 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:18:37,048 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:37,509 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:18:38,003 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:38,498 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:18:40,045 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:41,007 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:18:41,463 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:44,296 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:18:46,706 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:18:47,143 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:18:47,575 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:18:48,320 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:18:52,263 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:19:02,204 - INFO - Novo gesto criado: C
+2025-08-29 15:19:48,386 - INFO - Dados de gestos salvos no banco de dados
+2025-08-29 15:19:48,386 - INFO - Modelo treinado e salvo
+2025-08-29 15:19:49,474 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:19:49,890 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:19:52,496 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:19:52,902 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:19:53,304 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:19:53,748 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:19:54,157 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:19:55,771 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:19:56,228 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:19:58,838 - INFO - Gesto reconhecido: D (100.0%)
+2025-08-29 15:19:59,302 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:20:06,012 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:20:06,539 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:20:06,999 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:20:07,415 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:20:08,153 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:20:08,578 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:20:09,003 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:20:15,640 - INFO - Gesto reconhecido: D (66.7%)
+2025-08-29 15:20:17,098 - INFO - Gesto reconhecido: A (66.7%)
+2025-08-29 15:20:17,726 - INFO - Gesto reconhecido: C (66.7%)
+2025-08-29 15:20:18,136 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:20:24,432 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:20:25,467 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:20:25,912 - INFO - Gesto reconhecido: B (66.7%)
+2025-08-29 15:20:26,496 - INFO - Gesto reconhecido: C (66.7%)
+2025-08-29 15:20:26,934 - INFO - Gesto reconhecido: A (100.0%)
+2025-08-29 15:20:27,515 - INFO - Gesto reconhecido: E (66.7%)
+2025-08-29 15:20:27,965 - INFO - Gesto reconhecido: C (100.0%)
+2025-08-29 15:20:28,549 - INFO - Gesto reconhecido: E (100.0%)
+2025-08-29 15:20:29,146 - INFO - Gesto reconhecido: B (100.0%)
+2025-08-29 15:20:31,817 - INFO - Gesto reconhecido: D (66.7%)
+2025-08-29 15:20:32,407 - INFO - Recursos liberados
+2025-08-29 15:20:32,407 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:20:32,424 - INFO - Banco de dados inicializado
+2025-08-29 15:20:32,424 - INFO - Carregando dados do banco de dados
+2025-08-29 15:20:32,510 - INFO - Modelo KNN inicializado
+2025-08-29 15:20:35,288 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:20:36,060 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:20:36,060 - INFO - 2 gestos exportados para test_export_011.json
+2025-08-29 15:20:36,092 - INFO - Recursos liberados
+2025-08-29 15:20:36,092 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:20:36,092 - INFO - Banco de dados inicializado
+2025-08-29 15:20:36,092 - INFO - Carregando dados do banco de dados
+2025-08-29 15:20:36,179 - INFO - Modelo KNN inicializado
+2025-08-29 15:20:39,286 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:20:40,420 - INFO - Recursos liberados
+2025-08-29 15:22:53,168 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:22:53,168 - INFO - Banco de dados inicializado
+2025-08-29 15:22:53,168 - INFO - Carregando dados do banco de dados
+2025-08-29 15:22:53,339 - INFO - Modelo KNN inicializado
+2025-08-29 15:22:56,251 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:23:05,195 - INFO - 
+2025-08-29 15:23:05,614 - INFO - 
+2025-08-29 15:23:06,484 - INFO - 
+2025-08-29 15:23:06,896 - INFO - 
+2025-08-29 15:23:48,938 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:23:48,943 - INFO - Banco de dados inicializado
+2025-08-29 15:23:48,943 - INFO - Carregando dados do banco de dados
+2025-08-29 15:23:49,085 - INFO - Modelo KNN inicializado
+2025-08-29 15:23:51,816 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:23:56,462 - INFO - 
+2025-08-29 15:23:57,494 - INFO - 
+2025-08-29 15:23:57,903 - INFO - 
+2025-08-29 15:23:58,300 - INFO - 
+2025-08-29 15:23:58,855 - INFO - 
+2025-08-29 15:23:59,280 - INFO - 
+2025-08-29 15:24:00,032 - INFO - 
+2025-08-29 15:24:00,440 - INFO - 
+2025-08-29 15:24:03,340 - INFO - 
+2025-08-29 15:24:04,340 - INFO - 
+2025-08-29 15:24:07,131 - INFO - 
+2025-08-29 15:24:08,340 - INFO - 
+2025-08-29 15:24:08,768 - INFO - 
+2025-08-29 15:24:09,177 - INFO - 
+2025-08-29 15:24:09,578 - INFO - 
+2025-08-29 15:24:12,079 - INFO - 
+2025-08-29 15:24:13,378 - INFO - 
+2025-08-29 15:24:15,765 - INFO - 
+2025-08-29 15:28:08,514 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:28:08,531 - INFO - Banco de dados inicializado
+2025-08-29 15:28:08,531 - INFO - Carregando dados do banco de dados
+2025-08-29 15:28:08,692 - INFO - Modelo KNN inicializado
+2025-08-29 15:28:12,198 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:28:15,025 - INFO - 
+2025-08-29 15:28:16,008 - INFO - 
+2025-08-29 15:28:16,421 - INFO - 
+2025-08-29 15:28:20,097 - INFO - 
+2025-08-29 15:28:23,212 - INFO - 
+2025-08-29 15:28:24,473 - INFO - 
+2025-08-29 15:28:24,879 - INFO - 
+2025-08-29 15:28:25,290 - INFO - 
+2025-08-29 15:28:25,684 - INFO - 
+2025-08-29 15:28:26,092 - INFO - 
+2025-08-29 15:28:27,037 - INFO - 
+2025-08-29 15:28:27,452 - INFO - 
+2025-08-29 15:28:27,854 - INFO - 
+2025-08-29 15:28:29,581 - INFO - 
+2025-08-29 15:28:30,256 - INFO - 
+2025-08-29 15:28:30,876 - INFO - 
+2025-08-29 15:28:31,272 - INFO - 
+2025-08-29 15:28:46,355 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:28:46,355 - INFO - Banco de dados inicializado
+2025-08-29 15:28:46,355 - INFO - Carregando dados do banco de dados
+2025-08-29 15:28:46,500 - INFO - Modelo KNN inicializado
+2025-08-29 15:28:49,440 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:28:53,425 - INFO - 
+2025-08-29 15:28:59,631 - INFO - 
+2025-08-29 15:29:00,027 - INFO - 
+2025-08-29 15:29:00,560 - INFO - 
+2025-08-29 15:29:02,768 - INFO - 
+2025-08-29 15:29:04,734 - INFO - 
+2025-08-29 15:29:08,032 - ERROR - Erro durante a execuçao: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4211: error: (-215:Assertion failed) inv_scale_x > 0 in function 'cv::resize'
+
+2025-08-29 15:29:08,332 - INFO - Recursos liberados
+2025-08-29 15:29:08,332 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:29:08,338 - INFO - Banco de dados inicializado
+2025-08-29 15:29:08,338 - INFO - Carregando dados do banco de dados
+2025-08-29 15:29:08,425 - INFO - Modelo KNN inicializado
+2025-08-29 15:29:11,120 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:29:12,143 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:29:12,145 - INFO - 2 gestos exportados para test_export_012.json
+2025-08-29 15:29:12,215 - INFO - Recursos liberados
+2025-08-29 15:29:12,215 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:29:12,220 - INFO - Banco de dados inicializado
+2025-08-29 15:29:12,220 - INFO - Carregando dados do banco de dados
+2025-08-29 15:29:12,297 - INFO - Modelo KNN inicializado
+2025-08-29 15:29:16,416 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:29:17,820 - INFO - Recursos liberados
+2025-08-29 15:29:45,044 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:29:45,050 - INFO - Banco de dados inicializado
+2025-08-29 15:29:45,050 - INFO - Carregando dados do banco de dados
+2025-08-29 15:29:45,207 - INFO - Modelo KNN inicializado
+2025-08-29 15:29:48,194 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:29:50,933 - INFO - 
+2025-08-29 15:29:51,689 - INFO - 
+2025-08-29 15:29:52,335 - INFO - 
+2025-08-29 15:29:52,848 - INFO - 
+2025-08-29 15:29:53,384 - INFO - 
+2025-08-29 15:29:53,789 - INFO - 
+2025-08-29 15:29:54,204 - INFO - 
+2025-08-29 15:29:55,113 - INFO - 
+2025-08-29 15:29:55,676 - INFO - 
+2025-08-29 15:29:56,186 - INFO - 
+2025-08-29 15:29:56,636 - INFO - 
+2025-08-29 15:29:57,041 - INFO - 
+2025-08-29 15:30:00,459 - INFO - 
+2025-08-29 15:30:00,881 - INFO - 
+2025-08-29 15:30:01,930 - INFO - 
+2025-08-29 15:30:02,341 - INFO - 
+2025-08-29 15:30:02,746 - INFO - 
+2025-08-29 15:30:03,150 - INFO - 
+2025-08-29 15:30:27,061 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:30:27,067 - INFO - Banco de dados inicializado
+2025-08-29 15:30:27,068 - INFO - Carregando dados do banco de dados
+2025-08-29 15:30:27,220 - INFO - Modelo KNN inicializado
+2025-08-29 15:30:30,125 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:30:35,978 - INFO - 
+2025-08-29 15:30:37,423 - INFO - 
+2025-08-29 15:30:39,096 - INFO - 
+2025-08-29 15:30:40,827 - INFO - 
+2025-08-29 15:30:41,248 - INFO - 
+2025-08-29 15:30:41,769 - INFO - 
+2025-08-29 15:30:42,170 - INFO - 
+2025-08-29 15:30:43,755 - INFO - 
+2025-08-29 15:30:44,177 - INFO - 
+2025-08-29 15:30:46,884 - INFO - 
+2025-08-29 15:30:48,447 - INFO - 
+2025-08-29 15:30:48,915 - INFO - 
+2025-08-29 15:30:49,526 - INFO - 
+2025-08-29 15:30:49,943 - INFO - 
+2025-08-29 15:30:50,904 - INFO - 
+2025-08-29 15:30:52,409 - INFO - 
+2025-08-29 15:30:52,840 - INFO - 
+2025-08-29 15:30:53,399 - INFO - 
+2025-08-29 15:30:53,818 - INFO - 
+2025-08-29 15:30:54,870 - INFO - 
+2025-08-29 15:30:58,671 - INFO - 
+2025-08-29 15:31:09,862 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:31:09,869 - INFO - Banco de dados inicializado
+2025-08-29 15:31:09,869 - INFO - Carregando dados do banco de dados
+2025-08-29 15:31:10,026 - INFO - Modelo KNN inicializado
+2025-08-29 15:31:12,800 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:31:15,284 - INFO - 
+2025-08-29 15:31:15,730 - INFO - 
+2025-08-29 15:31:16,155 - INFO - 
+2025-08-29 15:31:16,941 - INFO - 
+2025-08-29 15:31:17,378 - INFO - 
+2025-08-29 15:31:18,860 - INFO - 
+2025-08-29 15:31:19,688 - INFO - 
+2025-08-29 15:31:20,704 - INFO - 
+2025-08-29 15:31:21,379 - INFO - 
+2025-08-29 15:31:21,803 - INFO - 
+2025-08-29 15:31:53,005 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:31:53,005 - INFO - Banco de dados inicializado
+2025-08-29 15:31:53,005 - INFO - Carregando dados do banco de dados
+2025-08-29 15:31:53,163 - INFO - Modelo KNN inicializado
+2025-08-29 15:31:56,483 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:31:59,128 - INFO - 
+2025-08-29 15:32:00,037 - INFO - 
+2025-08-29 15:32:00,369 - INFO - 
+2025-08-29 15:32:02,041 - INFO - 
+2025-08-29 15:32:16,945 - INFO - 
+2025-08-29 15:32:17,353 - INFO - 
+2025-08-29 15:32:17,760 - INFO - 
+2025-08-29 15:32:18,170 - INFO - 
+2025-08-29 15:32:19,509 - INFO - 
+2025-08-29 15:32:19,930 - INFO - 
+2025-08-29 15:32:20,322 - INFO - 
+2025-08-29 15:32:38,199 - INFO - 
+2025-08-29 15:32:39,003 - INFO - 
+2025-08-29 15:32:40,003 - INFO - 
+2025-08-29 15:32:41,195 - INFO - 
+2025-08-29 15:32:44,490 - INFO - 
+2025-08-29 15:32:45,282 - INFO - 
+2025-08-29 15:32:45,983 - INFO - 
+2025-08-29 15:32:46,742 - INFO - 
+2025-08-29 15:32:49,596 - INFO - 
+2025-08-29 15:32:59,273 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:32:59,288 - INFO - Banco de dados inicializado
+2025-08-29 15:32:59,288 - INFO - Carregando dados do banco de dados
+2025-08-29 15:32:59,449 - INFO - Modelo KNN inicializado
+2025-08-29 15:33:02,275 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:33:04,897 - INFO - 
+2025-08-29 15:33:19,971 - INFO - 
+2025-08-29 15:33:21,324 - INFO - 
+2025-08-29 15:33:31,971 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:33:31,988 - INFO - Banco de dados inicializado
+2025-08-29 15:33:31,988 - INFO - Carregando dados do banco de dados
+2025-08-29 15:33:32,148 - INFO - Modelo KNN inicializado
+2025-08-29 15:33:35,092 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:33:37,593 - INFO - 
+2025-08-29 15:34:08,230 - INFO - 
+2025-08-29 15:34:10,303 - INFO - 
+2025-08-29 15:34:31,106 - INFO - 
+2025-08-29 15:34:33,481 - INFO - 
+2025-08-29 15:34:34,267 - INFO - 
+2025-08-29 15:34:45,178 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:34:45,178 - INFO - Banco de dados inicializado
+2025-08-29 15:34:45,178 - INFO - Carregando dados do banco de dados
+2025-08-29 15:34:45,344 - INFO - Modelo KNN inicializado
+2025-08-29 15:34:48,164 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:34:50,666 - INFO - 
+2025-08-29 15:35:00,092 - INFO - 
+2025-08-29 15:35:00,833 - INFO - 
+2025-08-29 15:35:01,644 - INFO - 
+2025-08-29 15:35:02,362 - INFO - 
+2025-08-29 15:35:03,131 - INFO - 
+2025-08-29 15:35:03,832 - INFO - 
+2025-08-29 15:35:25,803 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:35:25,803 - INFO - Banco de dados inicializado
+2025-08-29 15:35:25,803 - INFO - Carregando dados do banco de dados
+2025-08-29 15:35:25,972 - INFO - Modelo KNN inicializado
+2025-08-29 15:35:28,913 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:35:31,991 - INFO - 
+2025-08-29 15:36:07,970 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:36:07,977 - INFO - Banco de dados inicializado
+2025-08-29 15:36:07,977 - INFO - Carregando dados do banco de dados
+2025-08-29 15:36:08,142 - INFO - Modelo KNN inicializado
+2025-08-29 15:36:11,553 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:36:14,133 - INFO - 
+2025-08-29 15:36:14,604 - INFO - 
+2025-08-29 15:36:15,038 - INFO - 
+2025-08-29 15:36:15,688 - INFO - 
+2025-08-29 15:36:16,111 - INFO - 
+2025-08-29 15:36:33,352 - INFO - 
+2025-08-29 15:36:33,863 - INFO - 
+2025-08-29 15:36:34,353 - INFO - 
+2025-08-29 15:36:34,753 - INFO - 
+2025-08-29 15:36:35,155 - INFO - 
+2025-08-29 15:36:38,635 - INFO - 
+2025-08-29 15:37:10,273 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:37:10,273 - INFO - Banco de dados inicializado
+2025-08-29 15:37:10,273 - INFO - Carregando dados do banco de dados
+2025-08-29 15:37:10,439 - INFO - Modelo KNN inicializado
+2025-08-29 15:37:13,600 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:37:18,097 - INFO - 
+2025-08-29 15:37:18,792 - INFO - 
+2025-08-29 15:37:19,239 - INFO - 
+2025-08-29 15:37:19,646 - INFO - 
+2025-08-29 15:37:24,304 - INFO - 
+2025-08-29 15:37:24,732 - INFO - 
+2025-08-29 15:37:25,180 - INFO - 
+2025-08-29 15:37:41,313 - INFO - 
+2025-08-29 15:38:24,514 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:38:24,514 - INFO - Banco de dados inicializado
+2025-08-29 15:38:24,514 - INFO - Carregando dados do banco de dados
+2025-08-29 15:38:24,676 - INFO - Modelo KNN inicializado
+2025-08-29 15:38:28,634 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:38:33,323 - INFO - 
+2025-08-29 15:38:33,747 - INFO - 
+2025-08-29 15:38:34,675 - INFO - 
+2025-08-29 15:38:35,111 - INFO - 
+2025-08-29 15:38:35,515 - INFO - 
+2025-08-29 15:38:36,122 - INFO - 
+2025-08-29 15:38:36,800 - INFO - 
+2025-08-29 15:38:37,275 - INFO - 
+2025-08-29 15:38:38,094 - INFO - 
+2025-08-29 15:38:38,516 - INFO - 
+2025-08-29 15:38:39,153 - INFO - 
+2025-08-29 15:38:39,571 - INFO - 
+2025-08-29 15:38:39,987 - INFO - 
+2025-08-29 15:38:40,546 - INFO - 
+2025-08-29 15:38:40,953 - INFO - 
+2025-08-29 15:38:41,778 - INFO - 
+2025-08-29 15:38:42,199 - INFO - 
+2025-08-29 15:38:42,605 - INFO - 
+2025-08-29 15:38:43,063 - INFO - 
+2025-08-29 15:38:45,096 - INFO - 
+2025-08-29 15:38:45,728 - INFO - 
+2025-08-29 15:38:46,175 - INFO - 
+2025-08-29 15:38:46,735 - INFO - 
+2025-08-29 15:38:47,146 - INFO - 
+2025-08-29 15:38:47,561 - INFO - 
+2025-08-29 15:38:47,966 - INFO - 
+2025-08-29 15:38:48,369 - INFO - 
+2025-08-29 15:38:50,017 - INFO - 
+2025-08-29 15:39:09,187 - INFO - 
+2025-08-29 15:39:09,910 - INFO - 
+2025-08-29 15:39:10,966 - INFO - 
+2025-08-29 15:39:11,698 - INFO - 
+2025-08-29 15:39:34,700 - INFO - 
+2025-08-29 15:39:35,435 - INFO - 
+2025-08-29 15:39:40,185 - INFO - 
+2025-08-29 15:39:43,367 - INFO - 
+2025-08-29 15:40:07,534 - INFO - 
+2025-08-29 15:40:08,887 - INFO - 
+2025-08-29 15:40:10,529 - INFO - 
+2025-08-29 15:40:12,021 - INFO - 
+2025-08-29 15:40:21,832 - INFO - 
+2025-08-29 15:40:34,372 - INFO - 
+2025-08-29 15:40:35,062 - INFO - 
+2025-08-29 15:40:38,502 - INFO - 
+2025-08-29 15:40:39,200 - INFO - 
+2025-08-29 15:40:40,561 - INFO - 
+2025-08-29 15:40:41,236 - INFO - 
+2025-08-29 15:40:52,731 - INFO - 
+2025-08-29 15:40:57,439 - INFO - 
+2025-08-29 15:40:58,602 - INFO - 
+2025-08-29 15:40:59,453 - INFO - 
+2025-08-29 15:41:00,174 - INFO - 
+2025-08-29 15:41:01,604 - INFO - 
+2025-08-29 15:41:02,306 - INFO - 
+2025-08-29 15:41:03,448 - INFO - 
+2025-08-29 15:41:04,241 - INFO - 
+2025-08-29 15:41:06,909 - INFO - 
+2025-08-29 15:41:07,611 - INFO - 
+2025-08-29 15:41:08,362 - INFO - 
+2025-08-29 15:41:10,730 - INFO - 
+2025-08-29 15:41:12,851 - INFO - 
+2025-08-29 15:41:13,550 - INFO - 
+2025-08-29 15:41:14,468 - INFO - 
+2025-08-29 15:41:15,253 - INFO - 
+2025-08-29 15:41:16,002 - INFO - 
+2025-08-29 15:41:16,770 - INFO - 
+2025-08-29 15:41:18,246 - INFO - 
+2025-08-29 15:41:18,955 - INFO - 
+2025-08-29 15:41:19,640 - INFO - 
+2025-08-29 15:41:20,599 - INFO - 
+2025-08-29 15:41:21,308 - INFO - 
+2025-08-29 15:41:22,720 - INFO - 
+2025-08-29 15:41:24,594 - INFO - 
+2025-08-29 15:41:31,084 - INFO - 
+2025-08-29 15:41:33,397 - INFO - 
+2025-08-29 15:41:44,130 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:41:44,130 - INFO - Banco de dados inicializado
+2025-08-29 15:41:44,130 - INFO - Carregando dados do banco de dados
+2025-08-29 15:41:44,282 - INFO - Modelo KNN inicializado
+2025-08-29 15:41:47,843 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:41:52,689 - INFO - 
+2025-08-29 15:41:53,156 - INFO - 
+2025-08-29 15:41:53,575 - INFO - 
+2025-08-29 15:41:54,806 - INFO - 
+2025-08-29 15:41:55,236 - INFO - 
+2025-08-29 15:41:59,333 - INFO - 
+2025-08-29 15:42:49,213 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:42:49,213 - INFO - Banco de dados inicializado
+2025-08-29 15:42:49,213 - INFO - Carregando dados do banco de dados
+2025-08-29 15:42:49,378 - INFO - Modelo KNN inicializado
+2025-08-29 15:42:52,293 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:42:55,052 - INFO - 
+2025-08-29 15:42:57,620 - INFO - 
+2025-08-29 15:43:00,991 - INFO - 
+2025-08-29 15:43:01,403 - INFO - 
+2025-08-29 15:43:01,817 - INFO - 
+2025-08-29 15:43:02,226 - INFO - 
+2025-08-29 15:43:02,651 - INFO - 
+2025-08-29 15:43:03,192 - INFO - 
+2025-08-29 15:43:03,614 - INFO - 
+2025-08-29 15:43:04,064 - INFO - 
+2025-08-29 15:43:04,482 - INFO - 
+2025-08-29 15:43:04,887 - INFO - 
+2025-08-29 15:43:05,304 - INFO - 
+2025-08-29 15:43:05,719 - INFO - 
+2025-08-29 15:43:06,119 - INFO - 
+2025-08-29 15:43:06,520 - INFO - 
+2025-08-29 15:43:06,932 - INFO - 
+2025-08-29 15:43:07,383 - INFO - 
+2025-08-29 15:43:08,370 - INFO - 
+2025-08-29 15:43:09,482 - INFO - 
+2025-08-29 15:43:11,785 - INFO - 
+2025-08-29 15:44:00,435 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:44:00,450 - INFO - Banco de dados inicializado
+2025-08-29 15:44:00,450 - INFO - Carregando dados do banco de dados
+2025-08-29 15:44:00,600 - INFO - Modelo KNN inicializado
+2025-08-29 15:44:03,527 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:44:06,109 - INFO - 
+2025-08-29 15:44:07,564 - INFO - 
+2025-08-29 15:44:07,992 - INFO - 
+2025-08-29 15:44:08,433 - INFO - 
+2025-08-29 15:44:08,831 - INFO - 
+2025-08-29 15:44:09,243 - INFO - 
+2025-08-29 15:44:09,653 - INFO - 
+2025-08-29 15:44:10,076 - INFO - 
+2025-08-29 15:44:10,625 - INFO - 
+2025-08-29 15:44:11,046 - INFO - 
+2025-08-29 15:44:11,911 - INFO - 
+2025-08-29 15:44:12,328 - INFO - 
+2025-08-29 15:44:13,162 - INFO - 
+2025-08-29 15:44:13,592 - INFO - 
+2025-08-29 15:44:14,016 - INFO - 
+2025-08-29 15:44:14,569 - INFO - 
+2025-08-29 15:44:14,990 - INFO - 
+2025-08-29 15:44:15,401 - INFO - 
+2025-08-29 15:44:56,190 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:44:56,206 - INFO - Banco de dados inicializado
+2025-08-29 15:44:56,206 - INFO - Carregando dados do banco de dados
+2025-08-29 15:44:56,357 - INFO - Modelo KNN inicializado
+2025-08-29 15:44:59,375 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:45:01,977 - INFO - 
+2025-08-29 15:45:02,829 - INFO - 
+2025-08-29 15:45:03,237 - INFO - 
+2025-08-29 15:45:03,646 - INFO - 
+2025-08-29 15:45:04,148 - INFO - 
+2025-08-29 15:45:04,555 - INFO - 
+2025-08-29 15:45:04,963 - INFO - 
+2025-08-29 15:45:05,367 - INFO - 
+2025-08-29 15:45:07,633 - INFO - 
+2025-08-29 15:45:08,236 - INFO - 
+2025-08-29 15:45:08,664 - INFO - 
+2025-08-29 15:45:09,068 - INFO - 
+2025-08-29 15:45:23,615 - INFO - 
+2025-08-29 15:45:31,714 - INFO - 
+2025-08-29 15:45:32,459 - INFO - 
+2025-08-29 15:45:34,127 - INFO - 
+2025-08-29 15:45:37,162 - INFO - 
+2025-08-29 15:45:38,382 - INFO - 
+2025-08-29 15:45:39,098 - INFO - 
+2025-08-29 15:45:46,974 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:45:46,974 - INFO - Banco de dados inicializado
+2025-08-29 15:45:46,974 - INFO - Carregando dados do banco de dados
+2025-08-29 15:45:47,147 - INFO - Modelo KNN inicializado
+2025-08-29 15:45:49,924 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:45:52,445 - INFO - 
+2025-08-29 15:45:52,853 - INFO - 
+2025-08-29 15:45:53,306 - INFO - 
+2025-08-29 15:45:53,729 - INFO - 
+2025-08-29 15:45:56,567 - INFO - 
+2025-08-29 15:45:57,249 - INFO - 
+2025-08-29 15:45:57,755 - INFO - 
+2025-08-29 15:45:58,619 - INFO - 
+2025-08-29 15:46:23,710 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:46:23,725 - INFO - Banco de dados inicializado
+2025-08-29 15:46:23,725 - INFO - Carregando dados do banco de dados
+2025-08-29 15:46:23,886 - INFO - Modelo KNN inicializado
+2025-08-29 15:46:26,858 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:46:30,283 - INFO - 
+2025-08-29 15:46:31,008 - INFO - 
+2025-08-29 15:46:31,667 - INFO - 
+2025-08-29 15:46:32,370 - INFO - 
+2025-08-29 15:46:33,272 - INFO - 
+2025-08-29 15:46:34,641 - INFO - 
+2025-08-29 15:46:35,064 - INFO - 
+2025-08-29 15:46:35,495 - INFO - 
+2025-08-29 15:46:36,167 - INFO - 
+2025-08-29 15:46:36,582 - INFO - 
+2025-08-29 15:46:37,887 - INFO - 
+2025-08-29 15:46:38,305 - INFO - 
+2025-08-29 15:46:38,708 - INFO - 
+2025-08-29 15:46:39,239 - INFO - 
+2025-08-29 15:46:40,173 - INFO - 
+2025-08-29 15:46:41,056 - INFO - Recursos liberados
+2025-08-29 15:46:41,056 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:46:41,056 - INFO - Banco de dados inicializado
+2025-08-29 15:46:41,056 - INFO - Carregando dados do banco de dados
+2025-08-29 15:46:41,135 - INFO - Modelo KNN inicializado
+2025-08-29 15:46:43,808 - INFO - Resoluçao da camera definida para 1280x720
+2025-08-29 15:46:44,816 - INFO - Tentando exportar gestos para test_export.json
+2025-08-29 15:46:44,816 - INFO - 2 gestos exportados para test_export_013.json
+2025-08-29 15:46:44,896 - INFO - Recursos liberados
+2025-08-29 15:46:44,896 - INFO - Inicializando GestureRecognizer
+2025-08-29 15:46:44,896 - INFO - Banco de dados inicializado
+2025-08-29 15:46:44,896 - INFO - Carregando dados do banco de dados
+2025-08-29 15:46:44,979 - INFO - Modelo KNN inicializado
