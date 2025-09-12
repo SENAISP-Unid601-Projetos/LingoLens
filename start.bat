@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 :: Configurações
 set "SCRIPT_NAME=Main.py"
-set "SCRIPT_PATH=codigo\py\%SCRIPT_NAME%"
+set "SCRIPT_PATH=codigo\app\%SCRIPT_NAME%"
 set "SCRIPT_DIR=%~dp0"
 set "FULL_SCRIPT_PATH=%SCRIPT_DIR%%SCRIPT_PATH%"
 set "VENV_DIR=%SCRIPT_DIR%venv"
