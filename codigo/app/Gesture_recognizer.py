@@ -7,6 +7,14 @@ from Model_manager import ModelManager
 from Ui_manager import UIManager
 from Utils import extract_landmarks
 
+import os
+from Config import CONFIG
+
+# Cria a pasta do log caso não exista
+log_dir = os.path.dirname(CONFIG["log_file"])
+os.makedirs(log_dir, exist_ok=True)
+
+
 class GestureRecognizer:
     def __init__(self):
         logging.basicConfig(
