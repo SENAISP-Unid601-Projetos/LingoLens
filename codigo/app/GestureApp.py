@@ -59,7 +59,8 @@ class GestureApp:
             if results.multi_hand_landmarks:
                 for hand in results.multi_hand_landmarks:
                     landmarks = extract_landmarks(hand)
-                    if landmarks:
+                    if landmarks is not None and len(landmarks) > 0:
+                        self.new_gesture_data.append(landmarks)
                         if self.mode == "teste" and self.labels:
                             pred, prob = self.model_manager.predict(landmarks)
                             if prob >= CONFIG["confidence_threshold"]:
