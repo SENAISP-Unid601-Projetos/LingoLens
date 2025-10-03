@@ -3,8 +3,8 @@ import sqlite3
 import json
 import logging
 from Config import CONFIG
+from collections import Counter
 
-# Garante que a pasta do banco exista
 os.makedirs(os.path.dirname(CONFIG["db_path"]), exist_ok=True)
 
 class DatabaseManager:
@@ -13,7 +13,6 @@ class DatabaseManager:
         self._create_tables()
 
     def _create_tables(self):
-        # Tabela de gestos com tipo (letter ou movement)
         self.conn.execute('''
         CREATE TABLE IF NOT EXISTS gestures (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,29 +21,25 @@ class DatabaseManager:
             landmarks TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )''')
-
-        # Tabela de nomes de gestos com tipo
         self.conn.execute('''
         CREATE TABLE IF NOT EXISTS gesture_names (
             name TEXT PRIMARY KEY NOT NULL,
             type TEXT NOT NULL
         )''')
-
         self.conn.commit()
 
     def save_gestures(self, labels, data, types=None):
         """
-        Salva gestos no banco.
-        labels: lista de nomes
-        data: lista de landmarks
-        types: lista de tipos ('letter' ou 'movement'), default 'letter'
+        Salva gestos no banco, preservando dados existentes.
         """
         if types is None:
             types = ['letter'] * len(labels)
 
-        # Limpa dados antigos
-        self.conn.execute('DELETE FROM gestures')
-        self.conn.execute('DELETE FROM gesture_names')
+        # Verificar balanceamento
+        label_counts = Counter(labels)
+        for name, count in label_counts.items():
+            if count < CONFIG["min_samples_per_class"]:
+                logging.warning(f"Classe '{name}' tem apenas {count} samples. Recomenda-se pelo menos {CONFIG['min_samples_per_class']}.")
 
         # Insere novos dados
         for name, landmarks, g_type in zip(labels, data, types):
@@ -52,8 +47,6 @@ class DatabaseManager:
                 "INSERT INTO gestures (name, type, landmarks) VALUES (?, ?, ?)",
                 (name, g_type, json.dumps(landmarks))
             )
-
-        for name, g_type in zip(labels, types):
             self.conn.execute(
                 "INSERT OR IGNORE INTO gesture_names (name, type) VALUES (?, ?)",
                 (name, g_type)
@@ -64,8 +57,6 @@ class DatabaseManager:
     def load_gestures(self, gesture_type=None):
         """
         Carrega gestos do banco.
-        gesture_type: 'letter', 'movement' ou None para todos
-        Retorna: labels, data, gesture_names
         """
         labels, data, gesture_names = [], [], {}
 
@@ -83,9 +74,8 @@ class DatabaseManager:
         for name, g_type, landmarks_json in cursor.fetchall():
             try:
                 landmarks = json.loads(landmarks_json)
-                # Verifica se landmarks é lista de 63 floats ou sequence de frames
                 if (isinstance(landmarks, list) and
-                    (len(landmarks) == 63 or isinstance(landmarks[0], list))):
+                    (len(landmarks) >= 63 or isinstance(landmarks[0], list))):
                     labels.append(name)
                     data.append(landmarks)
             except json.JSONDecodeError:

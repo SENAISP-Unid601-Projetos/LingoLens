@@ -1,12 +1,13 @@
 import logging
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
+from sklearn.model_selection import cross_val_score
 
 class ModelManager:
-    def __init__(self, neighbors):
-        self.model = KNeighborsClassifier(n_neighbors=neighbors)
-        self.trained = False  # Flag para verificar se o modelo foi treinado
+    def __init__(self, n_estimators):
+        self.model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
+        self.trained = False
 
     def train(self, data, labels):
         unique_labels = set(labels)
@@ -18,6 +19,10 @@ class ModelManager:
             logging.warning(
                 f"Apenas uma classe ({list(unique_labels)[0]}) disponível. Modelo treinado, mas previsões podem não ser confiáveis."
             )
+
+        # Validação cruzada
+        scores = cross_val_score(self.model, data, labels, cv=5, scoring='accuracy')
+        logging.info(f"Precisão média CV: {scores.mean():.2f} (+/- {scores.std() * 2:.2f})")
 
         self.model.fit(data, labels)
         self.trained = True
@@ -39,4 +44,4 @@ class ModelManager:
             return None, 0.0
         except Exception as e:
             logging.error(f"Erro na predição: {e}")
-            return None, 0.0
+            return None, 0.0s
