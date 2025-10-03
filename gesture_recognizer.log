@@ -1489,3 +1489,30 @@
 2025-08-29 15:46:44,896 - INFO - Banco de dados inicializado
 2025-08-29 15:46:44,896 - INFO - Carregando dados do banco de dados
 2025-08-29 15:46:44,979 - INFO - Modelo KNN inicializado
+2025-09-12 15:41:13,558 - INFO - Inicializando GestureRecognizer
+2025-09-12 15:41:13,590 - INFO - Banco de dados inicializado
+2025-09-12 15:41:13,590 - INFO - Carregando dados do banco de dados
+2025-09-12 15:41:14,367 - INFO - Modelo KNN inicializado
+2025-09-12 15:41:17,627 - INFO - Resoluçao da camera definida para 1280x720
+2025-09-12 15:41:25,963 - INFO - 
+2025-09-12 15:41:28,989 - INFO - 
+2025-09-12 15:41:34,029 - INFO - 
+2025-09-12 15:41:34,429 - INFO - 
+2025-09-12 15:41:34,826 - INFO - 
+2025-09-12 15:41:41,641 - INFO - 
+2025-09-12 15:41:42,055 - INFO - 
+2025-09-12 15:41:51,922 - INFO - Recursos liberados
+2025-09-12 15:41:51,922 - INFO - Inicializando GestureRecognizer
+2025-09-12 15:41:51,937 - INFO - Banco de dados inicializado
+2025-09-12 15:41:51,937 - INFO - Carregando dados do banco de dados
+2025-09-12 15:41:52,021 - INFO - Modelo KNN inicializado
+2025-09-12 15:41:54,788 - INFO - Resoluçao da camera definida para 1280x720
+2025-09-12 15:41:56,165 - INFO - Tentando exportar gestos para test_export.json
+2025-09-12 15:41:56,165 - INFO - 2 gestos exportados para test_export_014.json
+2025-09-12 15:41:56,190 - INFO - Recursos liberados
+2025-09-12 15:41:56,190 - INFO - Inicializando GestureRecognizer
+2025-09-12 15:41:56,204 - INFO - Banco de dados inicializado
+2025-09-12 15:41:56,204 - INFO - Carregando dados do banco de dados
+2025-09-12 15:41:56,269 - INFO - Modelo KNN inicializado
+2025-09-12 15:41:59,160 - INFO - Resoluçao da camera definida para 1280x720
+2025-09-12 15:42:00,050 - INFO - Recursos liberados
