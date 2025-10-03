@@ -79,6 +79,19 @@ class DatabaseManager:
                 logging.error(f"Erro ao carregar gesto {name}")
 
         return labels, data, gesture_names
+    
+    def delete_gesture(self, gesture_name):
+        """Deleta todos os gestos e registros de nomes com o nome fornecido."""
+        try:
+            self.conn.execute("DELETE FROM gestures WHERE name = ?", (gesture_name,))
+            self.conn.execute("DELETE FROM gesture_names WHERE name = ?", (gesture_name,))
+            self.conn.commit()
+            logging.info(f"Gesto '{gesture_name}' deletado do banco.")
+            return True
+        except Exception as e:
+            logging.error(f"Erro ao deletar gesto '{gesture_name}': {e}")
+            return False
+
 
     def close(self):
         self.conn.close()

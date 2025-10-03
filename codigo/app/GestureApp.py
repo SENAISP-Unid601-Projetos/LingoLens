@@ -11,27 +11,37 @@ class GestureApp:
     def __init__(self):
         logging.basicConfig(filename=CONFIG["log_file"], level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
+
+        # Banco e UI
         self.db = DatabaseManager()
-        self.model_manager = ModelManager(CONFIG["knn_neighbors"])
         self.ui = UIManager()
+
+        # Modelo
+        self.model_manager = ModelManager(CONFIG["knn_neighbors"])
+
+        # Carrega gestos do banco
         self.labels, self.data, _ = self.db.load_gestures()
         if self.labels:
             self.model_manager.train(self.data, self.labels)
 
+        # Captura de vídeo e MediaPipe Hands
         self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
-        self.hands = mp.solutions.hands.Hands(max_num_hands=CONFIG["max_num_hands"],
-                                              min_detection_confidence=CONFIG["min_detection_confidence"])
+        self.hands = mp.solutions.hands.Hands(
+            max_num_hands=CONFIG["max_num_hands"],
+            min_detection_confidence=CONFIG["min_detection_confidence"]
+        )
         self.drawing = mp.solutions.drawing_utils
 
+        # Estados do app
         self.current_word = ""
         self.mode = "teste"
         self.new_gesture_name = ""
         self.new_gesture_data = []
 
     def run(self):
-        print("[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome H=Ajuda")
+        print("[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome D=Deletar H=Ajuda")
 
         while True:
             ret, frame = self.cap.read()
@@ -43,6 +53,7 @@ class GestureApp:
             rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = self.hands.process(rgb)
 
+            # Processa landmarks
             if results.multi_hand_landmarks:
                 for hand_landmarks in results.multi_hand_landmarks:
                     self.drawing.draw_landmarks(image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
@@ -55,6 +66,7 @@ class GestureApp:
                         elif self.mode == "treino" and self.new_gesture_name:
                             self.new_gesture_data.append(landmarks)
 
+            # Desenha UI
             image = self.ui.draw_ui(image, f"Modo: {self.mode}", 0, self.current_word)
             cv2.imshow("GestureApp", image)
 
@@ -63,10 +75,28 @@ class GestureApp:
             # ===== Input de texto ativo =====
             if self.ui.show_text_input:
                 if key == 13:  # Enter
-                    self.new_gesture_name = self.ui.input_text.upper()
+                    gesture_name = self.ui.input_text.upper()
                     self.ui.input_text = ""
                     self.ui.show_text_input = False
-                    self.ui.set_error(f"Gesto '{self.new_gesture_name}' definido. Faça movimentos e pressione 'S'.")
+
+                    if getattr(self.ui, "input_action", "") == "delete":
+                        # Deleta gesto
+                        success = self.db.delete_gesture(gesture_name)
+                        if success:
+                            # Atualiza labels e dados e re-treina modelo
+                            self.labels, self.data, _ = self.db.load_gestures()
+                            if self.labels:
+                                self.model_manager.train(self.data, self.labels)
+                            self.ui.set_error(f"Gesto '{gesture_name}' deletado com sucesso!")
+                        else:
+                            self.ui.set_error(f"Erro ao deletar gesto '{gesture_name}'.")
+
+                        self.ui.input_action = ""
+                    else:
+                        # Define novo gesto para treino
+                        self.new_gesture_name = gesture_name
+                        self.ui.set_error(f"Gesto '{self.new_gesture_name}' definido. Faça movimentos e pressione 'S'.")
+
                 elif key == 8:  # Backspace
                     self.ui.input_text = self.ui.input_text[:-1]
                 elif key != 255:
@@ -89,14 +119,12 @@ class GestureApp:
                     self.ui.input_prompt = "Digite o nome do gesto:"
                 elif key == ord('s') and self.mode == "treino":
                     if self.new_gesture_name and self.new_gesture_data:
-                        # Converte todos os ndarrays para listas e filtra None
+                        # Converte ndarray para lista se necessário
                         clean_data = []
                         for l in self.new_gesture_data:
                             if l is not None:
-                                if hasattr(l, "tolist"):
-                                    clean_data.append(l.tolist())
-                                else:
-                                    clean_data.append(l)
+                                clean_data.append(l.tolist() if hasattr(l, "tolist") else l)
+
                         self.labels += [self.new_gesture_name] * len(clean_data)
                         self.data += clean_data
 
@@ -110,6 +138,11 @@ class GestureApp:
                     self.mode = "teste"
                     self.new_gesture_name = ""
                     self.new_gesture_data = []
+
+                elif key == ord('d') and self.mode == "teste":
+                    self.ui.show_text_input = True
+                    self.ui.input_prompt = "Digite o nome do gesto para deletar:"
+                    self.ui.input_action = "delete"
 
         self.cap.release()
         cv2.destroyAllWindows()
