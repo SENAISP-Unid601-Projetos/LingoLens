@@ -29,19 +29,14 @@ class DatabaseManager:
         self.conn.commit()
 
     def save_gestures(self, labels, data, types=None):
-        """
-        Salva gestos no banco, preservando dados existentes.
-        """
         if types is None:
             types = ['letter'] * len(labels)
 
-        # Verificar balanceamento
         label_counts = Counter(labels)
         for name, count in label_counts.items():
             if count < CONFIG["min_samples_per_class"]:
                 logging.warning(f"Classe '{name}' tem apenas {count} samples. Recomenda-se pelo menos {CONFIG['min_samples_per_class']}.")
 
-        # Insere novos dados
         for name, landmarks, g_type in zip(labels, data, types):
             self.conn.execute(
                 "INSERT INTO gestures (name, type, landmarks) VALUES (?, ?, ?)",
@@ -55,9 +50,6 @@ class DatabaseManager:
         self.conn.commit()
 
     def load_gestures(self, gesture_type=None):
-        """
-        Carrega gestos do banco.
-        """
         labels, data, gesture_names = [], [], {}
 
         query_names = "SELECT name, type FROM gesture_names"
@@ -74,10 +66,13 @@ class DatabaseManager:
         for name, g_type, landmarks_json in cursor.fetchall():
             try:
                 landmarks = json.loads(landmarks_json)
-                if (isinstance(landmarks, list) and
-                    (len(landmarks) >= 63 or isinstance(landmarks[0], list))):
-                    labels.append(name)
-                    data.append(landmarks)
+                if isinstance(landmarks, list):
+                    if g_type == "letter" and len(landmarks) >= 63:
+                        labels.append(name)
+                        data.append(landmarks)
+                    elif g_type in ["word", "movement"] and all(isinstance(seq, list) and len(seq) >= 63 for seq in landmarks):
+                        labels.append(name)
+                        data.append(landmarks)
             except json.JSONDecodeError:
                 logging.error(f"Erro ao carregar gesto {name}")
 

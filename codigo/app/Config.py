@@ -8,13 +8,15 @@ CONFIG = {
     "prediction_cooldown": 15,
     "camera_resolution": (1280, 720),
     "target_fps": 30,
+    "train_fps": 15,
     "max_num_hands": 1,
     "min_detection_confidence": 0.5,
     "rf_estimators": 100,  # Para Random Forest
-    "log_file": os.path.join(BASE_DIR, "logs", "Gesture_recognizer.log"),
-    "train_fps": 15,
+    "lstm_units": 64,      # Unidades por camada LSTM
+    "lstm_layers": 2,      # Número de camadas LSTM
+    "max_sequence_length": 30,  # Frames por sequência (dinâmicos)
+    "min_samples_per_class": 50,  # Mínimo de samples/sequências por gesto
     "gesture_types": ["letter", "word", "movement"],
-    "max_sequence_length": 30,
-    "train_data_dir": os.path.join(BASE_DIR, "data", "train"),
-    "min_samples_per_class": 50,  # Mínimo de samples por letra
+    "log_file": os.path.join(BASE_DIR, "logs", "Gesture_recognizer.log"),
+    "train_data_dir": os.path.join(BASE_DIR, "data", "train")
 }
