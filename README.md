@@ -18,31 +18,7 @@ O script faz automaticamente:
 
 ## ⌨️ Atalhos no Programa
 
-- **Q** → Sair  
-- **C** → Limpar palavra  
-- **N** → Alternar entre número/letra  
-- **T** → Alternar modo Treinamento  
-- **S** → Criar novo gesto (A-Z, 0-9)  
-- **E** → Exportar gestos em JSON  
-- **H** → Mostrar/ocultar ajuda  
-
----
-
-## 🧪 Testes Unitários
-
-O aplicativo inclui testes automáticos (`unittest`).  
-Para executá-los manualmente (opcional):
-```bash
-python Main.py
-```
-Os testes verificarão funcionalidades básicas, como extração de landmarks e exportação de gestos.
-
----
-
-## 🛠️ Logs e Mensagens de Erro
-
-- Logs de execução e erros são salvos em **`gesture_recognizer.log`**.  
-- Mensagens de erro também aparecem na interface do aplicativo, caso algum problema seja detectado (como ausência de mão na câmera).
+- **Desenvolvendo...**
 
 ---
 
