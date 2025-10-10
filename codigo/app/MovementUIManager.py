@@ -1,10 +1,9 @@
 import cv2
 
 
-class UIManager:
+class MovementUIManager:
     def __init__(self, ui_scale=1.0):
         self.ui_scale = ui_scale
-        self.show_help = False
         self.show_text_input = False
         self.input_text = ""
         self.input_prompt = ""
@@ -12,46 +11,28 @@ class UIManager:
         self.error_message_timer = 0
         self.error_message_duration = 90
 
-    def set_error(self, message):
-        self.error_message = message
-        self.error_message_timer = self.error_message_duration
-
-    def draw_ui(
-        self, image, status, cooldown, word, help_menu=False, error="", title=""
-    ):
+    def draw_ui(self, image, title, cooldown, word):
         height, width = image.shape[:2]
         text_color = (255, 255, 255)
         outline_color = (0, 0, 0)
 
         # Título da tela
-        if title:
-            cv2.putText(
-                image,
-                title,
-                (width // 2 - 150, 30),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1.0,
-                (0, 255, 255),
-                2,
-            )
-
-        # Barra de status
         cv2.putText(
             image,
-            status,
+            title,
             (int(10 * self.ui_scale), int(35 * self.ui_scale)),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.9 * self.ui_scale,
+            1.0 * self.ui_scale,
             outline_color,
             3,
             cv2.LINE_AA,
         )
         cv2.putText(
             image,
-            status,
+            title,
             (int(10 * self.ui_scale), int(35 * self.ui_scale)),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.9 * self.ui_scale,
+            1.0 * self.ui_scale,
             text_color,
             2,
             cv2.LINE_AA,
@@ -70,7 +51,9 @@ class UIManager:
         )
 
         # Instruções
-        instructions = "Q:Sair C:Limpar N:Nome T:Treino S:Gesto E:Exportar H:Ajuda M:Treinar movimento"
+        instructions = (
+            "Q:Sair C:Limpar T:Treino S:Salvar N:Nome D:Deletar ESC:Cancelar M:Gestos"
+        )
         cv2.putText(
             image,
             instructions,
@@ -82,11 +65,11 @@ class UIManager:
             cv2.LINE_AA,
         )
 
-        # Erro
-        if error:
+        # Mensagem de erro
+        if self.error_message:
             cv2.putText(
                 image,
-                error,
+                self.error_message,
                 (10, height - 60),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.7 * self.ui_scale,
@@ -96,3 +79,7 @@ class UIManager:
             )
 
         return image
+
+    def set_error(self, text):
+        self.error_message = text
+        self.error_message_timer = 0

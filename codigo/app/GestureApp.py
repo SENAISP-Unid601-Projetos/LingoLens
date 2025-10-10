@@ -7,41 +7,41 @@ from Model_manager import ModelManager
 from Ui_manager import UIManager
 from Utils import extract_landmarks
 
+
 class GestureApp:
-    def __init__(self):
-        logging.basicConfig(filename=CONFIG["log_file"], level=logging.INFO,
-                            format="%(asctime)s - %(levelname)s - %(message)s")
-
-        # Banco e UI
-        self.db = DatabaseManager()
+    def __init__(self, db: DatabaseManager):
+        logging.basicConfig(
+            filename=CONFIG["log_file"],
+            level=logging.INFO,
+            format="%(asctime)s - %(levelname)s - %(message)s",
+        )
+        self.db = db
         self.ui = UIManager()
-
-        # Modelo
         self.model_manager = ModelManager(CONFIG["knn_neighbors"])
-
-        # Carrega gestos do banco
         self.labels, self.data, _ = self.db.load_gestures()
         if self.labels:
             self.model_manager.train(self.data, self.labels)
-
-        # Captura de vídeo e MediaPipe Hands
         self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
         self.hands = mp.solutions.hands.Hands(
             max_num_hands=CONFIG["max_num_hands"],
-            min_detection_confidence=CONFIG["min_detection_confidence"]
+            min_detection_confidence=CONFIG["min_detection_confidence"],
         )
         self.drawing = mp.solutions.drawing_utils
-
-        # Estados do app
         self.current_word = ""
         self.mode = "teste"
         self.new_gesture_name = ""
         self.new_gesture_data = []
 
     def run(self):
-        print("[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome D=Deletar H=Ajuda")
+        image = self.ui.draw_ui(
+            image, f"Treinar Gestos - Modo: {self.mode}", 0, self.current_word
+        )
+
+        print(
+            "[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome D=Deletar M=Movimento"
+        )
 
         while True:
             ret, frame = self.cap.read()
@@ -53,10 +53,11 @@ class GestureApp:
             rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = self.hands.process(rgb)
 
-            # Processa landmarks
             if results.multi_hand_landmarks:
                 for hand_landmarks in results.multi_hand_landmarks:
-                    self.drawing.draw_landmarks(image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
+                    self.drawing.draw_landmarks(
+                        image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS
+                    )
                     landmarks = extract_landmarks(hand_landmarks)
                     if landmarks is not None:
                         if self.mode == "teste" and self.labels:
@@ -66,84 +67,81 @@ class GestureApp:
                         elif self.mode == "treino" and self.new_gesture_name:
                             self.new_gesture_data.append(landmarks)
 
-            # Desenha UI
-            image = self.ui.draw_ui(image, f"Modo: {self.mode}", 0, self.current_word)
+            image = self.ui.draw_ui(image, "Treinar Gestos", 0, self.current_word)
             cv2.imshow("GestureApp", image)
 
             key = cv2.waitKey(1) & 0xFF
 
-            # ===== Input de texto ativo =====
             if self.ui.show_text_input:
                 if key == 13:  # Enter
                     gesture_name = self.ui.input_text.upper()
                     self.ui.input_text = ""
                     self.ui.show_text_input = False
-
                     if getattr(self.ui, "input_action", "") == "delete":
-                        # Deleta gesto
                         success = self.db.delete_gesture(gesture_name)
                         if success:
-                            # Atualiza labels e dados e re-treina modelo
                             self.labels, self.data, _ = self.db.load_gestures()
                             if self.labels:
                                 self.model_manager.train(self.data, self.labels)
-                            self.ui.set_error(f"Gesto '{gesture_name}' deletado com sucesso!")
+                            self.ui.set_error(
+                                f"Gesto '{gesture_name}' deletado com sucesso!"
+                            )
                         else:
-                            self.ui.set_error(f"Erro ao deletar gesto '{gesture_name}'.")
-
+                            self.ui.set_error(
+                                f"Erro ao deletar gesto '{gesture_name}'."
+                            )
                         self.ui.input_action = ""
                     else:
-                        # Define novo gesto para treino
                         self.new_gesture_name = gesture_name
-                        self.ui.set_error(f"Gesto '{self.new_gesture_name}' definido. Faça movimentos e pressione 'S'.")
-
-                elif key == 8:  # Backspace
+                        self.ui.set_error(
+                            f"Gesto '{self.new_gesture_name}' definido. Pressione 'S' para salvar."
+                        )
+                elif key == 8:
                     self.ui.input_text = self.ui.input_text[:-1]
                 elif key != 255:
                     self.ui.input_text += chr(key)
-
-            # ===== Teclas de comando =====
             else:
-                if key == ord('q'):
+                if key == ord("q"):
                     break
-                elif key == ord('c'):
+                elif key == ord("m"):
+                    self.cap.release()
+                    cv2.destroyAllWindows()
+                    return "movement"
+                elif key == ord("c"):
                     self.current_word = ""
-                elif key == ord('h'):
-                    self.ui.show_help = not self.ui.show_help
-                elif key == ord('t'):
+                elif key == ord("t"):
                     self.mode = "treino"
                     self.new_gesture_data = []
-                    self.ui.set_error("Modo Treino ativado. Pressione 'N' para definir nome do gesto.")
-                elif key == ord('n') and self.mode == "treino":
+                    self.ui.set_error(
+                        "Modo Treino ativado. Pressione 'N' para definir nome do gesto."
+                    )
+                elif key == ord("n") and self.mode == "treino":
                     self.ui.show_text_input = True
                     self.ui.input_prompt = "Digite o nome do gesto:"
-                elif key == ord('s') and self.mode == "treino":
+                elif key == ord("s") and self.mode == "treino":
                     if self.new_gesture_name and self.new_gesture_data:
-                        # Converte ndarray para lista se necessário
                         clean_data = []
                         for l in self.new_gesture_data:
                             if l is not None:
-                                clean_data.append(l.tolist() if hasattr(l, "tolist") else l)
-
+                                clean_data.append(
+                                    l.tolist() if hasattr(l, "tolist") else l
+                                )
                         self.labels += [self.new_gesture_name] * len(clean_data)
                         self.data += clean_data
-
                         try:
                             self.db.save_gestures(self.labels, self.data)
                             self.model_manager.train(self.data, self.labels)
                             self.ui.set_error(f"Gesto '{self.new_gesture_name}' salvo!")
                         except Exception as e:
                             self.ui.set_error(f"Erro ao salvar gesto: {e}")
-
                     self.mode = "teste"
                     self.new_gesture_name = ""
                     self.new_gesture_data = []
-
-                elif key == ord('d') and self.mode == "teste":
+                elif key == ord("d") and self.mode == "teste":
                     self.ui.show_text_input = True
                     self.ui.input_prompt = "Digite o nome do gesto para deletar:"
                     self.ui.input_action = "delete"
 
         self.cap.release()
         cv2.destroyAllWindows()
-        self.db.close()
+        return None
