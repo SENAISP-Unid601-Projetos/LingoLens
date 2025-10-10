@@ -1,82 +1,68 @@
-import os
 import sqlite3
-import json
-import logging
-from Config import CONFIG
-from collections import Counter
-
-os.makedirs(os.path.dirname(CONFIG["db_path"]), exist_ok=True)
+import pickle
+import os
+import numpy as np
 
 class DatabaseManager:
-    def __init__(self, db_path):
-        self.conn = sqlite3.connect(db_path)
-        self._create_tables()
+    def __init__(self, db_path=os.path.join('app', 'data', 'gestures.db')):
+        self.db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), db_path))
+        self.create_table()
 
-    def _create_tables(self):
-        self.conn.execute('''
-        CREATE TABLE IF NOT EXISTS gestures (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            type TEXT NOT NULL,
-            landmarks TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )''')
-        self.conn.execute('''
-        CREATE TABLE IF NOT EXISTS gesture_names (
-            name TEXT PRIMARY KEY NOT NULL,
-            type TEXT NOT NULL
-        )''')
-        self.conn.commit()
+    def create_table(self):
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS gestures (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    landmarks BLOB NOT NULL
+                )
+            ''')
+            conn.commit()
 
-    def save_gestures(self, labels, data, types=None):
-        if types is None:
-            types = ['letter'] * len(labels)
+    def save_gestures(self, gesture_name, gesture_type, landmarks):
+        try:
+            existing_dict = self.load_gestures(gesture_type)
+            if gesture_name not in existing_dict:
+                existing_dict[gesture_name] = []
+            existing_dict[gesture_name].extend(landmarks)
+            print(f"[DEBUG] Gestos existentes antes de salvar ({gesture_type}): {existing_dict.keys()}")
+            
+            serialized_data = pickle.dumps(existing_dict)
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    SELECT id FROM gestures WHERE type = ?
+                ''', (gesture_type,))
+                result = cursor.fetchone()
+                
+                if result:
+                    cursor.execute('''
+                        UPDATE gestures SET landmarks = ? WHERE type = ?
+                    ''', (serialized_data, gesture_type))
+                else:
+                    cursor.execute('''
+                        INSERT INTO gestures (name, type, landmarks)
+                        VALUES (?, ?, ?)
+                    ''', (gesture_name, gesture_type, serialized_data))
+                conn.commit()
+            print(f"[INFO] Gestos de '{gesture_name}' ({gesture_type}) salvos no banco de dados.")
+        except Exception as e:
+            print(f"[ERROR] Erro ao salvar gestos: {e}")
 
-        label_counts = Counter(labels)
-        for name, count in label_counts.items():
-            if count < CONFIG["min_samples_per_class"]:
-                logging.warning(f"Classe '{name}' tem apenas {count} samples. Recomenda-se pelo menos {CONFIG['min_samples_per_class']}.")
-
-        for name, landmarks, g_type in zip(labels, data, types):
-            self.conn.execute(
-                "INSERT INTO gestures (name, type, landmarks) VALUES (?, ?, ?)",
-                (name, g_type, json.dumps(landmarks))
-            )
-            self.conn.execute(
-                "INSERT OR IGNORE INTO gesture_names (name, type) VALUES (?, ?)",
-                (name, g_type)
-            )
-
-        self.conn.commit()
-
-    def load_gestures(self, gesture_type=None):
-        labels, data, gesture_names = [], [], {}
-
-        query_names = "SELECT name, type FROM gesture_names"
-        if gesture_type:
-            query_names += f" WHERE type='{gesture_type}'"
-        cursor = self.conn.execute(query_names)
-        gesture_names = {name: name for name, _ in cursor.fetchall()}
-
-        query_gestures = "SELECT name, type, landmarks FROM gestures"
-        if gesture_type:
-            query_gestures += f" WHERE type='{gesture_type}'"
-        cursor = self.conn.execute(query_gestures)
-
-        for name, g_type, landmarks_json in cursor.fetchall():
-            try:
-                landmarks = json.loads(landmarks_json)
-                if isinstance(landmarks, list):
-                    if g_type == "letter" and len(landmarks) >= 63:
-                        labels.append(name)
-                        data.append(landmarks)
-                    elif g_type in ["word", "movement"] and all(isinstance(seq, list) and len(seq) >= 63 for seq in landmarks):
-                        labels.append(name)
-                        data.append(landmarks)
-            except json.JSONDecodeError:
-                logging.error(f"Erro ao carregar gesto {name}")
-
-        return labels, data, gesture_names
-
-    def close(self):
-        self.conn.close()
+    def load_gestures(self, gesture_type):
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    SELECT landmarks FROM gestures WHERE type = ?
+                ''', (gesture_type,))
+                result = cursor.fetchone()
+                if result:
+                    return pickle.loads(result[0])
+                return {}
+        except Exception as e:
+            print(f"[ERROR] Erro ao carregar gestos: {e}")
+            return {}
