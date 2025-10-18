@@ -6,6 +6,7 @@ from Config import CONFIG
 from Database_manager import DatabaseManager
 from Model_manager import ModelManager
 from Ui_manager import UIManager
+from Extract_landmarks import extract_landmarks
 
 class GestureApp:
     def __init__(self):

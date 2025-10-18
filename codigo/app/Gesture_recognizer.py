@@ -42,7 +42,7 @@ class GestureRecognizer:
             self.gesture_type = gesture_type
             self.landmarks_buffer = landmarks
 
-            # Forçar 'letter' para gestos de uma letra
+            # Forçar 'letter' for gestures de uma letra
             if len(gesture_name) == 1:
                 self.gesture_type = 'letter'
 
@@ -56,8 +56,10 @@ class GestureRecognizer:
                 existing_data[gesture_name] = []
             existing_data[gesture_name].extend(self.landmarks_buffer)
 
-            # Salvar no banco (provavelmente onde o problema de apenas A/B ocorre)
-            self.db_manager.save_gestures(gesture_name, self.gesture_type, self.landmarks_buffer)
+            # Salvar no banco
+            labels = [gesture_name] * len(landmarks)
+            gesture_types = [gesture_type] * len(landmarks)
+            self.db_manager.save_gestures(labels, landmarks, gesture_types)
 
             # Treinar modelo
             if self.gesture_type == 'letter':
@@ -123,6 +125,7 @@ class GestureRecognizer:
             gesture_type = self.detect_gesture_type(landmarks)
             if gesture_type == 'letter':
                 if self.rf_model is None:
+                    logging.warning("Modelo ainda não treinado. Retornando None.")
                     return None, 0.0
                 X = np.array(landmarks[-1]).flatten().reshape(1, -1)
                 prediction = self.rf_model.predict(X)
@@ -130,6 +133,7 @@ class GestureRecognizer:
                 return prediction[0], probability
             else:
                 if self.lstm_model is None or len(landmarks) < self.sequence_length:
+                    logging.warning("Modelo ainda não treinado ou sequência insuficiente. Retornando None.")
                     return None, 0.0
                 X = np.array([landmarks[-self.sequence_length:]])
                 prediction = self.lstm_model.predict(X, verbose=0)
@@ -260,7 +264,7 @@ class GestureRecognizer:
                 self.input_text = self.input_text[:-1]
             elif self.input_active and key == 13:
                 if self.input_text:
-                    self.current_letter = self.input_text
+                    self.current_letter = self.input_text.upper()  # Normalizar para maiúsculas
                     self.input_active = False
                     self.input_text = ""
                     self.landmarks_buffer = []
