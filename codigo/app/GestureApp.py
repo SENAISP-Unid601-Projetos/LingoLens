@@ -4,8 +4,9 @@ import logging
 from Config import CONFIG
 from Database_manager import DatabaseManager
 from Model_manager import ModelManager
-from Ui_manager import UIManager
+from UI_manager import UIManager
 from Utils import extract_landmarks
+from GestureTrainer import GestureTrainer  # Adicione esta importação
 
 
 class GestureApp:
@@ -33,14 +34,11 @@ class GestureApp:
         self.mode = "teste"
         self.new_gesture_name = ""
         self.new_gesture_data = []
+        self.gesture_trainer = GestureTrainer()  # Instancia o treinador
 
     def run(self):
-        image = self.ui.draw_ui(
-            image, f"Treinar Gestos - Modo: {self.mode}", 0, self.current_word
-        )
-
         print(
-            "[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome D=Deletar M=Movimento"
+            "[INFO] Teclas: Q=Sair | C=Limpar | T=Treino | S=Salvar | N=Nome | D=Deletar | M=Movimento | G:Treinar Gesto"
         )
 
         while True:
@@ -53,6 +51,7 @@ class GestureApp:
             rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = self.hands.process(rgb)
 
+            # Detecção e desenho
             if results.multi_hand_landmarks:
                 for hand_landmarks in results.multi_hand_landmarks:
                     self.drawing.draw_landmarks(
@@ -67,11 +66,13 @@ class GestureApp:
                         elif self.mode == "treino" and self.new_gesture_name:
                             self.new_gesture_data.append(landmarks)
 
+            # Desenha UI com título fixo
             image = self.ui.draw_ui(image, "Treinar Gestos", 0, self.current_word)
             cv2.imshow("GestureApp", image)
 
             key = cv2.waitKey(1) & 0xFF
 
+            # Se estiver digitando texto (nome/deleção)
             if self.ui.show_text_input:
                 if key == 13:  # Enter
                     gesture_name = self.ui.input_text.upper()
@@ -100,13 +101,37 @@ class GestureApp:
                     self.ui.input_text = self.ui.input_text[:-1]
                 elif key != 255:
                     self.ui.input_text += chr(key)
+
             else:
-                if key == ord("q"):
+                # ESC cancela modo treino ou sai
+                if key == 27:
+                    if self.mode == "treino":
+                        self.mode = "teste"
+                        self.new_gesture_name = ""
+                        self.new_gesture_data = []
+                        self.ui.set_error("Modo treino cancelado.")
+                    else:
+                        break
+
+                elif key == ord("q"):
                     break
                 elif key == ord("m"):
                     self.cap.release()
                     cv2.destroyAllWindows()
                     return "movement"
+                elif key == ord("g"):  # Novo atalho para treinar gesto
+                    self.cap.release()
+                    cv2.destroyAllWindows()
+                    self.gesture_trainer.run()
+                    # Recarrega a câmera após o treino
+                    self.cap = cv2.VideoCapture(0)
+                    self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
+                    self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
+                    # Recarrega os dados atualizados
+                    self.labels, self.data, _ = self.db.load_gestures()
+                    if self.labels:
+                        self.model_manager.train(self.data, self.labels)
+                    continue
                 elif key == ord("c"):
                     self.current_word = ""
                 elif key == ord("t"):

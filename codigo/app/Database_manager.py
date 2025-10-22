@@ -4,9 +4,9 @@ import json
 import logging
 from Config import CONFIG
 
-# Garante que a pasta do banco exista
+# Garante que as pastas existam
 os.makedirs(os.path.dirname(CONFIG["db_path"]), exist_ok=True)
-
+os.makedirs(os.path.dirname(CONFIG["log_file"]), exist_ok=True)
 
 class DatabaseManager:
     def __init__(self, db_path=CONFIG["db_path"]):
@@ -34,8 +34,25 @@ class DatabaseManager:
             type TEXT NOT NULL
         )"""
         )
-
         self.conn.commit()
+
+    def add_gesture(self, name, landmarks, g_type="letter"):
+        """Adiciona um único gesto ao banco"""
+        try:
+            landmarks_json = json.dumps(landmarks.tolist() if hasattr(landmarks, 'tolist') else landmarks)
+            self.conn.execute(
+                "INSERT INTO gestures (name, type, landmarks) VALUES (?, ?, ?)",
+                (name, g_type, landmarks_json)
+            )
+            self.conn.execute(
+                "INSERT OR IGNORE INTO gesture_names (name, type) VALUES (?, ?)",
+                (name, g_type)
+            )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            logging.error(f"Erro ao adicionar gesto: {e}")
+            return False
 
     def save_gestures(self, labels, data, types=None):
         """
@@ -65,6 +82,10 @@ class DatabaseManager:
             )
 
         self.conn.commit()
+
+    def save_movements(self, labels, data):
+        """Salva movimentos no banco"""
+        return self.save_gestures(labels, data, types=["movement"] * len(labels))
 
     def load_gestures(self, gesture_type=None):
         """
@@ -97,6 +118,10 @@ class DatabaseManager:
                 logging.error(f"Erro ao carregar gesto {name}")
 
         return labels, data, gesture_names
+
+    def load_movements(self):
+        """Carrega movimentos do banco"""
+        return self.load_gestures(gesture_type="movement")
 
     def delete_gesture(self, gesture_name):
         """

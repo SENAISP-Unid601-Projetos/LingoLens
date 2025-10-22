@@ -1,5 +1,6 @@
 from GestureApp import GestureApp
 from MovementApp import MovementApp
+from GestureTrainer import GestureTrainer  # Adicione esta linha
 from Database_manager import DatabaseManager
 
 

@@ -25,12 +25,22 @@ class GestureTrainer:
             max_num_hands=CONFIG["max_num_hands"],
             min_detection_confidence=CONFIG["min_detection_confidence"]
         )
+        self.drawing = mp.solutions.drawing_utils
 
         # Carrega gestos existentes
         self.labels, self.data, _ = self.db.load_gestures()
+        self.current_landmarks = None
 
-    def run(self, letter):
-        self.ui.set_current_letter(letter)
+    def run(self, letter=None):
+        if letter:
+            self.ui.set_current_letter(letter)
+        else:
+            self.ui.show_text_input = True
+            self.ui.input_prompt = "Digite a letra para treinar:"
+            letter = self._get_letter_input()
+            if not letter:
+                return
+
         print(f"[INFO] Treinando letra: {letter}")
 
         while self.cap.isOpened():
@@ -43,28 +53,78 @@ class GestureTrainer:
             rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = self.hands.process(rgb)
 
+            # Desenha landmarks da mão
             if results.multi_hand_landmarks:
-                for hand in results.multi_hand_landmarks:
-                    landmarks = extract_landmarks(hand)
-                    if landmarks and len(landmarks) == 63:  # garante consistência
+                for hand_landmarks in results.multi_hand_landmarks:
+                    self.drawing.draw_landmarks(
+                        image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS
+                    )
+                    landmarks = extract_landmarks(hand_landmarks)
+                    if landmarks and len(landmarks) == 63:
                         self.current_landmarks = landmarks
 
-            # Desenha interface
-            frame = self.ui.draw_train_ui(image)
-            cv2.imshow("Treino de Gestos", frame)
+            # Desenha interface atualizada
+            status = "Pressione S para salvar o gesto"
+            image = self.ui.draw_train_ui(image, status, "")
+            cv2.imshow("Treino de Gestos", image)
 
-            # Captura tecla (uma única vez por loop)
+            # Captura tecla
             key = cv2.waitKey(1) & 0xFF
-            if key == ord("s") and hasattr(self, "current_landmarks"):
-                self.db.add_gesture(letter, self.current_landmarks, g_type="letter")
-                self.labels.append(letter)
-                self.data.append(self.current_landmarks)
-                print(f"[INFO] Gesto '{letter}' salvo no banco!")
+            
+            if key == ord("s") and self.current_landmarks is not None:
+                success = self.db.add_gesture(letter, self.current_landmarks, g_type="letter")
+                if success:
+                    self.labels.append(letter)
+                    self.data.append(self.current_landmarks)
+                    self.ui.set_error(f"Gesto '{letter}' salvo com sucesso!")
+                    print(f"[INFO] Gesto '{letter}' salvo no banco!")
+                else:
+                    self.ui.set_error(f"Erro ao salvar gesto '{letter}'")
+
+            elif key == ord("c"):
+                self.current_landmarks = None
+                self.ui.set_error("Gesto atual limpo")
+
+            elif key == ord("m"):
+                print("[INFO] Voltando para modo movimentos.")
+                break
 
             elif key == ord("q"):
                 print("[INFO] Saindo do treino.")
                 break
 
         self.cap.release()
-        self.db.close()
         cv2.destroyAllWindows()
+
+    def _get_letter_input(self):
+        """Obtém input de letra do usuário"""
+        while True:
+            ret, frame = self.cap.read()
+            if not ret:
+                break
+
+            image = cv2.flip(frame, 1)
+            image = self.ui.draw_train_ui(image, "Digite a letra e pressione Enter", "")
+            cv2.imshow("Treino de Gestos", image)
+
+            key = cv2.waitKey(1) & 0xFF
+
+            if key == 13:  # Enter
+                letter = self.ui.input_text.upper()
+                self.ui.input_text = ""
+                self.ui.show_text_input = False
+                if letter:
+                    return letter
+                else:
+                    self.ui.set_error("Digite uma letra válida")
+                    
+            elif key == 8:  # Backspace
+                self.ui.input_text = self.ui.input_text[:-1]
+                
+            elif key == 27:  # ESC
+                break
+                
+            elif 32 <= key <= 126:  # Caracteres imprimíveis
+                self.ui.input_text += chr(key)
+
+        return None
