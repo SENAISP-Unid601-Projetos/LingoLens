@@ -91,6 +91,32 @@ class DatabaseManager:
             logging.error(f"Erro ao carregar gestos para {gesture_type}: {e}")
             return {}, [], [], []
 
+    def list_gestures(self, gesture_type):
+        """Retorna uma lista de nomes de gestos para um dado gesture_type."""
+        try:
+            self.cursor.execute('SELECT DISTINCT gesture_name FROM gestures WHERE gesture_type = ?', (gesture_type,))
+            results = self.cursor.fetchall()
+            return [row[0] for row in results]
+        except sqlite3.Error as e:
+            logging.error(f"Erro ao listar gestos para {gesture_type}: {e}")
+            return []
+
+    def delete_gesture(self, gesture_type, gesture_name):
+        """Deleta um gesto específico com base no gesture_type e gesture_name."""
+        try:
+            with self.conn:
+                self.cursor.execute('DELETE FROM gestures WHERE gesture_type = ? AND gesture_name = ?', 
+                                  (gesture_type, gesture_name))
+            if self.cursor.rowcount > 0:
+                logging.info(f"Gesto {gesture_name} do tipo {gesture_type} deletado com sucesso")
+                return True
+            else:
+                logging.warning(f"Nenhum gesto encontrado para {gesture_name} do tipo {gesture_type}")
+                return False
+        except sqlite3.Error as e:
+            logging.error(f"Erro ao deletar gesto {gesture_name} do tipo {gesture_type}: {e}")
+            return False
+
     def close(self):
         try:
             self.conn.commit()

@@ -65,6 +65,9 @@ class GestureApp:
             self.frame_count = 0
             self.prev_landmarks = None
             self.last_prediction_time = time.time()
+            self.delete_mode = False
+            self.gesture_list = []
+            self.selected_index = 0
         except Exception as e:
             logging.error(f"Erro na inicialização do GestureApp: {e}")
             raise
@@ -82,7 +85,7 @@ class GestureApp:
             return False
 
     def run(self):
-        print("[INFO] Teclas: Q=Sair C:Limpar T:Treino S:Gesto")
+        print("[INFO] Teclas: Q=Sair C:Limpar T:Treino S:Gesto D:Excluir")
         try:
             while True:
                 ret, frame = self.cap.read()
@@ -99,7 +102,7 @@ class GestureApp:
                 rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 results = self.hands.process(rgb)
 
-                if results.multi_hand_landmarks:
+                if results.multi_hand_landmarks and not self.delete_mode:
                     for hand in results.multi_hand_landmarks:
                         if self.mode == "treino":
                             self.mp_drawing.draw_landmarks(
@@ -125,16 +128,62 @@ class GestureApp:
                                 else:
                                     logging.debug(f"Predição ignorada: {pred} com probabilidade {prob:.2f} < {CONFIG['confidence_threshold']}")
 
+                # Preparar dados para UI
+                status = f"Modo: {'Treino' if self.mode == 'treino' else 'Teste'} ({self.gesture_type})"
+                gesture_list = self.gesture_list if self.delete_mode else None
+                selected_index = self.selected_index if self.delete_mode else None
+
                 self.ui.draw_ui(
-                    image, f"Modo: {'Treino' if self.mode=='treino' else 'Teste'} ({self.gesture_type})",
-                    CONFIG["prediction_cooldown"] / CONFIG["target_fps"], self.current_word, self.sample_count, self.input_text,
-                    self.is_input_active, self.new_gesture_name
+                    image, status, CONFIG["prediction_cooldown"] / CONFIG["target_fps"], 
+                    self.current_word, self.sample_count, self.input_text,
+                    self.is_input_active, self.new_gesture_name, gesture_list, selected_index
                 )
 
                 cv2.imshow("GestureApp", image)
                 key = cv2.waitKey(1) & 0xFF
 
-                if self.is_input_active:
+                # Modo de exclusão
+                if self.delete_mode:
+                    if key == 27:  # ESC para sair do modo de exclusão
+                        self.delete_mode = False
+                        self.gesture_list = []
+                        self.selected_index = 0
+                        print("[INFO] Modo Excluir desativado")
+                    elif key == ord('n') or key == 40:  # N ou seta para baixo
+                        if self.gesture_list:
+                            self.selected_index = (self.selected_index + 1) % len(self.gesture_list)
+                    elif key == ord('p') or key == 38:  # P ou seta para cima
+                        if self.gesture_list:
+                            self.selected_index = (self.selected_index - 1) % len(self.gesture_list)
+                    elif key == 13 and self.gesture_list:  # Enter para confirmar exclusão
+                        gesture_to_delete = self.gesture_list[self.selected_index]
+                        print(f"[INFO] Tentando deletar: {gesture_to_delete}")
+                        if self.db.delete_gesture(self.gesture_type, gesture_to_delete):
+                            print(f"[INFO] Gesto '{gesture_to_delete}' deletado com sucesso")
+                            # Recarregar dados após exclusão
+                            self.data_dict, self.labels, self.data, self.gesture_names = self.db.load_gestures(self.gesture_type)
+                            self.gesture_list = self.db.list_gestures(self.gesture_type)
+                            if self.gesture_list:
+                                self.selected_index = min(self.selected_index, len(self.gesture_list) - 1)
+                            else:
+                                self.selected_index = 0
+                            if self.labels:
+                                success = self.model_manager.train(self.data, self.labels)
+                                if success:
+                                    print(f"[INFO] Modelo atualizado com {len(set(self.labels))} classe(s): {set(self.labels)}")
+                                else:
+                                    print("[ERROR] Falha ao atualizar modelo após exclusão")
+                            else:
+                                self.model_manager.trained = False
+                                print("[INFO] Nenhum gesto restante para treinar")
+                        else:
+                            print(f"[ERROR] Falha ao deletar gesto '{gesture_to_delete}'")
+                        if not self.gesture_list:
+                            self.delete_mode = False
+                            print("[INFO] Modo Excluir desativado: nenhum gesto restante")
+
+                # Modo de input ativo
+                elif self.is_input_active:
                     if key == 13:  # Enter
                         self.new_gesture_name = self.input_text.upper()
                         self.is_input_active = False
@@ -142,10 +191,16 @@ class GestureApp:
                         self.sample_count = 0
                         if self.new_gesture_name:
                             print(f"[INFO] Modo Treino ativado para '{self.new_gesture_name}'")
+                    elif key == 27:  # ESC
+                        self.is_input_active = False
+                        self.input_text = ""
+                        self.mode = "teste"
+                        print("[INFO] Entrada de texto cancelada. Retornando ao modo Teste")
                     elif key == 8:  # Backspace
                         self.input_text = self.input_text[:-1]
-                    elif key in [ord(c) for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"]:
+                    elif 65 <= key <= 90 or 97 <= key <= 122:  # Letras A-Z, a-z
                         self.input_text += chr(key).upper()
+                # Teclas normais
                 else:
                     if key == ord("q"):
                         print("[INFO] Saindo do aplicativo...")
@@ -162,7 +217,7 @@ class GestureApp:
                         self.new_gesture_data = []
                         self.sample_count = 0
                         self.prev_landmarks = None
-                        print("[INFO] Modo de entrada de texto ativado. Digite na janela")
+                        print("[INFO] Modo de entrada de texto ativado. Digite na janela (ESC para cancelar)")
                     elif key == ord("s"):
                         if self.mode == "treino" and self.new_gesture_name and self.new_gesture_data:
                             if len(self.new_gesture_data) < CONFIG["min_samples_per_class"]:
@@ -185,15 +240,26 @@ class GestureApp:
                             
                             self.mode = "teste"
                             self.new_gesture_name = ""
-                            self.new_gesture_data = []
+                            self.new_gesture_from_data = []
                             self.is_input_active = False
                             self.sample_count = 0
                             print("[INFO] Modo Teste ativado")
                         elif self.mode == "treino" and not self.new_gesture_data:
                             print("[WARNING] Nenhum dado de gesto capturado para salvar")
+                    elif key == ord("d"):
+                        self.delete_mode = True
+                        self.gesture_list = self.db.list_gestures(self.gesture_type)
+                        self.selected_index = 0
+                        if not self.gesture_list:
+                            print("[WARNING] Nenhum gesto encontrado para excluir")
+                            self.delete_mode = False
+                        else:
+                            print(f"[INFO] Modo Excluir ativado. {len(self.gesture_list)} gestos encontrados.")
+                            print("Use N (próximo), P (anterior), ENTER para excluir, ESC para sair")
 
         except Exception as e:
             logging.error(f"Erro durante execução do GestureApp: {e}")
+            print(f"[ERROR] Erro durante execução: {e}")
         finally:
             self.cap.release()
             cv2.destroyAllWindows()
