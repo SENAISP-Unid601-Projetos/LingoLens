@@ -11,6 +11,10 @@ def extract_landmarks(hand_landmarks, image_shape=None):
     Returns:
         Lista achatada com coordenadas normalizadas e distâncias ou None se inválido.
     """
+    if image_shape is not None and (not isinstance(image_shape, tuple) or len(image_shape) < 2):
+        logging.error("image_shape deve ser uma tupla com pelo menos 2 elementos (altura, largura)")
+        return None
+
     landmarks = []
     for lm in hand_landmarks.landmark:
         x = lm.x * image_shape[1] if image_shape else lm.x
@@ -20,12 +24,14 @@ def extract_landmarks(hand_landmarks, image_shape=None):
         logging.debug(f"Coordenada: x={x}, y={y}, z={z}, image_shape={image_shape}")
     
     landmarks_array = np.array(landmarks)
-    if landmarks_array.size != 63:
-        logging.error(f"Landmarks inválidos ({landmarks_array.size})")
+    if len(landmarks_array) != 21:  # MediaPipe retorna 21 landmarks por mão
+        logging.error(f"Esperado 21 landmarks, mas recebido {len(landmarks_array)}")
         return None
     
     landmarks_reshaped = landmarks_array.reshape(-1, 3)
-    normalized = (landmarks_reshaped - landmarks_reshaped.mean(axis=0)) / (landmarks_reshaped.std(axis=0) + 1e-8)
+    std = landmarks_reshaped.std(axis=0)
+    std = np.where(std == 0, 1.0, std)  # Evitar divisão por zero
+    normalized = (landmarks_reshaped - landmarks_reshaped.mean(axis=0)) / (std + 1e-8)
     
     distances = []
     key_pairs = [(4, 8), (8, 12)]  # Polegar (4) - Indicador (8), Indicador (8) - Médio (12)
