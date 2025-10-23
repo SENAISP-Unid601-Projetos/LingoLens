@@ -62,17 +62,13 @@ class MovementTrainer:
             logging.error("Nenhum dado válido para salvar.")
             return
             
-        # Carrega dados existentes
         existing_labels, existing_data, _ = self.db.load_movements()
         
-        # Adiciona novos dados
         updated_labels = existing_labels + [name] * len(clean_data)
         updated_data = existing_data + clean_data
         
-        # Salva no banco
         self.db.save_movements(updated_labels, updated_data)
         
-        # Atualiza e retreina o modelo
         self.labels = updated_labels
         self.data = updated_data
         self.train(self.data, self.labels)

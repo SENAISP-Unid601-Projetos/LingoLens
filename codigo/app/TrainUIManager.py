@@ -14,14 +14,10 @@ class TrainUIManager:
         self.input_action = ""
 
     def draw_train_ui(self, image, status="Treino", word=""):
-        """
-        Desenha a interface para treino de gestos/letras igual à de movimentos.
-        """
         height, width = image.shape[:2]
         text_color = (255, 255, 255)
         outline_color = (0, 0, 0)
 
-        # Título da tela
         title = f"Treinar Gestos - Letra: {self.current_letter}"
         cv2.putText(
             image,
@@ -44,7 +40,6 @@ class TrainUIManager:
             cv2.LINE_AA,
         )
 
-        # Status/Modo
         cv2.putText(
             image,
             status,
@@ -56,7 +51,6 @@ class TrainUIManager:
             cv2.LINE_AA,
         )
 
-        # Palavra atual (se aplicável)
         if word:
             cv2.putText(
                 image,
@@ -69,7 +63,6 @@ class TrainUIManager:
                 cv2.LINE_AA,
             )
 
-        # Instruções
         instructions = "S:Salvar Gesto | Q:Sair | C:Limpar | M:Voltar para Movimentos"
         cv2.putText(
             image,
@@ -82,7 +75,6 @@ class TrainUIManager:
             cv2.LINE_AA,
         )
 
-        # Mensagem de erro
         if self.error_message:
             cv2.putText(
                 image,
@@ -95,14 +87,11 @@ class TrainUIManager:
                 cv2.LINE_AA,
             )
 
-        # Input de texto (se necessário)
         if self.show_text_input:
-            # Fundo para input
             overlay = image.copy()
             cv2.rectangle(overlay, (50, 100), (width - 50, 200), (50, 50, 50), -1)
             cv2.addWeighted(overlay, 0.7, image, 0.3, 0, image)
             
-            # Prompt
             cv2.putText(
                 image,
                 self.input_prompt,
@@ -113,7 +102,6 @@ class TrainUIManager:
                 2,
             )
             
-            # Texto digitado
             cv2.putText(
                 image,
                 self.input_text + "_",

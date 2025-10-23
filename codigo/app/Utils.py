@@ -12,7 +12,6 @@ def extract_landmarks(hand_landmarks):
             logging.error(f"Landmarks inválidos ({landmarks.size})")
             return None
 
-        # Normaliza
         landmarks_reshaped = landmarks.reshape(-1, 3)
         normalized = (landmarks_reshaped - landmarks_reshaped.mean(axis=0)) / (landmarks_reshaped.std(axis=0) + 1e-8)
         return normalized.flatten()

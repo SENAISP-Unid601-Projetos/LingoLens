@@ -11,6 +11,7 @@ class UIManager:
         self.error_message = ""
         self.error_message_timer = 0
         self.error_message_duration = 90
+        self.input_action = ""
 
     def set_error(self, message):
         self.error_message = message
@@ -23,7 +24,6 @@ class UIManager:
         text_color = (255, 255, 255)
         outline_color = (0, 0, 0)
 
-        # Título da tela
         if title:
             cv2.putText(
                 image,
@@ -35,7 +35,6 @@ class UIManager:
                 2,
             )
 
-        # Barra de status
         cv2.putText(
             image,
             status,
@@ -57,7 +56,6 @@ class UIManager:
             cv2.LINE_AA,
         )
 
-        # Palavra atual
         cv2.putText(
             image,
             word,
@@ -69,7 +67,6 @@ class UIManager:
             cv2.LINE_AA,
         )
 
-        # Instruções
         instructions = "Q:Sair C:Limpar N:Nome T:Treino S:Gesto E:Exportar H:Ajuda M:Treinar movimento"
         cv2.putText(
             image,
@@ -82,7 +79,6 @@ class UIManager:
             cv2.LINE_AA,
         )
 
-        # Erro
         if error:
             cv2.putText(
                 image,

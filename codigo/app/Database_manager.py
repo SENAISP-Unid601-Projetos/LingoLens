@@ -4,7 +4,6 @@ import json
 import logging
 from Config import CONFIG
 
-# Garante que as pastas existam
 os.makedirs(os.path.dirname(CONFIG["db_path"]), exist_ok=True)
 os.makedirs(os.path.dirname(CONFIG["log_file"]), exist_ok=True)
 
@@ -14,7 +13,6 @@ class DatabaseManager:
         self._create_tables()
 
     def _create_tables(self):
-        # Tabela de gestos com tipo (letter ou movement)
         self.conn.execute(
             """
         CREATE TABLE IF NOT EXISTS gestures (
@@ -26,7 +24,6 @@ class DatabaseManager:
         )"""
         )
 
-        # Tabela de nomes de gestos com tipo
         self.conn.execute(
             """
         CREATE TABLE IF NOT EXISTS gesture_names (
@@ -37,7 +34,6 @@ class DatabaseManager:
         self.conn.commit()
 
     def add_gesture(self, name, landmarks, g_type="letter"):
-        """Adiciona um único gesto ao banco"""
         try:
             landmarks_json = json.dumps(landmarks.tolist() if hasattr(landmarks, 'tolist') else landmarks)
             self.conn.execute(
@@ -55,20 +51,12 @@ class DatabaseManager:
             return False
 
     def save_gestures(self, labels, data, types=None):
-        """
-        Salva gestos no banco.
-        labels: lista de nomes
-        data: lista de landmarks
-        types: lista de tipos ('letter' ou 'movement'), default 'letter'
-        """
         if types is None:
             types = ["letter"] * len(labels)
 
-        # Limpa dados antigos
         self.conn.execute("DELETE FROM gestures")
         self.conn.execute("DELETE FROM gesture_names")
 
-        # Insere novos dados
         for name, landmarks, g_type in zip(labels, data, types):
             self.conn.execute(
                 "INSERT INTO gestures (name, type, landmarks) VALUES (?, ?, ?)",
@@ -84,15 +72,9 @@ class DatabaseManager:
         self.conn.commit()
 
     def save_movements(self, labels, data):
-        """Salva movimentos no banco"""
         return self.save_gestures(labels, data, types=["movement"] * len(labels))
 
     def load_gestures(self, gesture_type=None):
-        """
-        Carrega gestos do banco.
-        gesture_type: 'letter', 'movement' ou None para todos
-        Retorna: labels, data, gesture_names
-        """
         labels, data, gesture_names = [], [], {}
 
         query_names = "SELECT name, type FROM gesture_names"
@@ -120,14 +102,9 @@ class DatabaseManager:
         return labels, data, gesture_names
 
     def load_movements(self):
-        """Carrega movimentos do banco"""
         return self.load_gestures(gesture_type="movement")
 
     def delete_gesture(self, gesture_name):
-        """
-        Deleta um gesto do banco.
-        Retorna True se deletado, False se não encontrado.
-        """
         cursor = self.conn.execute(
             "SELECT COUNT(*) FROM gestures WHERE name=?", (gesture_name,)
         )
