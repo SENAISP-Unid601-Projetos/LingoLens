@@ -1,0 +1,7 @@
+2025-10-23 13:58:18,312 - INFO - Gestos salvos para letter
+2025-10-23 13:58:18,312 - WARNING - Treinando com apenas 1 classe (A). Predições não serão discriminativas.
+2025-10-23 13:58:18,407 - INFO - Modelo treinado com 129 amostras e 1 classes: {'A'}
+2025-10-23 13:58:18,413 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
+2025-10-23 13:58:18,427 - INFO - Predição: A | Probabilidade: 1.00
+2025-10-23 13:58:21,171 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
+2025-10-23 13:58:21,174 - INFO - Predição: A | Probabilidade: 1.00
