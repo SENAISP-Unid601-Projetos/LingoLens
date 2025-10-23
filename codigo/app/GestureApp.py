@@ -7,7 +7,10 @@ from Config import CONFIG, validate_gesture_type
 from Database_manager import DatabaseManager
 from Model_manager import ModelManager
 from Ui_manager import UIManager
+# ****************************
 from Extract_landmarks import extract_landmarks
+from sklearn.utils import shuffle
+from collections import Counter 
 
 class GestureApp:
     def __init__(self, gesture_type="letter"):
@@ -219,33 +222,49 @@ class GestureApp:
                         self.prev_landmarks = None
                         print("[INFO] Modo de entrada de texto ativado. Digite na janela (ESC para cancelar)")
                     elif key == ord("s"):
-                        if self.mode == "treino" and self.new_gesture_name and self.new_gesture_data:
-                            if len(self.new_gesture_data) < CONFIG["min_samples_per_class"]:
-                                print(f"[WARNING] Coletados poucos samples ({len(self.new_gesture_data)}). Recomenda-se {CONFIG['min_samples_per_class']}")
-                            
-                            new_labels = [self.new_gesture_name] * len(self.new_gesture_data)
-                            new_gesture_types = [self.gesture_type] * len(self.new_gesture_data)
-                            self.labels.extend(new_labels)
-                            self.data.extend(self.new_gesture_data)
-                            self.db.save_gestures(new_labels, self.new_gesture_data, new_gesture_types)
-                            
-                            success = self.model_manager.train(self.data, self.labels)
-                            if success:
-                                num_classes = len(set(self.labels))
-                                print(f"[INFO] Gestos de '{self.new_gesture_name}' salvos e modelo atualizado ({num_classes} classe(s): {set(self.labels)})")
-                                if num_classes == 1:
-                                    print(f"[INFO] Adicione mais letras para predições discriminativas.")
-                            else:
-                                print("[ERROR] Falha ao treinar modelo após salvar gestos.")
-                            
-                            self.mode = "teste"
-                            self.new_gesture_name = ""
-                            self.new_gesture_from_data = []
-                            self.is_input_active = False
-                            self.sample_count = 0
-                            print("[INFO] Modo Teste ativado")
-                        elif self.mode == "treino" and not self.new_gesture_data:
-                            print("[WARNING] Nenhum dado de gesto capturado para salvar")
+                      if self.mode == "treino" and self.new_gesture_name and self.new_gesture_data:
+                        if len(self.new_gesture_data) < CONFIG["min_samples_per_class"]:
+                            print(f"[WARNING] Coletados poucos samples ({len(self.new_gesture_data)}). Recomenda-se {CONFIG['min_samples_per_class']}")
+
+                        # === NOVO: Adiciona os novos dados ===
+                        new_labels = [self.new_gesture_name] * len(self.new_gesture_data)
+                        new_gesture_types = [self.gesture_type] * len(self.new_gesture_data)
+
+                        self.labels.extend(new_labels)
+                        self.data.extend(self.new_gesture_data)
+
+                        # === EMBARALHAR ANTES DE TREINAR ===
+                        self.data, self.labels = shuffle(self.data, self.labels, random_state=42)
+
+                        # === LOG: Mostra distribuição ===
+                        print(f"[INFO] Dados embaralhados. Total: {len(self.labels)} amostras")
+                        print(f"Distribuição por letra: {dict(Counter(self.labels))}")
+
+                        # === Salva no banco (sem embaralhar aqui) ===
+                        self.db.save_gestures(new_labels, self.new_gesture_data, new_gesture_types)
+
+                        # === Treina com dados embaralhados ===
+                        success = self.model_manager.train(self.data, self.labels)
+                        if success:
+                            num_classes = len(set(self.labels))
+                            print(f"[SUCESSO] Modelo treinado com {num_classes} classe(s): {set(self.labels)}")
+                            if num_classes == 1:
+                                print(f"[INFO] Adicione mais letras para predições discriminativas.")
+                        else:
+                            print("[ERROR] Falha ao treinar modelo após salvar gestos.")
+
+                        # === Volta ao modo teste ===
+                        self.mode = "teste"
+                        self.new_gesture_name = ""
+                        self.new_gesture_data = []
+                        self.is_input_active = False
+                        self.sample_count = 0
+                        self.prev_landmarks = None
+                        self.landmark_history = []
+                        print("[INFO] Modo Teste ativado")
+
+                    elif self.mode == "treino" and not self.new_gesture_data:
+                        print("[WARNING] Nenhum dado de gesto capturado para salvar")
                     elif key == ord("d"):
                         self.delete_mode = True
                         self.gesture_list = self.db.list_gestures(self.gesture_type)
