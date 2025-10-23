@@ -46,31 +46,31 @@ class ModelManager:
 
     def train(self, data, labels):
         if not data or not labels or len(data) != len(labels):
-            logging.error("Dados ou labels inválidos para treinamento")
+            logging.error("Dados ou labels invalidos para treinamento")
             return False
 
         unique_labels = set(labels)
         if len(unique_labels) < 1:
-            logging.error("Nenhum dado disponível para treino")
+            logging.error("Nenhum dado disponivel para treino")
             return False
 
         if len(unique_labels) == 1:
-            logging.warning(f"Treinando com apenas 1 classe ({list(unique_labels)[0]}). Predições não serão discriminativas.")
+            logging.warning(f"Treinando com apenas 1 classe ({list(unique_labels)[0]}). Predicoes nao serao discriminativas.")
 
         try:
             if self.gesture_type == "letter":
                 data = np.array(data)
                 if data.shape[1] != 65:
-                    logging.error(f"Formato de dados inválido. Esperado (N, 65), recebido (N, {data.shape[1]})")
+                    logging.error(f"Formato de dados invalido. Esperado (N, 65), recebido (N, {data.shape[1]})")
                     return False
                 if len(unique_labels) >= 2:
                     scores = cross_val_score(self.model, data, labels, cv=5, scoring='accuracy')
-                    logging.info(f"Precisão média CV (Random Forest): {scores.mean():.2f} (+/- {scores.std() * 2:.2f})")
+                    logging.info(f"Precisão media CV (Random Forest): {scores.mean():.2f} (+/- {scores.std() * 2:.2f})")
                 self.model.fit(data, labels)
             else:
                 data = np.array(data)
                 if data.shape[1:] != (CONFIG["max_sequence_length"], 65):
-                    logging.error(f"Formato de dados inválido. Esperado (N, {CONFIG['max_sequence_length']}, 65), recebido {data.shape}")
+                    logging.error(f"Formato de dados invalido. Esperado (N, {CONFIG['max_sequence_length']}, 65), recebido {data.shape}")
                     return False
                 self.label_map = {label: idx for idx, label in enumerate(unique_labels)}
                 numeric_labels = [self.label_map[label] for label in labels]
@@ -95,25 +95,25 @@ class ModelManager:
 
     def predict(self, data):
         if not self.trained:
-            logging.warning("Modelo ainda não treinado. Retornando None")
+            logging.warning("Modelo ainda nao treinado. Retornando None")
             return None, 0.0
 
         unique_labels = set(self.labels) if self.labels else set()
         if len(unique_labels) < 2:
-            logging.warning(f"Predição com {len(unique_labels)} classe(s). Resultado não discriminativo.")
+            logging.warning(f"Predicao com {len(unique_labels)} classe(s). Resultado nao discriminativo.")
 
         try:
             if self.gesture_type == "letter":
                 data = np.array(data)
                 if data.shape != (65,):
-                    logging.error(f"Formato de dados inválido para predição. Esperado (65,), recebido {data.shape}")
+                    logging.error(f"Formato de dados invalido para predicao. Esperado (65,), recebido {data.shape}")
                     return None, 0.0
                 prediction = self.model.predict([data])[0]
                 probability = self.model.predict_proba([data]).max()
             else:
                 data = np.array([data])
                 if data.shape != (1, CONFIG["max_sequence_length"], 65):
-                    logging.error(f"Formato de dados inválido para predição. Esperado (1, {CONFIG['max_sequence_length']}, 65), recebido {data.shape}")
+                    logging.error(f"Formato de dados invalido para predicao. Esperado (1, {CONFIG['max_sequence_length']}, 65), recebido {data.shape}")
                     return None, 0.0
                 probabilities = self.model.predict(data, verbose=0)[0]
                 prediction_idx = np.argmax(probabilities)
@@ -122,7 +122,7 @@ class ModelManager:
             logging.debug(f"Predição: {prediction} | Probabilidade: {probability:.2f}")
             return prediction, probability
         except NotFittedError:
-            logging.error("Erro: modelo não está ajustado corretamente")
+            logging.error("Erro: modelo não esta ajustado corretamente")
             return None, 0.0
         except Exception as e:
             logging.error(f"Erro na predição: {e}")

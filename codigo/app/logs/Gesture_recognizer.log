@@ -1,0 +1,101 @@
+2025-10-23 16:10:59,930 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:11:06,251 - INFO - Modelo treinado com 33834 amostras e 20 classes: {'S', 'G', 'B', 'R', 'W', 'C', 'V', 'I', 'M', 'A', 'F', 'O', 'Q', 'P', 'T', 'N', 'E', 'U', 'L', 'D'}
+2025-10-23 16:11:17,399 - INFO - Predição: D | Probabilidade: 0.73
+2025-10-23 16:11:54,335 - INFO - Predição: A | Probabilidade: 0.76
+2025-10-23 16:12:11,825 - INFO - Predição: S | Probabilidade: 0.73
+2025-10-23 16:12:15,131 - INFO - Predição: A | Probabilidade: 0.81
+2025-10-23 16:12:16,640 - INFO - Predição: A | Probabilidade: 0.97
+2025-10-23 16:12:20,455 - INFO - Predição: O | Probabilidade: 0.71
+2025-10-23 16:12:23,198 - INFO - Predição: D | Probabilidade: 0.87
+2025-10-23 16:12:24,718 - INFO - Predição: D | Probabilidade: 0.97
+2025-10-23 16:12:33,504 - INFO - Predição: I | Probabilidade: 0.71
+2025-10-23 16:12:40,239 - INFO - Predição: O | Probabilidade: 0.94
+2025-10-23 16:12:43,681 - INFO - Predição: O | Probabilidade: 0.70
+2025-10-23 16:12:45,214 - INFO - Predição: D | Probabilidade: 0.84
+2025-10-23 16:12:46,973 - INFO - Predição: C | Probabilidade: 0.70
+2025-10-23 16:12:57,631 - INFO - Predição: C | Probabilidade: 0.70
+2025-10-23 16:13:11,286 - INFO - Predição: M | Probabilidade: 0.79
+2025-10-23 16:13:50,980 - INFO - Predição: A | Probabilidade: 0.74
+2025-10-23 16:13:53,779 - INFO - Predição: O | Probabilidade: 0.71
+2025-10-23 16:17:07,068 - INFO - Predição: O | Probabilidade: 0.97
+2025-10-23 16:17:11,054 - INFO - Predição: A | Probabilidade: 0.70
+2025-10-23 16:17:13,777 - INFO - Predição: S | Probabilidade: 0.81
+2025-10-23 16:17:15,432 - INFO - Predição: S | Probabilidade: 0.71
+2025-10-23 16:17:17,144 - INFO - Predição: N | Probabilidade: 0.73
+2025-10-23 16:17:18,686 - INFO - Predição: N | Probabilidade: 0.74
+2025-10-23 16:17:24,380 - INFO - Predição: U | Probabilidade: 0.75
+2025-10-23 16:17:25,951 - INFO - Predição: U | Probabilidade: 0.75
+2025-10-23 16:17:34,653 - INFO - Predição: I | Probabilidade: 0.72
+2025-10-23 16:17:48,822 - INFO - Predição: C | Probabilidade: 0.82
+2025-10-23 16:17:56,850 - INFO - Predição: O | Probabilidade: 0.74
+2025-10-23 16:17:58,523 - INFO - Predição: E | Probabilidade: 0.98
+2025-10-23 16:18:00,176 - INFO - Predição: B | Probabilidade: 0.82
+2025-10-23 16:18:05,146 - INFO - Predição: G | Probabilidade: 0.73
+2025-10-23 16:18:06,685 - INFO - Predição: L | Probabilidade: 0.93
+2025-10-23 16:18:15,361 - INFO - Predição: A | Probabilidade: 0.71
+2025-10-23 16:18:16,875 - INFO - Predição: A | Probabilidade: 0.77
+2025-10-23 16:18:18,411 - INFO - Predição: S | Probabilidade: 0.71
+2025-10-23 16:25:31,056 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:25:37,582 - INFO - Modelo treinado com 33834 amostras e 20 classes: {'S', 'V', 'M', 'G', 'N', 'P', 'C', 'T', 'D', 'F', 'O', 'L', 'U', 'I', 'E', 'R', 'A', 'B', 'W', 'Q'}
+2025-10-23 16:25:54,099 - INFO - Predicao: N | Probabilidade: 0.72
+2025-10-23 16:26:02,496 - INFO - Predicao: M | Probabilidade: 0.96
+2025-10-23 16:26:08,188 - INFO - Predicao: A | Probabilidade: 0.74
+2025-10-23 16:26:09,770 - INFO - Predicao: A | Probabilidade: 0.74
+2025-10-23 16:26:12,751 - INFO - Predicao: S | Probabilidade: 0.86
+2025-10-23 16:26:23,432 - INFO - Gesto A do tipo letter deletado com sucesso
+2025-10-23 16:26:52,086 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:26:58,527 - INFO - Modelo treinado com 33684 amostras e 20 classes: {'S', 'V', 'M', 'G', 'N', 'P', 'C', 'T', 'D', 'F', 'O', 'L', 'U', 'I', 'E', 'R', 'A', 'B', 'W', 'Q'}
+2025-10-23 16:28:21,797 - INFO - Gestos salvos para letter
+2025-10-23 16:28:51,095 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.01)
+2025-10-23 16:28:58,884 - INFO - Modelo treinado com 33834 amostras e 20 classes: {'S', 'V', 'M', 'G', 'N', 'P', 'C', 'T', 'D', 'F', 'O', 'L', 'U', 'I', 'E', 'R', 'A', 'B', 'W', 'Q'}
+2025-10-23 16:29:13,533 - INFO - Predicao: A | Probabilidade: 0.82
+2025-10-23 16:29:15,066 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:29:17,824 - INFO - Predicao: A | Probabilidade: 0.77
+2025-10-23 16:29:19,453 - INFO - Predicao: A | Probabilidade: 0.70
+2025-10-23 16:29:23,686 - INFO - Predicao: A | Probabilidade: 0.71
+2025-10-23 16:29:25,351 - INFO - Predicao: A | Probabilidade: 0.75
+2025-10-23 16:29:26,882 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:29:28,582 - INFO - Predicao: A | Probabilidade: 0.89
+2025-10-23 16:29:30,127 - INFO - Predicao: A | Probabilidade: 0.98
+2025-10-23 16:29:31,663 - INFO - Predicao: A | Probabilidade: 0.98
+2025-10-23 16:29:43,211 - INFO - Predicao: M | Probabilidade: 0.72
+2025-10-23 16:29:46,585 - INFO - Predicao: A | Probabilidade: 0.75
+2025-10-23 16:29:50,284 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:29:51,896 - INFO - Predicao: A | Probabilidade: 0.77
+2025-10-23 16:29:53,438 - INFO - Predicao: A | Probabilidade: 0.81
+2025-10-23 16:29:54,978 - INFO - Predicao: A | Probabilidade: 0.89
+2025-10-23 16:29:58,589 - INFO - Predicao: A | Probabilidade: 0.70
+2025-10-23 16:30:01,135 - INFO - Predicao: A | Probabilidade: 0.75
+2025-10-23 16:30:03,856 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:30:06,000 - INFO - Predicao: A | Probabilidade: 0.79
+2025-10-23 16:30:08,573 - INFO - Predicao: A | Probabilidade: 0.77
+2025-10-23 16:30:10,193 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:30:13,953 - INFO - Predicao: A | Probabilidade: 0.81
+2025-10-23 16:30:15,518 - INFO - Predicao: A | Probabilidade: 0.74
+2025-10-23 16:30:17,025 - INFO - Predicao: A | Probabilidade: 0.78
+2025-10-23 16:30:18,542 - INFO - Predicao: A | Probabilidade: 0.71
+2025-10-23 16:30:20,886 - INFO - Predicao: A | Probabilidade: 0.74
+2025-10-23 16:30:22,877 - INFO - Predicao: A | Probabilidade: 0.71
+2025-10-23 16:30:24,382 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:30:25,890 - INFO - Predicao: A | Probabilidade: 0.91
+2025-10-23 16:30:27,439 - INFO - Predicao: A | Probabilidade: 0.98
+2025-10-23 16:30:30,021 - INFO - Predicao: A | Probabilidade: 0.74
+2025-10-23 16:30:31,576 - INFO - Predicao: A | Probabilidade: 0.72
+2025-10-23 16:30:36,306 - INFO - Predicao: M | Probabilidade: 0.74
+2025-10-23 16:30:39,040 - INFO - Predicao: M | Probabilidade: 0.74
+2025-10-23 16:30:52,916 - INFO - Predicao: A | Probabilidade: 0.74
+2025-10-23 16:31:02,416 - INFO - Predicao: A | Probabilidade: 0.73
+2025-10-23 16:31:07,079 - INFO - Predicao: A | Probabilidade: 0.90
+2025-10-23 16:31:08,939 - INFO - Predicao: A | Probabilidade: 0.70
+2025-10-23 16:31:18,651 - INFO - Predicao: A | Probabilidade: 0.70
+2025-10-23 16:31:20,540 - INFO - Predicao: G | Probabilidade: 0.72
+2025-10-23 16:31:23,071 - INFO - Predicao: L | Probabilidade: 0.71
+2025-10-23 16:31:25,766 - INFO - Predicao: N | Probabilidade: 0.81
+2025-10-23 16:32:06,319 - INFO - Gesto M do tipo letter deletado com sucesso
+2025-10-23 16:32:37,080 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.01)
+2025-10-23 16:32:43,942 - INFO - Modelo treinado com 35965 amostras e 20 classes: {'S', 'V', 'M', 'G', 'N', 'P', 'C', 'T', 'D', 'F', 'O', 'L', 'U', 'I', 'E', 'R', 'A', 'B', 'W', 'Q'}
+2025-10-23 16:34:10,467 - INFO - Gestos salvos para letter
+2025-10-23 16:34:41,508 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.01)
+2025-10-23 16:34:48,447 - INFO - Modelo treinado com 36117 amostras e 20 classes: {'S', 'V', 'M', 'G', 'N', 'P', 'C', 'T', 'D', 'F', 'O', 'L', 'U', 'I', 'E', 'R', 'A', 'B', 'W', 'Q'}
+2025-10-23 16:35:01,078 - INFO - Predicao: M | Probabilidade: 0.87
+2025-10-23 16:35:10,676 - INFO - Predicao: M | Probabilidade: 0.95

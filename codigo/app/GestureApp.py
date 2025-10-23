@@ -32,7 +32,7 @@ class GestureApp:
                     num_classes = len(set(self.labels))
                     print(f"[INFO] Modelo carregado com {num_classes} gesto(s): {set(self.labels)}")
                     if num_classes == 1:
-                        print(f"[INFO] Apenas 1 classe disponível. Predições serão não-discriminativas.")
+                        print(f"[INFO] Apenas 1 classe disponivel. Predições serao nao-discriminativas.")
                 else:
                     print("[WARNING] Falha ao carregar modelo.")
             else:
@@ -40,8 +40,8 @@ class GestureApp:
 
             self.cap = cv2.VideoCapture(0)
             if not self.cap.isOpened():
-                logging.error("Não foi possível abrir a webcam")
-                raise RuntimeError("Não foi possível abrir a webcam")
+                logging.error("Nao foi possivel abrir a webcam")
+                raise RuntimeError("Nao foi possível abrir a webcam")
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
             self.cap.set(cv2.CAP_PROP_FPS, CONFIG["train_fps"])
@@ -81,7 +81,7 @@ class GestureApp:
             self.prev_landmarks = landmarks
             return variance < 0.005
         except Exception as e:
-            logging.error(f"Erro ao verificar estabilidade da mão: {e}")
+            logging.error(f"Erro ao verificar estabilidade da mao: {e}")
             return False
 
     def run(self):
@@ -121,12 +121,12 @@ class GestureApp:
                                 pred, prob = self.model_manager.predict(landmarks)
                                 if pred and prob >= CONFIG["confidence_threshold"]:
                                     self.current_word += pred
-                                    cv2.putText(image, f"Predição: {pred} ({prob:.2f})",
+                                    cv2.putText(image, f"Predicao: {pred} ({prob:.2f})",
                                                 (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                                    logging.info(f"Predição: {pred} | Probabilidade: {prob:.2f}")
+                                    logging.info(f"Predicao: {pred} | Probabilidade: {prob:.2f}")
                                     self.last_prediction_time = time.time()
                                 else:
-                                    logging.debug(f"Predição ignorada: {pred} com probabilidade {prob:.2f} < {CONFIG['confidence_threshold']}")
+                                    logging.debug(f"Predicao ignorada: {pred} com probabilidade {prob:.2f} < {CONFIG['confidence_threshold']}")
 
                 # Preparar dados para UI
                 status = f"Modo: {'Treino' if self.mode == 'treino' else 'Teste'} ({self.gesture_type})"
@@ -172,7 +172,7 @@ class GestureApp:
                                 if success:
                                     print(f"[INFO] Modelo atualizado com {len(set(self.labels))} classe(s): {set(self.labels)}")
                                 else:
-                                    print("[ERROR] Falha ao atualizar modelo após exclusão")
+                                    print("[ERROR] Falha ao atualizar modelo apos exclusao")
                             else:
                                 self.model_manager.trained = False
                                 print("[INFO] Nenhum gesto restante para treinar")
@@ -234,7 +234,7 @@ class GestureApp:
                                 num_classes = len(set(self.labels))
                                 print(f"[INFO] Gestos de '{self.new_gesture_name}' salvos e modelo atualizado ({num_classes} classe(s): {set(self.labels)})")
                                 if num_classes == 1:
-                                    print(f"[INFO] Adicione mais letras para predições discriminativas.")
+                                    print(f"[INFO] Adicione mais letras para predicoes discriminativas.")
                             else:
                                 print("[ERROR] Falha ao treinar modelo após salvar gestos.")
                             
@@ -258,8 +258,8 @@ class GestureApp:
                             print("Use N (próximo), P (anterior), ENTER para excluir, ESC para sair")
 
         except Exception as e:
-            logging.error(f"Erro durante execução do GestureApp: {e}")
-            print(f"[ERROR] Erro durante execução: {e}")
+            logging.error(f"Erro durante execucao do GestureApp: {e}")
+            print(f"[ERROR] Erro durante execucao: {e}")
         finally:
             self.cap.release()
             cv2.destroyAllWindows()

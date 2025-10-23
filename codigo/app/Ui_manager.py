@@ -133,7 +133,7 @@ class UIManager:
 
         # Mensagem de cooldown
         if cooldown > 0:
-            cv2.putText(image, "Aguarde para nova predição...",
+            cv2.putText(image, "Aguarde para nova predicao...",
                         (10, height - 60),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7 * self.ui_scale,
                         (255, 50, 50), 2, cv2.LINE_AA)
