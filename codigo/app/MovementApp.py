@@ -20,11 +20,11 @@ class MovementApp:
         self.mode = "teste"
         self.new_movement_name = ""
         self.new_movement_data = []
-        self.samples_count = 0  # Contador de amostras
+        self.samples_count = 0
 
     def run(self):
         print(
-            "[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome D=Deletar ESC=Cancelar M:Gestos"
+            "[INFO] Teclas: Q=Sair C=Limpar T=Treino S=Salvar N=Nome D:Deletar ESC=Cancelar M:Gestos"
         )
         
         while True:
@@ -49,18 +49,17 @@ class MovementApp:
                                 self.current_word += pred
                         elif self.mode == "treino" and self.new_movement_name:
                             self.new_movement_data.append(landmarks)
-                            self.samples_count = len(self.new_movement_data)  # Atualiza contador
+                            self.samples_count = len(self.new_movement_data)
 
-            # Atualiza a UI com o contador
-            status = f"Modo: {self.mode} | Amostras: {self.samples_count}"
+            status_text = f"Treinar Movimentos - Modo: {self.mode} | Amostras: {self.samples_count}"
             image = self.ui.draw_ui(
-                image, f"Treinar Movimentos - {status}", 0, self.current_word
+                image, status_text, 0, self.current_word
             )
             cv2.imshow("MovementApp", image)
 
             key = cv2.waitKey(1) & 0xFF
 
-            if key == 27:  # ESC cancela treino
+            if key == 27:
                 self.mode = "teste"
                 self.new_movement_name = ""
                 self.new_movement_data = []
@@ -95,14 +94,13 @@ class MovementApp:
             elif key == ord("q"):
                 break
 
-            # Processar input de texto
+            # CORREÇÃO DO ENTER - Processar input de texto
             if self.ui.show_text_input:
-                if key == 13:  # Enter
+                if key == 13 or key == 10:  # Enter (ambos os códigos)
                     movement_name = self.ui.input_text.upper()
                     self.ui.input_text = ""
                     self.ui.show_text_input = False
                     if self.ui.input_action == "delete":
-                        # Implementar deleção de movimento se necessário
                         self.ui.set_error(f"Movimento '{movement_name}' deletado!")
                         self.ui.input_action = ""
                     else:
@@ -110,8 +108,13 @@ class MovementApp:
                         self.ui.set_error(f"Movimento '{self.new_movement_name}' definido. Pressione 'S' para salvar.")
                 elif key == 8:  # Backspace
                     self.ui.input_text = self.ui.input_text[:-1]
-                elif 32 <= key <= 126:  # Caracteres imprimíveis
-                    self.ui.input_text += chr(key)
+                elif key == 27:  # ESC cancela input
+                    self.ui.show_text_input = False
+                    self.ui.input_text = ""
+                    self.ui.input_action = ""
+                elif key != 255 and key != 0:  # Ignorar teclas especiais
+                    if 32 <= key <= 126:  # Caracteres ASCII imprimíveis
+                        self.ui.input_text += chr(key)
 
         self.cap.release()
         cv2.destroyAllWindows()

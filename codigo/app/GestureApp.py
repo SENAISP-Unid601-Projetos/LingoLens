@@ -191,8 +191,9 @@ class GestureApp:
 
             key = cv2.waitKey(1) & 0xFF
 
+            # CORREÇÃO DO ENTER - Processar input de texto
             if self.show_text_input:
-                if key == 13:
+                if key == 13 or key == 10:  # Enter (ambos os códigos)
                     gesture_name = self.input_text.upper()
                     self.input_text = ""
                     self.show_text_input = False
@@ -211,17 +212,20 @@ class GestureApp:
                         self.new_gesture_name = gesture_name
                         self.set_error(f"Gesto '{self.new_gesture_name}' definido. Pressione 'S' para salvar.")
                         
-                elif key == 8:
+                elif key == 8:  # Backspace
                     self.input_text = self.input_text[:-1]
-                elif 32 <= key <= 126:
-                    self.input_text += chr(key)
-                elif key == 27:
+                elif key == 27:  # ESC cancela input
                     self.show_text_input = False
                     self.input_text = ""
                     self.input_action = ""
+                elif key != 255 and key != 0:  # Ignorar teclas especiais
+                    # Filtrar apenas caracteres válidos
+                    if 32 <= key <= 126:  # Caracteres ASCII imprimíveis
+                        self.input_text += chr(key)
 
             else:
-                if key == 27:
+                # Teclas gerais
+                if key == 27:  # ESC cancela modo treino
                     if self.mode == "treino":
                         self.mode = "teste"
                         self.new_gesture_name = ""

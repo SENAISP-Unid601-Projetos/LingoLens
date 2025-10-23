@@ -27,7 +27,6 @@ class GestureTrainer:
         )
         self.drawing = mp.solutions.drawing_utils
 
-        # Carrega gestos existentes
         self.labels, self.data, _ = self.db.load_gestures()
         self.current_landmarks = None
 
@@ -53,7 +52,6 @@ class GestureTrainer:
             rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             results = self.hands.process(rgb)
 
-            # Desenha landmarks da mão
             if results.multi_hand_landmarks:
                 for hand_landmarks in results.multi_hand_landmarks:
                     self.drawing.draw_landmarks(
@@ -63,12 +61,10 @@ class GestureTrainer:
                     if landmarks and len(landmarks) == 63:
                         self.current_landmarks = landmarks
 
-            # Desenha interface atualizada
             status = "Pressione S para salvar o gesto"
             image = self.ui.draw_train_ui(image, status, "")
             cv2.imshow("Treino de Gestos", image)
 
-            # Captura tecla
             key = cv2.waitKey(1) & 0xFF
             
             if key == ord("s") and self.current_landmarks is not None:
@@ -97,7 +93,7 @@ class GestureTrainer:
         cv2.destroyAllWindows()
 
     def _get_letter_input(self):
-        """Obtém input de letra do usuário"""
+        """Obtém input de letra do usuário - COM ENTER CORRIGIDO"""
         while True:
             ret, frame = self.cap.read()
             if not ret:
@@ -109,7 +105,8 @@ class GestureTrainer:
 
             key = cv2.waitKey(1) & 0xFF
 
-            if key == 13:  # Enter
+            # CORREÇÃO DO ENTER
+            if key == 13 or key == 10:  # Enter (ambos os códigos)
                 letter = self.ui.input_text.upper()
                 self.ui.input_text = ""
                 self.ui.show_text_input = False
@@ -124,7 +121,8 @@ class GestureTrainer:
             elif key == 27:  # ESC
                 break
                 
-            elif 32 <= key <= 126:  # Caracteres imprimíveis
-                self.ui.input_text += chr(key)
+            elif key != 255 and key != 0:  # Ignorar teclas especiais
+                if 32 <= key <= 126:  # Caracteres ASCII imprimíveis
+                    self.ui.input_text += chr(key)
 
         return None
