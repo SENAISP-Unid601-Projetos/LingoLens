@@ -1,6 +1,6 @@
 # 🖐️ LingoLens – Tradutor de Libras em Tempo Real
 
-O **LingoLens** é um tradutor de **Libras (alfabeto A-Z e números 0-9)** em tempo real. Ele captura gestos via câmera, processa os **landmarks da mão** e converte os sinais em texto, exibindo a palavra formada diretamente na tela.
+O **LingoLens** é um tradutor de **Libras (alfabeto A-Z)** em tempo real. Ele captura gestos via câmera, processa os **landmarks da mão** e converte os sinais em texto, exibindo a palavra formada diretamente na tela.
 
 ---
 
