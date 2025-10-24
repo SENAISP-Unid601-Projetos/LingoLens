@@ -1,107 +1,100 @@
 2025-10-23 13:58:18,312 - INFO - Gestos salvos para letter
-2025-10-23 13:58:18,312 - WARNING - Treinando com apenas 1 classe (A). Predições não serão discriminativas.
+2025-10-23 13:58:18,312 - WARNING - Treinando com apenas 1 classe (A). Prediï¿½ï¿½es nï¿½o serï¿½o discriminativas.
 2025-10-23 13:58:18,407 - INFO - Modelo treinado com 129 amostras e 1 classes: {'A'}
-2025-10-23 13:58:18,413 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
-2025-10-23 13:58:18,427 - INFO - Predição: A | Probabilidade: 1.00
-2025-10-23 13:58:21,171 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
-2025-10-23 13:58:21,174 - INFO - Predição: A | Probabilidade: 1.00
-2025-10-23 16:55:09,480 - WARNING - Treinando com apenas 1 classe (A). Predições não serão discriminativas.
+2025-10-23 13:58:18,413 - WARNING - Prediï¿½ï¿½o com 1 classe(s). Resultado nï¿½o discriminativo.
+2025-10-23 13:58:18,427 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 1.00
+2025-10-23 13:58:21,171 - WARNING - Prediï¿½ï¿½o com 1 classe(s). Resultado nï¿½o discriminativo.
+2025-10-23 13:58:21,174 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 1.00
+2025-10-23 16:55:09,480 - WARNING - Treinando com apenas 1 classe (A). Prediï¿½ï¿½es nï¿½o serï¿½o discriminativas.
 2025-10-23 16:55:09,562 - INFO - Modelo treinado com 129 amostras e 1 classes: {'A'}
-2025-10-23 16:55:57,662 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
-2025-10-23 16:55:57,680 - INFO - Predição: A | Probabilidade: 1.00
-2025-10-23 16:56:00,570 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
-2025-10-23 16:56:00,570 - INFO - Predição: A | Probabilidade: 1.00
-2025-10-23 16:56:02,212 - WARNING - Predição com 1 classe(s). Resultado não discriminativo.
-2025-10-23 16:56:02,212 - INFO - Predição: A | Probabilidade: 1.00
+2025-10-23 16:55:57,662 - WARNING - Prediï¿½ï¿½o com 1 classe(s). Resultado nï¿½o discriminativo.
+2025-10-23 16:55:57,680 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 1.00
+2025-10-23 16:56:00,570 - WARNING - Prediï¿½ï¿½o com 1 classe(s). Resultado nï¿½o discriminativo.
+2025-10-23 16:56:00,570 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 1.00
+2025-10-23 16:56:02,212 - WARNING - Prediï¿½ï¿½o com 1 classe(s). Resultado nï¿½o discriminativo.
+2025-10-23 16:56:02,212 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 1.00
 2025-10-23 16:57:06,074 - INFO - Gestos salvos para letter
-2025-10-23 16:57:06,529 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:57:06,529 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-23 16:57:06,624 - INFO - Modelo treinado com 299 amostras e 2 classes: {'A', 'B'}
-2025-10-23 16:57:06,646 - INFO - Predição: B | Probabilidade: 1.00
-2025-10-23 16:57:08,844 - INFO - Predição: B | Probabilidade: 0.73
-2025-10-23 16:57:11,605 - INFO - Predição: B | Probabilidade: 1.00
-2025-10-23 16:57:13,132 - INFO - Predição: A | Probabilidade: 1.00
-2025-10-23 16:57:14,825 - INFO - Predição: A | Probabilidade: 0.99
-2025-10-23 16:57:16,349 - INFO - Predição: A | Probabilidade: 0.76
-2025-10-23 16:57:17,883 - INFO - Predição: A | Probabilidade: 0.92
+2025-10-23 16:57:06,646 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 1.00
+2025-10-23 16:57:08,844 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.73
+2025-10-23 16:57:11,605 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 1.00
+2025-10-23 16:57:13,132 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 1.00
+2025-10-23 16:57:14,825 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.99
+2025-10-23 16:57:16,349 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.76
+2025-10-23 16:57:17,883 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.92
 2025-10-23 16:58:27,126 - INFO - Gestos salvos para letter
-2025-10-23 16:58:27,696 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:58:27,696 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-23 16:58:27,822 - INFO - Modelo treinado com 470 amostras e 3 classes: {'A', 'C', 'B'}
-2025-10-23 16:58:27,848 - INFO - Predição: C | Probabilidade: 1.00
-2025-10-23 16:58:31,181 - INFO - Predição: A | Probabilidade: 0.95
-2025-10-23 16:58:32,718 - INFO - Predição: C | Probabilidade: 1.00
-2025-10-23 16:58:34,241 - INFO - Predição: B | Probabilidade: 1.00
+2025-10-23 16:58:27,848 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 1.00
+2025-10-23 16:58:31,181 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.95
+2025-10-23 16:58:32,718 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 1.00
+2025-10-23 16:58:34,241 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 1.00
 2025-10-23 16:59:48,134 - INFO - Gestos salvos para letter
-2025-10-23 16:59:48,884 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:59:48,884 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-23 16:59:49,058 - INFO - Modelo treinado com 644 amostras e 4 classes: {'S', 'C', 'B', 'A'}
-2025-10-23 16:59:49,079 - INFO - Predição: S | Probabilidade: 1.00
-2025-10-23 16:59:50,598 - INFO - Predição: A | Probabilidade: 0.93
-2025-10-23 16:59:52,137 - INFO - Predição: S | Probabilidade: 1.00
-2025-10-23 17:00:16,684 - INFO - Predição: B | Probabilidade: 0.73
-2025-10-23 17:00:55,588 - INFO - Predição: B | Probabilidade: 0.70
-2025-10-23 17:01:36,808 - INFO - Predição: C | Probabilidade: 0.70
-2025-10-23 17:01:38,861 - INFO - Predição: C | Probabilidade: 0.70
-2025-10-23 17:02:25,309 - INFO - Predição: B | Probabilidade: 0.79
-2025-10-23 17:02:51,382 - INFO - Predição: C | Probabilidade: 0.76
-2025-10-23 17:03:31,529 - INFO - Predição: A | Probabilidade: 0.71
-2025-10-23 17:03:33,071 - INFO - Predição: S | Probabilidade: 0.89
-2025-10-23 17:03:38,384 - INFO - Predição: C | Probabilidade: 0.96
-2025-10-23 17:03:40,004 - INFO - Predição: C | Probabilidade: 0.94
-2025-10-23 17:03:41,678 - INFO - Predição: B | Probabilidade: 0.77
-2025-10-23 17:03:54,544 - INFO - Predição: A | Probabilidade: 0.71
-2025-10-23 17:03:56,396 - INFO - Predição: A | Probabilidade: 0.71
-2025-10-23 17:03:57,933 - INFO - Predição: A | Probabilidade: 0.73
-2025-10-23 17:03:59,447 - INFO - Predição: S | Probabilidade: 1.00
-2025-10-23 17:04:00,982 - INFO - Predição: S | Probabilidade: 0.91
-2025-10-23 17:04:02,951 - INFO - Predição: A | Probabilidade: 0.71
-2025-10-23 17:04:04,456 - INFO - Predição: A | Probabilidade: 0.78
-2025-10-23 17:04:05,990 - INFO - Predição: A | Probabilidade: 0.72
-2025-10-23 17:04:07,530 - INFO - Predição: A | Probabilidade: 0.72
-2025-10-23 17:04:09,039 - INFO - Predição: A | Probabilidade: 0.76
-2025-10-23 17:04:10,567 - INFO - Predição: A | Probabilidade: 0.77
-2025-10-23 17:04:12,091 - INFO - Predição: S | Probabilidade: 1.00
-2025-10-23 17:04:13,612 - INFO - Predição: S | Probabilidade: 0.88
-2025-10-23 17:04:15,141 - INFO - Predição: S | Probabilidade: 0.95
-2025-10-23 17:04:16,685 - INFO - Predição: S | Probabilidade: 0.82
-2025-10-23 17:04:19,222 - INFO - Predição: S | Probabilidade: 0.78
-2025-10-23 17:04:21,225 - INFO - Predição: A | Probabilidade: 0.76
-2025-10-23 17:04:22,749 - INFO - Predição: A | Probabilidade: 0.87
-2025-10-23 17:04:24,270 - INFO - Predição: A | Probabilidade: 0.75
-2025-10-23 17:04:25,801 - INFO - Predição: A | Probabilidade: 0.84
-2025-10-23 17:04:27,331 - INFO - Predição: A | Probabilidade: 0.90
-2025-10-23 17:04:28,855 - INFO - Predição: A | Probabilidade: 0.89
-2025-10-23 17:04:30,365 - INFO - Predição: A | Probabilidade: 0.90
-2025-10-23 17:04:31,887 - INFO - Predição: S | Probabilidade: 0.74
-2025-10-23 17:04:33,405 - INFO - Predição: A | Probabilidade: 0.89
-2025-10-23 17:04:34,950 - INFO - Predição: S | Probabilidade: 0.81
-2025-10-23 17:04:36,577 - INFO - Predição: A | Probabilidade: 0.79
-2025-10-23 17:04:38,103 - INFO - Predição: A | Probabilidade: 0.87
-2025-10-23 17:04:39,612 - INFO - Predição: S | Probabilidade: 0.74
-2025-10-23 17:08:38,708 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 16:59:49,079 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 1.00
+2025-10-23 16:59:50,598 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.93
+2025-10-23 16:59:52,137 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 1.00
+2025-10-23 17:00:16,684 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.73
+2025-10-23 17:00:55,588 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.70
+2025-10-23 17:01:36,808 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.70
+2025-10-23 17:01:38,861 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.70
+2025-10-23 17:02:25,309 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.79
+2025-10-23 17:02:51,382 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.76
+2025-10-23 17:03:31,529 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.71
+2025-10-23 17:03:33,071 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.89
+2025-10-23 17:03:38,384 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.96
+2025-10-23 17:03:40,004 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.94
+2025-10-23 17:03:41,678 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.77
+2025-10-23 17:03:54,544 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.71
+2025-10-23 17:03:56,396 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.71
+2025-10-23 17:03:57,933 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.73
+2025-10-23 17:03:59,447 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 1.00
+2025-10-23 17:04:00,982 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.91
+2025-10-23 17:04:02,951 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.71
+2025-10-23 17:04:04,456 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.78
+2025-10-23 17:04:05,990 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.72
+2025-10-23 17:04:07,530 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.72
+2025-10-23 17:04:09,039 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.76
+2025-10-23 17:04:10,567 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.77
+2025-10-23 17:04:12,091 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 1.00
+2025-10-23 17:04:13,612 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.88
+2025-10-23 17:04:15,141 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.95
+2025-10-23 17:04:16,685 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.82
+2025-10-23 17:04:19,222 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.78
+2025-10-23 17:04:21,225 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.76
+2025-10-23 17:04:22,749 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.87
+2025-10-23 17:04:24,270 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.75
+2025-10-23 17:04:25,801 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.84
+2025-10-23 17:04:27,331 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.90
+2025-10-23 17:04:28,855 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.89
+2025-10-23 17:04:30,365 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.90
+2025-10-23 17:04:31,887 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.74
+2025-10-23 17:04:33,405 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.89
+2025-10-23 17:04:34,950 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.81
+2025-10-23 17:04:36,577 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.79
+2025-10-23 17:04:38,103 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.87
+2025-10-23 17:04:39,612 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.74
+2025-10-23 17:08:38,708 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-23 17:08:38,961 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'S', 'A', 'B', 'C'}
-2025-10-23 17:08:55,225 - INFO - Predição: B | Probabilidade: 0.89
-2025-10-23 17:08:56,760 - INFO - Predição: B | Probabilidade: 0.89
-2025-10-23 17:08:58,321 - INFO - Predição: B | Probabilidade: 0.75
-2025-10-23 17:08:59,842 - INFO - Predição: C | Probabilidade: 0.90
-2025-10-24 14:30:57,427 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-23 17:08:55,225 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.89
+2025-10-23 17:08:56,760 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.89
+2025-10-23 17:08:58,321 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.75
+2025-10-23 17:08:59,842 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.90
+2025-10-24 14:30:57,427 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-24 14:30:57,744 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'B', 'C', 'A', 'S'}
-2025-10-24 14:31:08,113 - INFO - Predição: A | Probabilidade: 0.83
-2025-10-24 14:31:09,637 - INFO - Predição: S | Probabilidade: 0.98
-2025-10-24 14:31:15,759 - INFO - Predição: S | Probabilidade: 0.72
-2025-10-24 14:31:18,165 - INFO - Predição: C | Probabilidade: 0.74
-2025-10-24 14:31:23,494 - INFO - Predição: S | Probabilidade: 0.80
-2025-10-24 14:31:25,032 - INFO - Predição: S | Probabilidade: 0.80
-2025-10-24 14:31:26,559 - INFO - Predição: S | Probabilidade: 0.79
-2025-10-24 14:37:44,506 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-24 14:31:08,113 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.83
+2025-10-24 14:31:09,637 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.98
+2025-10-24 14:31:15,759 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.72
+2025-10-24 14:31:18,165 - INFO - Prediï¿½ï¿½o: C | Probabilidade: 0.74
+2025-10-24 14:31:23,494 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.80
+2025-10-24 14:31:25,032 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.80
+2025-10-24 14:31:26,559 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.79
+2025-10-24 14:37:44,506 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-24 14:37:44,674 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'S', 'B', 'A', 'C'}
-2025-10-24 14:37:50,499 - INFO - Predição: A | Probabilidade: 0.74
-2025-10-24 14:37:52,016 - INFO - Predição: S | Probabilidade: 0.98
-2025-10-24 14:37:54,703 - INFO - Predição: B | Probabilidade: 0.99
-2025-10-24 14:39:15,586 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-24 14:37:50,499 - INFO - Prediï¿½ï¿½o: A | Probabilidade: 0.74
+2025-10-24 14:37:52,016 - INFO - Prediï¿½ï¿½o: S | Probabilidade: 0.98
+2025-10-24 14:37:54,703 - INFO - Prediï¿½ï¿½o: B | Probabilidade: 0.99
+2025-10-24 14:39:15,586 - INFO - Precisï¿½o mï¿½dia CV (Random Forest): 1.00 (+/- 0.00)
 2025-10-24 14:39:15,769 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'B', 'C', 'A', 'S'}
-2025-10-24 14:46:17,344 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
-2025-10-24 14:46:17,524 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'C', 'A', 'B', 'S'}
-2025-10-24 14:46:23,149 - INFO - Predição: A | Probabilidade: 0.76
-2025-10-24 14:46:24,680 - INFO - Predição: S | Probabilidade: 0.99
-2025-10-24 14:46:26,224 - INFO - Predição: B | Probabilidade: 0.99
-2025-10-24 14:46:27,762 - INFO - Predição: B | Probabilidade: 0.87
-2025-10-24 14:46:29,264 - INFO - Predição: B | Probabilidade: 0.84
