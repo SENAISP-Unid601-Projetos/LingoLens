@@ -9,8 +9,8 @@ echo.
 REM Definir caminhos relativos
 set PROJECT_DIR=%~dp0
 set CODE_DIR=%PROJECT_DIR%codigo\app
-set LOGS_DIR=%PROJECT_DIR%logs
-set DATA_DIR=%PROJECT_DIR%data
+set LOGS_DIR=%CODE_DIR%\logs
+set DATA_DIR=%CODE_DIR%\data
 set REQUIREMENTS=%PROJECT_DIR%requirements.txt
 set MAIN_PY=%CODE_DIR%\main.py
 
