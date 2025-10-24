@@ -82,3 +82,19 @@
 2025-10-23 17:08:56,760 - INFO - Predição: B | Probabilidade: 0.89
 2025-10-23 17:08:58,321 - INFO - Predição: B | Probabilidade: 0.75
 2025-10-23 17:08:59,842 - INFO - Predição: C | Probabilidade: 0.90
+2025-10-24 14:30:57,427 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-24 14:30:57,744 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'B', 'C', 'A', 'S'}
+2025-10-24 14:31:08,113 - INFO - Predição: A | Probabilidade: 0.83
+2025-10-24 14:31:09,637 - INFO - Predição: S | Probabilidade: 0.98
+2025-10-24 14:31:15,759 - INFO - Predição: S | Probabilidade: 0.72
+2025-10-24 14:31:18,165 - INFO - Predição: C | Probabilidade: 0.74
+2025-10-24 14:31:23,494 - INFO - Predição: S | Probabilidade: 0.80
+2025-10-24 14:31:25,032 - INFO - Predição: S | Probabilidade: 0.80
+2025-10-24 14:31:26,559 - INFO - Predição: S | Probabilidade: 0.79
+2025-10-24 14:37:44,506 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-24 14:37:44,674 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'S', 'B', 'A', 'C'}
+2025-10-24 14:37:50,499 - INFO - Predição: A | Probabilidade: 0.74
+2025-10-24 14:37:52,016 - INFO - Predição: S | Probabilidade: 0.98
+2025-10-24 14:37:54,703 - INFO - Predição: B | Probabilidade: 0.99
+2025-10-24 14:39:15,586 - INFO - Precisão média CV (Random Forest): 1.00 (+/- 0.00)
+2025-10-24 14:39:15,769 - INFO - Modelo treinado com 1542 amostras e 4 classes: {'B', 'C', 'A', 'S'}
