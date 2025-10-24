@@ -115,6 +115,14 @@ class DatabaseManager:
         self.conn.execute("DELETE FROM gesture_names WHERE name=?", (gesture_name,))
         self.conn.commit()
         return True
+    
+    def load_libras_gestures(self):
+        """Carrega gestos específicos de Libras"""
+        return self.load_gestures(gesture_type="libras")
+
+    def save_libras_gesture(self, name, landmarks):
+        """Salva gesto de Libras"""
+        return self.add_gesture(name, landmarks, "libras")
 
     def close(self):
         self.conn.close()
