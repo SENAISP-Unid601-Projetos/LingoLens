@@ -7,7 +7,10 @@ from Config import CONFIG, validate_gesture_type
 from Database_manager import DatabaseManager
 from Model_manager import ModelManager
 from Ui_manager import UIManager
+# ****************************
 from Extract_landmarks import extract_landmarks
+from sklearn.utils import shuffle
+from collections import Counter 
 
 class GestureApp:
     def __init__(self, gesture_type="letter"):
@@ -32,7 +35,7 @@ class GestureApp:
                     num_classes = len(set(self.labels))
                     print(f"[INFO] Modelo carregado com {num_classes} gesto(s): {set(self.labels)}")
                     if num_classes == 1:
-                        print(f"[INFO] Apenas 1 classe disponivel. Predições serao nao-discriminativas.")
+                        print(f"[INFO] Apenas 1 classe disponível. Predições serão não-discriminativas.")
                 else:
                     print("[WARNING] Falha ao carregar modelo.")
             else:
@@ -40,8 +43,8 @@ class GestureApp:
 
             self.cap = cv2.VideoCapture(0)
             if not self.cap.isOpened():
-                logging.error("Nao foi possivel abrir a webcam")
-                raise RuntimeError("Nao foi possível abrir a webcam")
+                logging.error("Não foi possível abrir a webcam")
+                raise RuntimeError("Não foi possível abrir a webcam")
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
             self.cap.set(cv2.CAP_PROP_FPS, CONFIG["train_fps"])
@@ -81,7 +84,7 @@ class GestureApp:
             self.prev_landmarks = landmarks
             return variance < 0.005
         except Exception as e:
-            logging.error(f"Erro ao verificar estabilidade da mao: {e}")
+            logging.error(f"Erro ao verificar estabilidade da mão: {e}")
             return False
 
     def run(self):
@@ -121,12 +124,12 @@ class GestureApp:
                                 pred, prob = self.model_manager.predict(landmarks)
                                 if pred and prob >= CONFIG["confidence_threshold"]:
                                     self.current_word += pred
-                                    cv2.putText(image, f"Predicao: {pred} ({prob:.2f})",
+                                    cv2.putText(image, f"Predição: {pred} ({prob:.2f})",
                                                 (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                                    logging.info(f"Predicao: {pred} | Probabilidade: {prob:.2f}")
+                                    logging.info(f"Predição: {pred} | Probabilidade: {prob:.2f}")
                                     self.last_prediction_time = time.time()
                                 else:
-                                    logging.debug(f"Predicao ignorada: {pred} com probabilidade {prob:.2f} < {CONFIG['confidence_threshold']}")
+                                    logging.debug(f"Predição ignorada: {pred} com probabilidade {prob:.2f} < {CONFIG['confidence_threshold']}")
 
                 # Preparar dados para UI
                 status = f"Modo: {'Treino' if self.mode == 'treino' else 'Teste'} ({self.gesture_type})"
@@ -172,7 +175,7 @@ class GestureApp:
                                 if success:
                                     print(f"[INFO] Modelo atualizado com {len(set(self.labels))} classe(s): {set(self.labels)}")
                                 else:
-                                    print("[ERROR] Falha ao atualizar modelo apos exclusao")
+                                    print("[ERROR] Falha ao atualizar modelo após exclusão")
                             else:
                                 self.model_manager.trained = False
                                 print("[INFO] Nenhum gesto restante para treinar")
@@ -219,33 +222,49 @@ class GestureApp:
                         self.prev_landmarks = None
                         print("[INFO] Modo de entrada de texto ativado. Digite na janela (ESC para cancelar)")
                     elif key == ord("s"):
-                        if self.mode == "treino" and self.new_gesture_name and self.new_gesture_data:
-                            if len(self.new_gesture_data) < CONFIG["min_samples_per_class"]:
-                                print(f"[WARNING] Coletados poucos samples ({len(self.new_gesture_data)}). Recomenda-se {CONFIG['min_samples_per_class']}")
-                            
-                            new_labels = [self.new_gesture_name] * len(self.new_gesture_data)
-                            new_gesture_types = [self.gesture_type] * len(self.new_gesture_data)
-                            self.labels.extend(new_labels)
-                            self.data.extend(self.new_gesture_data)
-                            self.db.save_gestures(new_labels, self.new_gesture_data, new_gesture_types)
-                            
-                            success = self.model_manager.train(self.data, self.labels)
-                            if success:
-                                num_classes = len(set(self.labels))
-                                print(f"[INFO] Gestos de '{self.new_gesture_name}' salvos e modelo atualizado ({num_classes} classe(s): {set(self.labels)})")
-                                if num_classes == 1:
-                                    print(f"[INFO] Adicione mais letras para predicoes discriminativas.")
-                            else:
-                                print("[ERROR] Falha ao treinar modelo após salvar gestos.")
-                            
-                            self.mode = "teste"
-                            self.new_gesture_name = ""
-                            self.new_gesture_from_data = []
-                            self.is_input_active = False
-                            self.sample_count = 0
-                            print("[INFO] Modo Teste ativado")
-                        elif self.mode == "treino" and not self.new_gesture_data:
-                            print("[WARNING] Nenhum dado de gesto capturado para salvar")
+                      if self.mode == "treino" and self.new_gesture_name and self.new_gesture_data:
+                        if len(self.new_gesture_data) < CONFIG["min_samples_per_class"]:
+                            print(f"[WARNING] Coletados poucos samples ({len(self.new_gesture_data)}). Recomenda-se {CONFIG['min_samples_per_class']}")
+
+                        # === NOVO: Adiciona os novos dados ===
+                        new_labels = [self.new_gesture_name] * len(self.new_gesture_data)
+                        new_gesture_types = [self.gesture_type] * len(self.new_gesture_data)
+
+                        self.labels.extend(new_labels)
+                        self.data.extend(self.new_gesture_data)
+
+                        # === EMBARALHAR ANTES DE TREINAR ===
+                        self.data, self.labels = shuffle(self.data, self.labels, random_state=42)
+
+                        # === LOG: Mostra distribuição ===
+                        print(f"[INFO] Dados embaralhados. Total: {len(self.labels)} amostras")
+                        print(f"Distribuição por letra: {dict(Counter(self.labels))}")
+
+                        # === Salva no banco (sem embaralhar aqui) ===
+                        self.db.save_gestures(new_labels, self.new_gesture_data, new_gesture_types)
+
+                        # === Treina com dados embaralhados ===
+                        success = self.model_manager.train(self.data, self.labels)
+                        if success:
+                            num_classes = len(set(self.labels))
+                            print(f"[SUCESSO] Modelo treinado com {num_classes} classe(s): {set(self.labels)}")
+                            if num_classes == 1:
+                                print(f"[INFO] Adicione mais letras para predições discriminativas.")
+                        else:
+                            print("[ERROR] Falha ao treinar modelo após salvar gestos.")
+
+                        # === Volta ao modo teste ===
+                        self.mode = "teste"
+                        self.new_gesture_name = ""
+                        self.new_gesture_data = []
+                        self.is_input_active = False
+                        self.sample_count = 0
+                        self.prev_landmarks = None
+                        self.landmark_history = []
+                        print("[INFO] Modo Teste ativado")
+
+                    elif self.mode == "treino" and not self.new_gesture_data:
+                        print("[WARNING] Nenhum dado de gesto capturado para salvar")
                     elif key == ord("d"):
                         self.delete_mode = True
                         self.gesture_list = self.db.list_gestures(self.gesture_type)
@@ -258,8 +277,8 @@ class GestureApp:
                             print("Use N (próximo), P (anterior), ENTER para excluir, ESC para sair")
 
         except Exception as e:
-            logging.error(f"Erro durante execucao do GestureApp: {e}")
-            print(f"[ERROR] Erro durante execucao: {e}")
+            logging.error(f"Erro durante execução do GestureApp: {e}")
+            print(f"[ERROR] Erro durante execução: {e}")
         finally:
             self.cap.release()
             cv2.destroyAllWindows()
