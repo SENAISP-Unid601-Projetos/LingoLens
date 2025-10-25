@@ -8,20 +8,26 @@ os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
 
 CONFIG = {
     "db_path": os.path.join(BASE_DIR, "data", "gestures.db"),
+    "data_dir": os.path.join(BASE_DIR, "data"),  # Diretório para modelos e dados
+    "log_file": os.path.join(BASE_DIR, "logs", "Gesture_recognizer.log"),  # Log geral
+    "dynamic_log_file": os.path.join(BASE_DIR, "logs", "dynamic_gesture.log"),  # Log para gestos dinâmicos
     "confidence_threshold": 0.7,  # Limiar para predições confiáveis
-    "prediction_cooldown": 45,  # 1.5 segundos a 30 FPS
-    "camera_resolution": (1280, 720),
+    "prediction_cooldown": 30,  # 1 segundo a 30 FPS
+    "camera_resolution": [1280, 720],
     "target_fps": 30,
-    "train_fps": 20,
+    "train_fps": 30,  # Igualado a target_fps para consistência
     "max_num_hands": 1,
     "min_detection_confidence": 0.5,
     "rf_estimators": 100,
-    "lstm_units": 64,
+    "lstm_units": 8,  # Reduzido para acelerar treinamento
     "lstm_layers": 2,
-    "max_sequence_length": 15,
-    "min_samples_per_class": 150,  # Aumentado para mais dados por letra
+    "sequence_length": 15,  # Comprimento da sequência para gestos dinâmicos
+    "min_samples_per_class": 30,  # Para gestos estáticos
+    "max_dynamic_samples": 5,  # Limite de sequências por gesto dinâmico
+    "movement_threshold": 0.02,  # Sensibilidade geral (estabilidade)
+    "dynamic_movement_threshold": 0.05,  # Sensibilidade para gestos dinâmicos
+    "lstm_epochs": 3,  # Reduzido para acelerar treinamento
     "gesture_types": ["letter", "word", "movement"],
-    "log_file": os.path.join(BASE_DIR, "logs", "Gesture_recognizer.log"),
     "train_data_dir": os.path.join(BASE_DIR, "data", "train")
 }
 
