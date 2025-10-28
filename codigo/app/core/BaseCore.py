@@ -10,6 +10,7 @@ class BaseCore:
         self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
+        self.labels, self.data, _ = self.db.load_gestures(gesture_type="letter")
         
         self.hands = mp.solutions.hands.Hands(
             max_num_hands=CONFIG["max_num_hands"],
@@ -62,22 +63,3 @@ class BaseCore:
         """Limpeza dos recursos"""
         self.cap.release()
         cv2.destroyAllWindows()
-    def process_frame(self, frame):
-        """Processa um frame e retorna landmarks"""
-        image = cv2.flip(frame, 1)
-        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        results = self.hands.process(rgb)
-
-        landmarks_list = []
-        if results.multi_hand_landmarks:
-            for hand_landmarks in results.multi_hand_landmarks:
-                self.drawing.draw_landmarks(
-                    image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS
-                )
-                landmarks = extract_landmarks(hand_landmarks)
-                # 🔥 CORREÇÃO: Verificação robusta dos landmarks
-                if landmarks is not None and hasattr(landmarks, '__len__') and len(landmarks) == 63:
-                    landmarks_list.append(landmarks)
-                    self.current_landmarks = landmarks
-
-        return image, landmarks_list

@@ -13,7 +13,6 @@ class MovementUI(BaseUI):
         scale_factor = self.calculate_scale_factor(width)
         text_color = (255, 255, 255)
 
-
         if core.mode == "treino":
             status_text = f"Treinando: {core.new_movement_name}"
             recording_color = (0, 0, 255) if core.is_recording else (255, 255, 0)
@@ -43,10 +42,11 @@ class MovementUI(BaseUI):
             cv2.LINE_AA,
         )
 
-        # Predição atual (modo teste)
+        # Predição atual (modo teste) - CORREÇÃO APLICADA (opcional): Adicionar tipo estático/dinâmico
         if core.mode == "teste" and core.current_prediction:
             confidence_color = (0, 255, 0) if core.prediction_confidence > 0.8 else (0, 255, 255)
-            prediction_text = f"Sinal Detectado: {core.current_prediction} ({core.prediction_confidence:.2f})"
+            type_text = 'Dinâmico' if core.is_dynamic else 'Estático'
+            prediction_text = f"Sinal Detectado: {core.current_prediction} ({core.prediction_confidence:.2f}) - {type_text}"
             
             cv2.putText(
                 image,

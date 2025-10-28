@@ -8,6 +8,7 @@ class GestureCore(BaseCore):
     def __init__(self, db):
         super().__init__(db)
         self.model_manager = ModelManager(CONFIG["knn_neighbors"])
+        # CORREÇÃO APLICADA: Filtrar por tipo para evitar mistura de shapes
         self.labels, self.data, _ = self.db.load_gestures(gesture_type="letter")
         if self.labels:
             self.model_manager.train(self.data, self.labels)

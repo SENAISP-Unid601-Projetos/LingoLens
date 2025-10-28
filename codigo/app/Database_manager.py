@@ -3,7 +3,7 @@ import sqlite3
 import json
 import logging
 from Config import CONFIG
-import numpy as np
+import numpy as np  # CORREÇÃO APLICADA: Import para isinstance(np.ndarray)
 
 os.makedirs(os.path.dirname(CONFIG["db_path"]), exist_ok=True)
 os.makedirs(os.path.dirname(CONFIG["log_file"]), exist_ok=True)
@@ -74,12 +74,12 @@ class DatabaseManager:
             
             # Inserir novos gestos
             for name, landmarks, g_type in zip(labels, data, types):
-                # Converta para lista se for ndarray
+                # CORREÇÃO APLICADA: Converter ndarray para list antes de JSON
                 if isinstance(landmarks, np.ndarray):
                     landmarks = landmarks.tolist()
-                elif hasattr(landmarks, 'tolist'):  # Para outros tipos com tolist()
+                elif hasattr(landmarks, 'tolist'):
                     landmarks = landmarks.tolist()
-
+                
                 landmarks_json = json.dumps(landmarks)
                 self.conn.execute(
                     "INSERT INTO gestures (name, type, landmarks) VALUES (?, ?, ?)",
