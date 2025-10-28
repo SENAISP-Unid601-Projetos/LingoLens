@@ -1,4 +1,5 @@
 import logging
+import cv2
 from .BaseCore import BaseCore
 from Model_manager import ModelManager
 from Config import CONFIG
@@ -7,13 +8,27 @@ class GestureCore(BaseCore):
     def __init__(self, db):
         super().__init__(db)
         self.model_manager = ModelManager(CONFIG["knn_neighbors"])
-        self.labels, self.data, _ = self.db.load_gestures()
+        self.labels, self.data, _ = self.db.load_gestures(gesture_type="letter")
         if self.labels:
             self.model_manager.train(self.data, self.labels)
         
         # Estados específicos de gestos
         self.new_gesture_name = ""
         self.new_gesture_data = []
+
+    def start_training_mode(self):
+        """Inicia o modo de treino"""
+        self.mode = "treino"
+        self.new_gesture_data = []
+        self.samples_count = 0
+        self.new_gesture_name = ""
+
+    def cancel_training(self):
+        """Cancela o modo de treino"""
+        self.mode = "teste"
+        self.new_gesture_name = ""
+        self.new_gesture_data = []
+        self.samples_count = 0
 
     def predict_gesture(self, landmarks):
         """Faz predição do gesto"""
@@ -76,17 +91,19 @@ class GestureCore(BaseCore):
                 self.model_manager.train(self.data, self.labels)
             return f"Gesto '{gesture_name}' deletado com sucesso!"
         return f"Erro ao deletar gesto '{gesture_name}'."
-    def start_training_mode(self):
-        """Inicia o modo de treino"""
-        self.mode = "treino"
-        self.new_gesture_data = []
-        self.samples_count = 0
-        self.new_gesture_name = ""
-        
-    def cancel_training(self):
-        """Cancela o modo de treino"""
-        self.mode = "teste"
-        self.new_gesture_name = ""
-        self.new_gesture_data = []
-        self.samples_count = 0
-        print("[DEBUG] Modo treino cancelado")
+
+    def change_resolution(self, width, height):
+        """Altera a resolução da câmera"""
+        try:
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+            
+            # Verificar se a resolução foi aplicada
+            actual_width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+            actual_height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            
+            print(f"[INFO] Resolução alterada para: {actual_width}x{actual_height}")
+            return True
+        except Exception as e:
+            print(f"[ERRO] Falha ao alterar resolução: {e}")
+            return False

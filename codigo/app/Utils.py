@@ -12,8 +12,14 @@ def extract_landmarks(hand_landmarks):
             
         landmarks = np.array([[lm.x, lm.y, lm.z] for lm in hand_landmarks.landmark]).flatten()
         
+        # 🔥 CORREÇÃO: Verificação mais robusta
         if landmarks.size != 63:
             logging.warning(f"Landmarks com tamanho inválido: {landmarks.size}")
+            return None
+
+        # Verificar se há valores NaN ou infinitos
+        if np.any(np.isnan(landmarks)) or np.any(np.isinf(landmarks)):
+            logging.warning("Landmarks contém valores inválidos (NaN ou infinito)")
             return None
 
         # Normalização robusta

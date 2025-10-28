@@ -23,7 +23,6 @@ RESOLUTION_OPTIONS = [
     (800, 600),
 ]
 
-# 🔥 NOVAS CONFIGURAÇÕES PARA LIBRAS
 CONFIG = {
     "db_path": os.path.join(BASE_DIR, "data", "gestures.db"),
     "confidence_threshold": 0.80,
@@ -31,25 +30,19 @@ CONFIG = {
     "camera_resolution": (1280, 720),
     "window_size": (window_width, window_height),
     "target_fps": 30,
-    "max_num_hands": 2,  # 🔥 MUDADO PARA 2 MÃOS (Libras usa duas mãos)
+    "max_num_hands": 2,
     "min_detection_confidence": 0.8,
     "knn_neighbors": 5,
     "log_file": os.path.join(BASE_DIR, "Logs", "Gesture_recognizer.log"),
     
     "train_fps": 30,
-    "gesture_types": ["letter", "word", "movement", "libras"],  # 🔥 ADICIONADO LIBRAS
+    "gesture_types": ["letter", "word", "movement", "libras"],
     "max_sequence_length": 30,
     "train_data_dir": os.path.join(BASE_DIR, "data", "train"),
     
     "resolution_options": RESOLUTION_OPTIONS,
     "current_resolution_index": 0,
     
-    # 🔥 CONFIGURAÇÕES ESPECÍFICAS PARA LIBRAS
-    "libras_sequence_length": 20,
-    "libras_movement_threshold": 0.1,
-    "libras_grammar_enabled": True,
-    "libras_two_hands": True,
-
     "libras_sequence_length": 10,
     "libras_movement_threshold": 0.1,
     "libras_confidence_threshold": 0.6,

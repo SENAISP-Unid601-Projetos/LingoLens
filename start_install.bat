@@ -44,8 +44,6 @@ echo.
 echo Criando estrutura de pastas...
 mkdir "codigo\App\data" 2>nul
 mkdir "codigo\App\Logs" 2>nul
-mkdir "codigo\App\core" 2>nul
-mkdir "codigo\App\ui" 2>nul
 
 echo.
 echo Instalacao completa! Agora use start.bat
