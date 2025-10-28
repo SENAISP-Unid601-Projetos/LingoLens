@@ -1,44 +1,52 @@
 import numpy as np
 import logging
+import os
+
+# Configura log (opcional, mas seguro)
+log_path = os.path.join(os.path.dirname(__file__), "logs", "extract.log")
+os.makedirs(os.path.dirname(log_path), exist_ok=True)
+logging.basicConfig(filename=log_path, level=logging.ERROR, format="%(asctime)s - %(message)s")
 
 def extract_landmarks(hand_landmarks, image_shape=None):
     """
-    Extrai e normaliza os pontos de referência de uma mão detectada pelo MediaPipe.
-    Inclui distâncias entre pontos-chave para melhorar a diferenciação.
+    Extrai 63 features (21 landmarks × 3 coords) normalizadas.
+    Usa normalização Z-score robusta (media e desvio padrão).
+    Compatível com RandomForest e LSTM (63 entradas).
+    
     Args:
-        hand_landmarks: Objeto de pontos de referência do MediaPipe.
-        image_shape: Tupla (altura, largura) da imagem para normalização (opcional).
+        hand_landmarks: MediaPipe hand landmarks
+        image_shape: (H, W) – opcional (não usado, pois MediaPipe já normaliza)
+    
     Returns:
-        Lista achatada com coordenadas normalizadas e distâncias ou None se inválido.
+        list[63 floats] ou None
     """
-    if image_shape is not None and (not isinstance(image_shape, tuple) or len(image_shape) < 2):
-        logging.error("image_shape deve ser uma tupla com pelo menos 2 elementos (altura, largura)")
-        return None
+    try:
+        if not hand_landmarks or len(hand_landmarks.landmark) != 21:
+            logging.error("Hand landmarks inválido ou incompleto")
+            return None
 
-    landmarks = []
-    for lm in hand_landmarks.landmark:
-        x = lm.x * image_shape[1] if image_shape else lm.x
-        y = lm.y * image_shape[0] if image_shape else lm.y
-        z = lm.z
-        landmarks.append([x, y, z])
-        logging.debug(f"Coordenada: x={x}, y={y}, z={z}, image_shape={image_shape}")
-    
-    landmarks_array = np.array(landmarks)
-    if len(landmarks_array) != 21:  # MediaPipe retorna 21 landmarks por mão
-        logging.error(f"Esperado 21 landmarks, mas recebido {len(landmarks_array)}")
+        # Extrai x, y, z (já normalizados entre 0 e 1 pelo MediaPipe)
+        landmarks = []
+        for lm in hand_landmarks.landmark:
+            landmarks.extend([lm.x, lm.y, lm.z])
+
+        landmarks = np.array(landmarks).reshape(21, 3)
+
+        # === NORMALIZAÇÃO Z-SCORE (robusta) ===
+        mean = landmarks.mean(axis=0)
+        std = landmarks.std(axis=0)
+        std = np.where(std == 0, 1.0, std)  # evita divisão por zero
+        normalized = (landmarks - mean) / (std + 1e-8)
+
+        # Achata para 63 features
+        result = normalized.flatten().tolist()
+
+        if len(result) != 63:
+            logging.error(f"Feature vector com tamanho errado: {len(result)}")
+            return None
+
+        return result
+
+    except Exception as e:
+        logging.error(f"Erro em extract_landmarks: {e}")
         return None
-    
-    landmarks_reshaped = landmarks_array.reshape(-1, 3)
-    std = landmarks_reshaped.std(axis=0)
-    std = np.where(std == 0, 1.0, std)  # Evitar divisão por zero
-    normalized = (landmarks_reshaped - landmarks_reshaped.mean(axis=0)) / (std + 1e-8)
-    
-    distances = []
-    key_pairs = [(4, 8), (8, 12)]  # Polegar (4) - Indicador (8), Indicador (8) - Médio (12)
-    for p1, p2 in key_pairs:
-        dist = np.linalg.norm(landmarks_reshaped[p1] - landmarks_reshaped[p2])
-        distances.append(dist)
-    
-    result = np.concatenate([normalized.flatten(), distances]).tolist()
-    logging.debug(f"Tamanho do vetor de features: {len(result)}")
-    return result

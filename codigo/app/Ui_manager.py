@@ -1,69 +1,86 @@
 import cv2
 import numpy as np
+import os
 
 class UIManager:
     def __init__(self):
-        """Inicializa o gerenciador de interface do usuário."""
-        self.font = cv2.FONT_HERSHEY_SIMPLEX
-        self.font_scale = 0.6  # Reduzido para caber mais texto
-        self.color = (255, 255, 255)  # Branco para texto
-        self.thickness = 1  # Reduzido para melhor legibilidade
+        """Inicializa o gerenciador de interface do usuário com UI responsiva."""
+        self.instructions = "Q=Sair | C=Limpar | T=Treino Estático | M=Treino Dinâmico | R=Reconhecimento | S=Salvar | D=Excluir"
         self.line_type = cv2.LINE_AA
-        self.instructions = "Q=Sair, C=Limpar, T=Treino Estático ou Treinar Dinâmico, M=Treino Dinâmico, R=Reconhecimento, S=Salvar, D=Excluir"
+
+    def _get_scaled_font(self, width, base_scale=0.5):
+        """Ajusta escala da fonte com base na largura da tela."""
+        scale = max(0.4, base_scale * (width / 800))
+        thickness = max(1, int(scale * 2))
+        return scale, thickness
 
     def draw_ui(self, image, status, prediction_cooldown, current_word, sample_count, input_text, 
                 is_input_active, new_gesture_name, gesture_list=None, selected_index=None, 
                 hand_stable=False, variance=0.0, dynamic_status="", mode="", 
                 dynamic_sequence_length=0, saving_status=""):
-        """Desenha a interface do usuário na imagem."""
+        """Desenha UI responsiva que se adapta a qualquer tamanho de janela."""
         try:
-            # Desenhar status principal
-            cv2.putText(image, status, (10, 30), self.font, self.font_scale, self.color, self.thickness, self.line_type)
+            if image is None or image.size == 0:
+                return image
 
-            # Modo de entrada de texto
+            height, width = image.shape[:2]
+            if width == 0 or height == 0:
+                return image
+
+            font_scale, thickness = self._get_scaled_font(width)
+            margin = max(10, int(width * 0.02))
+            line_height = max(20, int(font_scale * 40))
+
+            # Fundo escuro na parte inferior
+            bar_height = line_height * 3
+            overlay = image.copy()
+            cv2.rectangle(overlay, (0, height - bar_height), (width, height), (0, 0, 0), -1)
+            cv2.addWeighted(overlay, 0.7, image, 0.3, 0, image)
+
+            def draw_text(text, y, color=(200, 200, 200), align='left', bold=False):
+                scale = min(font_scale * (1.3 if bold else 1.0), 1.5)  # Limite máximo
+                thick = min(thickness + (1 if bold else 0), 4)
+                size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, scale, thick)[0]
+                if align == 'center':
+                    x = (width - size[0]) // 2
+                elif align == 'right':
+                    x = width - size[0] - margin
+                else:
+                    x = margin
+                cv2.putText(image, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, scale, color, thick, self.line_type)
+
+            # Linha 1: Status principal
+            draw_text(status, margin + line_height * 0, (0, 255, 255), bold=True)
+
+            # Linha 2: Modo específico
+            y2 = margin + line_height * 1
             if is_input_active:
-                cv2.putText(image, f"Digite o nome do gesto: {input_text}", 
-                            (10, 60), self.font, self.font_scale, (0, 255, 0), self.thickness, self.line_type)
-
-            # Modo de treino estático
+                draw_text(f"Nome: {input_text}_", y2, (0, 255, 0))
             elif mode == "train_static" and new_gesture_name:
-                stability_text = "Estável" if hand_stable else "Instável"
+                stability = "ESTÁVEL" if hand_stable else "INSTÁVEL"
                 color = (0, 255, 0) if hand_stable else (0, 0, 255)
-                cv2.putText(image, f"Treinando: {new_gesture_name} ({sample_count} samples, {stability_text}, var={variance:.6f})", 
-                            (10, 60), self.font, self.font_scale, color, self.thickness, self.line_type)
-
-            # Modo de treino dinâmico
+                draw_text(f"Treinando: {new_gesture_name} ({sample_count} amostras, {stability})", y2, color)
             elif mode == "train_dynamic" and new_gesture_name:
-                cv2.putText(image, f"Treinando dinâmico: {new_gesture_name} ({dynamic_sequence_length} frames)", 
-                            (10, 60), self.font, self.font_scale, (255, 255, 0), self.thickness, self.line_type)
-                if dynamic_status:
-                    cv2.putText(image, dynamic_status, (10, 90), self.font, self.font_scale, (255, 255, 0), self.thickness, self.line_type)
-
-            # Modo de reconhecimento
+                draw_text(f"Capturando: {new_gesture_name} ({dynamic_sequence_length} frames)", y2, (255, 255, 0))
             elif mode == "recognize":
                 if current_word:
-                    cv2.putText(image, f"Palavra: {current_word}", 
-                                (10, 90), self.font, self.font_scale, self.color, self.thickness, self.line_type)
+                    draw_text(f"Palavra: {current_word}", y2, (0, 255, 0))
                 if dynamic_status:
-                    cv2.putText(image, dynamic_status, (10, 120), self.font, self.font_scale, (255, 255, 0), self.thickness, self.line_type)
+                    draw_text(dynamic_status, y2 + line_height, (255, 255, 0))
 
-            # Modo de exclusão
-            if gesture_list:
-                cv2.putText(image, "Modo Excluir: Use N/P para navegar, ENTER para excluir, ESC para sair", 
-                            (10, image.shape[0] - 60), self.font, self.font_scale, (0, 0, 255), self.thickness, self.line_type)
-                for i, gesture in enumerate(gesture_list):
-                    color = (0, 255, 0) if i == selected_index else self.color
-                    cv2.putText(image, gesture, (image.shape[1] - 200, 30 + i * 30), 
-                                self.font, self.font_scale, color, self.thickness, self.line_type)
-
-            # Exibir status de salvamento/treinamento
+            # Status temporário
             if saving_status:
-                cv2.putText(image, saving_status, (10, image.shape[0] - 30), 
-                            self.font, self.font_scale, (0, 255, 255), self.thickness, self.line_type)
+                draw_text(saving_status, height - bar_height - margin, (0, 255, 255), bold=True)
 
-            # Exibir instruções de teclas
-            cv2.putText(image, self.instructions, (10, image.shape[0] - 10), 
-                        self.font, self.font_scale, (200, 200, 200), self.thickness, self.line_type)
+            # Modo exclusão
+            if gesture_list:
+                start_y = margin
+                for i, gesture in enumerate(gesture_list[:7]):
+                    color = (0, 255, 0) if i == selected_index else (180, 180, 180)
+                    draw_text(gesture, start_y + i * line_height, color, align='right')
+
+            # Instruções
+            draw_text(self.instructions, height - margin, (180, 180, 180), align='center')
 
             return image
         except Exception as e:

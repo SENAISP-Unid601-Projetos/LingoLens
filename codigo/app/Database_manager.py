@@ -1,217 +1,140 @@
 import sqlite3
 import pickle
-import os
 import logging
-from Config import CONFIG
-
-# Configurar logging usando CONFIG["log_file"]
-logging.basicConfig(
-    filename=CONFIG["log_file"],
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+import os
 
 class DatabaseManager:
-    def __init__(self, db_path):
+    def __init__(self, db_path=None):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        if db_path is None:
+            db_path = os.path.join(base_dir, "data", "gestures.db")
         self.db_path = db_path
-        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        self.base_dir = base_dir
+        self._ensure_directory()
+        
         try:
-            self.conn = sqlite3.connect(db_path)
+            self.conn = sqlite3.connect(db_path, check_same_thread=False)
             self.cursor = self.conn.cursor()
-            self.create_table()
-            self.create_dynamic_gestures_table()
-            logging.info("Banco de dados inicializado com sucesso")
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao conectar ao banco de dados: {e}")
+            self._create_tables()
+            log_path = os.path.join(base_dir, "logs", "database.log")
+            logging.basicConfig(filename=log_path, level=logging.INFO, format="%(asctime)s - %(message)s")
+            logging.info(f"Banco aberto: {db_path}")
+            print(f"[INFO] Banco aberto: {db_path}")
+        except Exception as e:
+            error_msg = f"Erro ao abrir banco: {e}"
+            print(f"[FATAL] {error_msg}")
+            logging.error(error_msg)
             raise
 
-    def create_table(self):
-        """Cria a tabela para gestos estáticos."""
-        try:
-            self.cursor.execute('''
-                CREATE TABLE IF NOT EXISTS gestures (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    gesture_type TEXT NOT NULL,
-                    gesture_name TEXT NOT NULL,
-                    data BLOB NOT NULL
-                )
-            ''')
-            self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_gesture_type_name ON gestures (gesture_type, gesture_name)')
-            self.conn.commit()
-            logging.info("Tabela 'gestures' criada ou verificada")
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao criar tabela 'gestures': {e}")
-            raise
+    def _ensure_directory(self):
+        directory = os.path.dirname(self.db_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
+            print(f"[INFO] Pasta criada: {directory}")
+            logging.info(f"Pasta criada: {directory}")
 
-    def create_dynamic_gestures_table(self):
-        """Cria a tabela para gestos dinâmicos, recriando se necessário."""
-        try:
-            self.cursor.execute("PRAGMA table_info(dynamic_gestures)")
-            columns = [col[1] for col in self.cursor.fetchall()]
-            expected_columns = {'id', 'gesture_name', 'data'}
-            if columns and set(columns) != expected_columns:
-                logging.warning("Esquema da tabela 'dynamic_gestures' incorreto. Recriando tabela.")
-                self.cursor.execute("DROP TABLE IF EXISTS dynamic_gestures")
-                self.conn.commit()
+    def _create_tables(self):
+        self.cursor.executescript("""
+            CREATE TABLE IF NOT EXISTS gestures (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                label TEXT NOT NULL,
+                data BLOB NOT NULL,
+                gesture_type TEXT NOT NULL
+            );
 
-            self.cursor.execute('''
-                CREATE TABLE IF NOT EXISTS dynamic_gestures (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    gesture_name TEXT NOT NULL,
-                    data BLOB NOT NULL
-                )
-            ''')
-            self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_dynamic_gesture_name ON dynamic_gestures (gesture_name)')
-            self.conn.commit()
-            logging.info("Tabela 'dynamic_gestures' criada ou verificada")
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao criar tabela 'dynamic_gestures': {e}")
-            raise
+            CREATE TABLE IF NOT EXISTS dynamics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                label TEXT NOT NULL,
+                sequence BLOB NOT NULL
+            );
 
-    def save_gestures(self, labels, data, gesture_types):
-        """Salva gestos estáticos no banco de dados, otimizado para evitar recarregar todos os dados."""
-        if not labels or not data or not gesture_types or len(labels) != len(data) or len(labels) != len(gesture_types):
-            logging.error("Entradas inválidas para labels, data ou gesture_types")
-            raise ValueError("Entradas inválidas para labels, data ou gesture_types")
-        
-        gesture_type = gesture_types[0]
-        if not all(t == gesture_type for t in gesture_types):
-            logging.error("Todos os gesture_types devem ser iguais")
-            raise ValueError("Todos os gesture_types devem ser iguais")
-        
-        try:
-            with self.conn:
-                for label, datum in zip(labels, data):
-                    # Carregar apenas os dados do gesture_name específico
-                    self.cursor.execute('SELECT data FROM gestures WHERE gesture_type = ? AND gesture_name = ?', 
-                                     (gesture_type, label))
-                    result = self.cursor.fetchone()
-                    gesture_data = pickle.loads(result[0]) if result else {label: []}
-                    gesture_data[label].append(datum)
-                    serialized_data = pickle.dumps(gesture_data)
-                    
-                    if result:
-                        self.cursor.execute('UPDATE gestures SET data = ? WHERE gesture_type = ? AND gesture_name = ?', 
-                                         (serialized_data, gesture_type, label))
-                    else:
-                        self.cursor.execute('INSERT INTO gestures (gesture_type, gesture_name, data) VALUES (?, ?, ?)', 
-                                         (gesture_type, label, serialized_data))
-            logging.info(f"Gestos estáticos salvos para {gesture_type}")
-        except (sqlite3.Error, pickle.PickleError) as e:
-            logging.error(f"Erro ao salvar gestos estáticos para {gesture_type}: {e}")
-            raise
+            CREATE TABLE IF NOT EXISTS model_static (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                model BLOB NOT NULL,
+                accuracy REAL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-    def save_dynamic_gestures(self, labels, data):
-        """Salva gestos dinâmicos no banco de dados."""
-        if not labels or not data or len(labels) != len(data):
-            logging.error("Entradas inválidas para labels ou data de gestos dinâmicos")
-            raise ValueError("Entradas inválidas para labels ou data de gestos dinâmicos")
-        
-        try:
-            with self.conn:
-                for label, datum in zip(labels, data):
-                    serialized_data = pickle.dumps(datum)
-                    self.cursor.execute('INSERT INTO dynamic_gestures (gesture_name, data) VALUES (?, ?)', 
-                                     (label, serialized_data))
-            logging.info(f"Gestos dinâmicos salvos: {labels}")
-        except (sqlite3.Error, pickle.PickleError) as e:
-            logging.error(f"Erro ao salvar gestos dinâmicos: {e}")
-            raise
+            CREATE TABLE IF NOT EXISTS model_lstm (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                weights BLOB NOT NULL,
+                classes BLOB NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        self.conn.commit()
+        logging.info("Tabelas criadas/verificados")
 
-    def load_gestures(self, gesture_type):
-        """Carrega gestos estáticos do banco de dados."""
-        try:
-            self.cursor.execute('SELECT gesture_name, data FROM gestures WHERE gesture_type = ?', (gesture_type,))
-            results = self.cursor.fetchall()
-            data_dict = {}
-            labels = []
-            data = []
-            gesture_names = []
-            for gesture_name, blob in results:
-                gesture_data = pickle.loads(blob)
-                data_dict.update(gesture_data)
-                gesture_names.append(gesture_name)
-                for label, landmarks_list in gesture_data.items():
-                    labels.extend([label] * len(landmarks_list))
-                    data.extend(landmarks_list)
-            return data_dict, labels, data, gesture_names
-        except (sqlite3.Error, pickle.PickleError) as e:
-            logging.error(f"Erro ao carregar gestos estáticos para {gesture_type}: {e}")
-            return {}, [], [], []
+    def save_gestures(self, labels, data_list, gesture_types):
+        data = [(l, pickle.dumps(d), t) for l, d, t in zip(labels, data_list, gesture_types)]
+        self.cursor.executemany("INSERT INTO gestures (label, data, gesture_type) VALUES (?, ?, ?)", data)
+        self.conn.commit()
+
+    def save_dynamic_gestures(self, labels, sequences):
+        for label, seq in zip(labels, sequences):
+            if len(seq) == 0: continue
+            blob = pickle.dumps(seq)
+            self.cursor.execute("SELECT id FROM dynamics WHERE label = ?", (label,))
+            if self.cursor.fetchone():
+                self.cursor.execute("UPDATE dynamics SET sequence = ? WHERE label = ?", (blob, label))
+            else:
+                self.cursor.execute("INSERT INTO dynamics (label, sequence) VALUES (?, ?)", (label, blob))
+        self.conn.commit()
+
+    def load_gestures(self, gesture_type="letter"):
+        self.cursor.execute("SELECT label, data FROM gestures WHERE gesture_type = ?", (gesture_type,))
+        rows = self.cursor.fetchall()
+        data_dict, labels, data = {}, [], []
+        for label, blob in rows:
+            d = pickle.loads(blob)
+            data_dict.setdefault(label, []).append(d)
+            labels.append(label)
+            data.append(d)
+        return data_dict, labels, data, list(data_dict.keys())
 
     def load_dynamic_gestures(self):
-        """Carrega gestos dinâmicos do banco de dados."""
-        try:
-            self.cursor.execute('SELECT gesture_name, data FROM dynamic_gestures')
-            results = self.cursor.fetchall()
-            data = []
-            labels = []
-            for gesture_name, blob in results:
-                gesture_data = pickle.loads(blob)
-                labels.append(gesture_name)
-                data.append(gesture_data)
-            return data, labels
-        except (sqlite3.Error, pickle.PickleError) as e:
-            logging.error(f"Erro ao carregar gestos dinâmicos: {e}")
-            return [], []
-
-    def list_gestures(self, gesture_type):
-        """Retorna uma lista de nomes de gestos estáticos para um dado gesture_type."""
-        try:
-            self.cursor.execute('SELECT DISTINCT gesture_name FROM gestures WHERE gesture_type = ?', (gesture_type,))
-            results = self.cursor.fetchall()
-            return [row[0] for row in results]
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao listar gestos estáticos para {gesture_type}: {e}")
-            return []
-
-    def list_dynamic_gestures(self):
-        """Retorna uma lista de nomes de gestos dinâmicos."""
-        try:
-            self.cursor.execute('SELECT DISTINCT gesture_name FROM dynamic_gestures')
-            results = self.cursor.fetchall()
-            return [row[0] for row in results]
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao listar gestos dinâmicos: {e}")
-            return []
-
-    def delete_gesture(self, gesture_type, gesture_name):
-        """Deleta um gesto estático específico."""
-        try:
-            with self.conn:
-                self.cursor.execute('DELETE FROM gestures WHERE gesture_type = ? AND gesture_name = ?', 
-                                  (gesture_type, gesture_name))
-            if self.cursor.rowcount > 0:
-                logging.info(f"Gesto estático {gesture_name} do tipo {gesture_type} deletado com sucesso")
-                return True
+        self.cursor.execute("SELECT label, sequence FROM dynamics")
+        rows = self.cursor.fetchall()
+        X, y = [], []
+        for label, blob in rows:
+            seq = pickle.loads(blob)
+            if isinstance(seq, list):
+                X.extend(seq)
+                y.extend([label] * len(seq))
             else:
-                logging.warning(f"Nenhum gesto estático encontrado para {gesture_name} do tipo {gesture_type}")
-                return False
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao deletar gesto estático {gesture_name} do tipo {gesture_type}: {e}")
-            return False
+                X.append(seq)
+                y.append(label)
+        return X, y
 
-    def delete_dynamic_gesture(self, gesture_name):
-        """Deleta um gesto dinâmico específico."""
-        try:
-            with self.conn:
-                self.cursor.execute('DELETE FROM dynamic_gestures WHERE gesture_name = ?', (gesture_name,))
-            if self.cursor.rowcount > 0:
-                logging.info(f"Gesto dinâmico {gesture_name} deletado com sucesso")
-                return True
-            else:
-                logging.warning(f"Nenhum gesto dinâmico encontrado para {gesture_name}")
-                return False
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao deletar gesto dinâmico {gesture_name}: {e}")
-            return False
+    def save_static_model(self, model, accuracy):
+        blob = pickle.dumps(model)
+        self.cursor.execute("DELETE FROM model_static")
+        self.cursor.execute("INSERT INTO model_static (model, accuracy) VALUES (?, ?)", (blob, accuracy))
+        self.conn.commit()
+
+    def load_static_model(self):
+        self.cursor.execute("SELECT model FROM model_static ORDER BY id DESC LIMIT 1")
+        row = self.cursor.fetchone()
+        return pickle.loads(row[0]) if row else None
+
+    def save_lstm_model(self, model):
+        weights = model.get_weights()
+        classes = getattr(model, 'classes_', [])
+        w_blob = pickle.dumps(weights)
+        c_blob = pickle.dumps(classes)
+        self.cursor.execute("DELETE FROM model_lstm")
+        self.cursor.execute("INSERT INTO model_lstm (weights, classes) VALUES (?, ?)", (w_blob, c_blob))
+        self.conn.commit()
+
+    def load_lstm_model(self, model_structure):
+        self.cursor.execute("SELECT weights, classes FROM model_lstm ORDER BY id DESC LIMIT 1")
+        row = self.cursor.fetchone()
+        if row:
+            weights = pickle.loads(row[0])
+            model_structure.set_weights(weights)
+            return pickle.loads(row[1])
+        return None
 
     def close(self):
-        """Fecha a conexão com o banco de dados."""
-        try:
-            if self.conn:
-                self.conn.commit()
-                self.conn.close()
-                logging.info("Conexão com o banco de dados fechada")
-        except sqlite3.Error as e:
-            logging.error(f"Erro ao fechar conexão com o banco de dados: {e}")
+        if self.conn:
+            self.conn.close()

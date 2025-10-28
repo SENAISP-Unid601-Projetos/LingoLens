@@ -1,129 +1,91 @@
-import logging
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.exceptions import NotFittedError
-from sklearn.model_selection import cross_val_score
-import os
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import pickle
+import logging
+from Database_manager import DatabaseManager
 from Config import CONFIG
 
 class ModelManager:
     def __init__(self, gesture_type="letter"):
-        from Config import validate_gesture_type
-        validate_gesture_type(gesture_type)
         self.gesture_type = gesture_type
-        self.trained = False
-        self.labels = []  # Inicializar labels
-        self.label_map = {}
-        if gesture_type == "letter":
-            self.model = RandomForestClassifier(
-                n_estimators=CONFIG["rf_estimators"], 
-                max_depth=15,  # Aumentado para mais flexibilidade
-                min_samples_split=5,  # Mitigar overfitting
-                random_state=42
-            )
-        else:
-            self.model = self._build_lstm_model()
-
-    def _build_lstm_model(self):
-        model = tf.keras.Sequential([
-            tf.keras.layers.LSTM(
-                CONFIG["lstm_units"],
-                return_sequences=True,
-                input_shape=(CONFIG["max_sequence_length"], 65)
-            ),
-            tf.keras.layers.LSTM(CONFIG["lstm_units"]),
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dense(32, activation='softmax')
-        ])
-        model.compile(
-            optimizer='adam',
-            loss='sparse_categorical_crossentropy',
-            metrics=['accuracy']
+        self.db = DatabaseManager(CONFIG["db_path"])
+        self.model = RandomForestClassifier(
+            n_estimators=200,
+            max_depth=15,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            random_state=42,
+            n_jobs=1
         )
-        return model
+        self.trained = False
+        log_path = CONFIG["log_file"].replace("app.log", "model_static.log")
+        logging.basicConfig(filename=log_path, level=logging.INFO, format="%(asctime)s - %(message)s")
 
-    def train(self, data, labels):
-        if not data or not labels or len(data) != len(labels):
-            logging.error("Dados ou labels inválidos para treinamento")
-            return False
-
-        unique_labels = set(labels)
-        if len(unique_labels) < 1:
-            logging.error("Nenhum dado disponível para treino")
-            return False
-
-        if len(unique_labels) == 1:
-            logging.warning(f"Treinando com apenas 1 classe ({list(unique_labels)[0]}). Predições não serão discriminativas.")
-
+    def train(self, X, y):
         try:
-            if self.gesture_type == "letter":
-                data = np.array(data)
-                if data.shape[1] != 65:
-                    logging.error(f"Formato de dados inválido. Esperado (N, 65), recebido (N, {data.shape[1]})")
-                    return False
-                if len(unique_labels) >= 2:
-                    scores = cross_val_score(self.model, data, labels, cv=5, scoring='accuracy')
-                    logging.info(f"Precisão média CV (Random Forest): {scores.mean():.2f} (+/- {scores.std() * 2:.2f})")
-                self.model.fit(data, labels)
-            else:
-                data = np.array(data)
-                if data.shape[1:] != (CONFIG["max_sequence_length"], 65):
-                    logging.error(f"Formato de dados inválido. Esperado (N, {CONFIG['max_sequence_length']}, 65), recebido {data.shape}")
-                    return False
-                self.label_map = {label: idx for idx, label in enumerate(unique_labels)}
-                numeric_labels = [self.label_map[label] for label in labels]
-                if self.model.layers[-1].units != len(unique_labels):
-                    self.model.layers.pop()
-                    self.model.add(tf.keras.layers.Dense(len(unique_labels), activation='softmax'))
-                    self.model.compile(
-                        optimizer='adam',
-                        loss='sparse_categorical_crossentropy',
-                        metrics=['accuracy']
-                    )
-                self.model.fit(data, np.array(numeric_labels), epochs=10, batch_size=32, validation_split=0.2, verbose=0)
-                logging.info(f"Modelo LSTM treinado com {len(data)} sequências e {len(unique_labels)} classes")
+            if len(X) < 10:
+                logging.warning("Menos de 10 amostras para treino")
+                print("[AVISO] Colete pelo menos 10 amostras por letra")
+                return False
 
+            X_clean = [x for x in X if len(x) == 63]
+            y_clean = [y[i] for i, x in enumerate(X) if len(x) == 63]
+            if len(set(y_clean)) < 2:
+                print("[AVISO] Precisa de pelo menos 2 letras diferentes")
+                return False
+
+            X_clean = np.array(X_clean)
+            y_clean = np.array(y_clean)
+
+            X_train, X_test, y_train, y_test = train_test_split(
+                X_clean, y_clean,
+                test_size=0.25,
+                random_state=42,
+                stratify=y_clean
+            )
+            self.model.fit(X_train, y_train)
+            train_acc = accuracy_score(y_train, self.model.predict(X_train))
+            val_acc = accuracy_score(y_test, self.model.predict(X_test))
             self.trained = True
-            self.labels = labels  # Armazenar labels para uso em predict
-            logging.info(f"Modelo treinado com {len(data)} amostras e {len(unique_labels)} classes: {unique_labels}")
+
+            self.db.save_static_model(self.model, val_acc)
+
+            log_msg = f"ESTÁTICO: RF | {len(X_clean)} amostras | {len(set(y_clean))} classes | Treino: {train_acc:.3f} | Val: {val_acc:.3f}"
+            logging.info(log_msg)
+            print(f"[SUCESSO] {log_msg}")
+
+            if val_acc < 0.7:
+                print("[ALERTA] Acurácia baixa! Colete mais amostras variadas.")
             return True
         except Exception as e:
-            logging.error(f"Erro ao treinar modelo: {e}")
+            logging.error(f"Erro treino estático: {e}")
             return False
 
-    def predict(self, data):
-        if not self.trained:
-            logging.warning("Modelo ainda não treinado. Retornando None")
+    def predict(self, landmarks):
+        if not self.trained or len(landmarks) != 63:
             return None, 0.0
-
-        unique_labels = set(self.labels) if self.labels else set()
-        if len(unique_labels) < 2:
-            logging.warning(f"Predição com {len(unique_labels)} classe(s). Resultado não discriminativo.")
-
         try:
-            if self.gesture_type == "letter":
-                data = np.array(data)
-                if data.shape != (65,):
-                    logging.error(f"Formato de dados inválido para predição. Esperado (65,), recebido {data.shape}")
-                    return None, 0.0
-                prediction = self.model.predict([data])[0]
-                probability = self.model.predict_proba([data]).max()
-            else:
-                data = np.array([data])
-                if data.shape != (1, CONFIG["max_sequence_length"], 65):
-                    logging.error(f"Formato de dados inválido para predição. Esperado (1, {CONFIG['max_sequence_length']}, 65), recebido {data.shape}")
-                    return None, 0.0
-                probabilities = self.model.predict(data, verbose=0)[0]
-                prediction_idx = np.argmax(probabilities)
-                probability = probabilities[prediction_idx]
-                prediction = list(self.label_map.keys())[list(self.label_map.values()).index(prediction_idx)]
-            logging.debug(f"Predição: {prediction} | Probabilidade: {probability:.2f}")
-            return prediction, probability
-        except NotFittedError:
-            logging.error("Erro: modelo não está ajustado corretamente")
+            prob = self.model.predict_proba([landmarks])[0]
+            conf = np.max(prob)
+            if conf < CONFIG["confidence_threshold"]:
+                return None, 0.0
+            pred = self.model.classes_[np.argmax(prob)]
+            return pred, conf
+        except:
             return None, 0.0
+
+    def load_model(self):
+        try:
+            model = self.db.load_static_model()
+            if model:
+                self.model = model
+                self.trained = True
+                logging.info("Modelo estático (RF) carregado do banco")
+                print(f"[INFO] Modelo estático carregado com {len(model.classes_)} classes")
+                return True
+            return False
         except Exception as e:
-            logging.error(f"Erro na predição: {e}")
-            return None, 0.0
+            logging.error(f"Erro ao carregar modelo: {e}")
+            return False
