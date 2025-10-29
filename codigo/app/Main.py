@@ -1,21 +1,16 @@
-import cv2
-import mediapipe as mp
-import logging
-import time
-import numpy as np
-from Config import CONFIG, validate_gesture_type
-from Database_manager import DatabaseManager
-from Model_manager import ModelManager
-from Ui_manager import UIManager
-from Extract_landmarks import extract_landmarks
 from GestureApp import GestureApp
+import sys
+import os
+
+# Adiciona o diretório do app ao path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 if __name__ == "__main__":
     try:
-        gesture_type = "letter"  # Pode ser configurado dinamicamente
-        validate_gesture_type(gesture_type)
-        app = GestureApp(gesture_type=gesture_type)
+        app = GestureApp(gesture_type="letter")
         app.run()
     except Exception as e:
-        logging.error(f"Erro ao executar o aplicativo: {e}")
-        print(f"[ERROR] Erro ao executar o aplicativo: {e}")
+        print(f"[FATAL] Erro crítico: {e}")
+        import traceback
+        traceback.print_exc()
+        input("Pressione Enter para sair...")

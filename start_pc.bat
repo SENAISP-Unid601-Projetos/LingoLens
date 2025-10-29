@@ -6,45 +6,40 @@ echo     Gesture Recognizer - Instalacao
 echo ========================================
 echo.
 
-REM Definir caminhos relativos
-set PROJECT_DIR=%~dp0
-set CODE_DIR=%PROJECT_DIR%codigo\app
-set LOGS_DIR=%CODE_DIR%\logs
-set DATA_DIR=%CODE_DIR%\data
-set REQUIREMENTS=%PROJECT_DIR%requirements.txt
-set MAIN_PY=%CODE_DIR%\main.py
+set "PROJECT_DIR=%~dp0"
+set "CODE_DIR=%PROJECT_DIR%codigo\app"
+set "LOGS_DIR=%CODE_DIR%\logs"
+set "DATA_DIR=%CODE_DIR%\data"
+set "MODELS_DIR=%CODE_DIR%\models"
+set "REQUIREMENTS=%PROJECT_DIR%requirements.txt"
+set "MAIN_PY=%CODE_DIR%\Main.py"
 
-REM Criar diretórios necessários
-if not exist "%LOGS_DIR%" (
-    mkdir "%LOGS_DIR%"
-    echo [INFO] Diretorio logs criado: %LOGS_DIR%
-)
-if not exist "%DATA_DIR%" (
-    mkdir "%DATA_DIR%"
-    echo [INFO] Diretorio data criado: %DATA_DIR%
+for %%D in ("%LOGS_DIR%" "%DATA_DIR%" "%MODELS_DIR%") do (
+    if not exist "%%D" (
+        mkdir "%%D"
+        echo [INFO] Diretorio criado: %%D
+    )
 )
 
-REM Instalar dependências GLOBALMENTE no PC
-echo [INFO] Instalando dependencias GLOBALMENTE no PC...
+echo [INFO] Instalando dependencias...
 if exist "%REQUIREMENTS%" (
     pip install --user -r "%REQUIREMENTS%"
 ) else (
-    pip install --user mediapipe opencv-python numpy scikit-learn tensorflow sqlite3
+    pip install --user mediapipe opencv-python numpy scikit-learn tensorflow
 )
 
-REM Baixar/Atualizar modelo MediaPipe (garante disponibilidade)
-echo [INFO] Verificando modelo MediaPipe...
-python -c "import mediapipe as mp; print('MediaPipe OK:', mp.solutions.hands.Hands())"
+echo [INFO] Testando MediaPipe...
+python -c "import mediapipe as mp; print('MediaPipe OK:', mp.__version__)" >nul 2>&1
+if errorlevel 1 (
+    echo [ERRO] MediaPipe falhou.
+    goto :error
+)
 
-REM Verificar se main.py existe
 if not exist "%MAIN_PY%" (
-    echo [ERROR] Arquivo main.py nao encontrado em %MAIN_PY%
-    echo [INFO] Verifique o caminho e tente novamente.
-    pause
-    exit /b 1
+    echo [ERRO] Main.py nao encontrado: %MAIN_PY%
+    goto :error
 )
 
-REM Executar o main.py
 echo.
 echo ========================================
 echo     Executando GestureApp...
@@ -54,5 +49,11 @@ echo.
 python "%MAIN_PY%"
 
 echo.
-echo [INFO] Execucao finalizada. Pressione qualquer tecla para fechar...
+echo [INFO] Finalizado.
 pause >nul
+exit /b 0
+
+:error
+echo [ERRO] Falha na instalacao.
+pause >nul
+exit /b 1

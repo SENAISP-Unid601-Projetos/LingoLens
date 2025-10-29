@@ -1,141 +1,134 @@
-import numpy as np
-import tensorflow as tf
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score
-import logging
-import threading
 import cv2
+import numpy as np
+from Config import CONFIG, get_logger
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.utils import to_categorical
 import os
 import pickle
-from Database_manager import DatabaseManager
-from Config import DYNAMIC_MODEL, CONFIG  # ADICIONADO CONFIG
+
+logger = get_logger("Dynamic")
 
 class DynamicGestureRecognizer:
     def __init__(self, config):
         self.config = config
-        self.db = DatabaseManager(CONFIG["db_path"])  # CORRIGIDO: com caminho
-        self.seq_len = DYNAMIC_MODEL["sequence_length"]
-        self.sequence = []
-        self.dynamic_sequence = self.sequence
-        self.recording = False
-        self.current_name = ""
-        self.status_message = ""
+        self.db = None
         self.model = None
-        self.classes = []
+        self.label_encoder = LabelEncoder()
         self.model_trained = False
-        logging.basicConfig(filename=os.path.join(CONFIG["log_file"].replace("app.log", "dynamic.log")), level=logging.INFO)
+        self.recording = False
+        self.current_gesture_name = ""
+        self.dynamic_sequence = []
+        self.status_message = ""
+        self.classes_ = []
+        self.recognition_sequence = []
+        self.max_sequence_length = 63
+
+    def set_db(self, db):
+        self.db = db
 
     def start_recording(self, name):
-        self.current_name = name
-        self.sequence = []
-        self.dynamic_sequence = self.sequence
+        self.current_gesture_name = name.upper()
+        self.dynamic_sequence = []
         self.recording = True
-        self.status_message = f"GRAVANDO: {name}"
-
-    def stop_recording(self):
-        if len(self.sequence) >= 5:
-            self.db.save_dynamic_gestures([self.current_name], [self.sequence])
-            self.status_message = f"SALVO: {self.current_name}"
-        else:
-            self.status_message = "Curto!"
-        self.recording = False
+        logger.info(f"Iniciando gravacao: {self.current_gesture_name}")
 
     def process_frame(self, image, landmarks):
         if self.recording:
-            self.sequence.append(landmarks[:63])
-            if len(self.sequence) > self.seq_len:
-                self.sequence.pop(0)
-            cv2.putText(image, f"REC: {len(self.sequence)}", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
-
-        elif self.model_trained and len(self.sequence) == self.seq_len:
-            X = np.array([self.sequence])
-            pred = self.model.predict(X, verbose=0)[0]
-            conf = np.max(pred)
-            if conf > 0.75:
-                idx = np.argmax(pred)
-                gesture = self.classes[idx]
-                self.status_message = f"{gesture} ({conf:.2f})"
-                cv2.putText(image, self.status_message, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,0), 2)
+            self.dynamic_sequence.append(landmarks.copy())
+            cv2.putText(image, f"GRAVANDO: {len(self.dynamic_sequence)}", (10, 60),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         return image
 
+    def stop_recording(self):
+        if not self.recording:
+            return
+        self.recording = False
+        seq_len = len(self.dynamic_sequence)
+        if seq_len >= CONFIG["min_frames"]:
+            if self.db:
+                self.db.save_dynamic_gesture(self.current_gesture_name, self.dynamic_sequence.copy())
+            logger.info(f"'{self.current_gesture_name}' salvo! ({seq_len} frames)")
+            self.status_message = f"{self.current_gesture_name} salvo!"
+        else:
+            logger.warning(f"Muito curto: {seq_len} frames")
+            self.status_message = "Muito curto!"
+        self.current_gesture_name = ""
+        self.dynamic_sequence = []
+
     def train_and_save_model_lstm(self):
-        def train():
-            try:
-                X, y = self.db.load_dynamic_gestures()
-                if len(X) < 10 or len(set(y)) < 2:
-                    self.status_message = "Poucos dados!"
-                    return
-
-                valid_X = [x for x in X if len(x) == self.seq_len]
-                valid_y = [y[i] for i, x in enumerate(X) if len(x) == self.seq_len]
-                if len(valid_X) < 10:
-                    self.status_message = "Sequências curtas!"
-                    return
-
-                X_arr = np.array(valid_X)
-                le = LabelEncoder()
-                y_enc = le.fit_transform(valid_y)
-                self.classes = le.classes_
-
-                model = tf.keras.Sequential([
-                    tf.keras.layers.Input(shape=(self.seq_len, 63)),
-                    tf.keras.layers.LSTM(DYNAMIC_MODEL["lstm_units"], return_sequences=True),
-                    tf.keras.layers.LSTM(DYNAMIC_MODEL["lstm_units"]),
-                    tf.keras.layers.Dense(DYNAMIC_MODEL["dense_units"], activation='relu'),
-                    tf.keras.layers.Dropout(DYNAMIC_MODEL["dropout"]),
-                    tf.keras.layers.Dense(len(self.classes), activation='softmax')  # DINÂMICO
-                ])
-                model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-                history = model.fit(
-                    X_arr, y_enc,
-                    epochs=DYNAMIC_MODEL["epochs"],
-                    batch_size=DYNAMIC_MODEL["batch_size"],
-                    validation_split=DYNAMIC_MODEL["validation_split"],
-                    verbose=0
-                )
-
-                val_acc = history.history['val_accuracy'][-1]
-                self.db.save_lstm_model(model)
-                self.model = model
-                self.model_trained = True
-
-                log_msg = f"DINÂMICO: LSTM | {len(valid_X)} seqs | Val: {val_acc:.3f}"
-                logging.info(log_msg)
-                print(f"[SUCESSO] {log_msg}")
-                self.status_message = f"LSTM: {val_acc:.1%}"
-
-            except Exception as e:
-                logging.error(f"Erro LSTM: {e}")
-                self.status_message = "Erro"
-        threading.Thread(target=train, daemon=True).start()
+        logger.info("Carregando gestos dinamicos...")
+        try:
+            gestures = self.db.load_all_dynamic_gestures()
+            sequences, labels = [], []
+            for name, seq_list in gestures.items():
+                for seq in seq_list:
+                    if len(seq) >= CONFIG["min_frames"]:
+                        arr = np.array(seq, dtype=np.float32)
+                        if arr.ndim == 1:
+                            arr = arr.reshape(1, -1)
+                        if arr.shape[1] == 63:
+                            sequences.append(arr)
+                            labels.append(name)
+            if len(sequences) < 4 or len(set(labels)) < 2:
+                logger.error("Dados insuficientes")
+                return
+            max_len = max(s.shape[0] for s in sequences)
+            X = np.zeros((len(sequences), max_len, 63))
+            for i, s in enumerate(sequences):
+                X[i, :s.shape[0], :] = s
+            y = to_categorical(self.label_encoder.fit_transform(labels))
+            model = Sequential([
+                LSTM(64, return_sequences=True, input_shape=(max_len, 63)),
+                LSTM(32),
+                Dense(32, activation='relu'),
+                Dense(len(self.label_encoder.classes_), activation='softmax')
+            ])
+            model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+            model.fit(X, y, epochs=50, batch_size=8, validation_split=0.2, verbose=0)
+            os.makedirs(CONFIG["model_dir"], exist_ok=True)
+            model.save(os.path.join(CONFIG["model_dir"], "lstm_dynamic_model.h5"))
+            with open(os.path.join(CONFIG["model_dir"], "lstm_classes.pkl"), 'wb') as f:
+                pickle.dump(self.label_encoder.classes_, f)
+            self.model = model
+            self.model_trained = True
+            self.classes_ = self.label_encoder.classes_
+            self.max_sequence_length = max_len
+            logger.info(f"LSTM treinado: {self.classes_}")
+        except Exception as e:
+            logger.error(f"Erro no treino: {e}")
 
     def load_model_lstm(self):
-        try:
-            # Primeiro carrega classes do banco
-            self.cursor = self.db.conn.cursor()
-            self.cursor.execute("SELECT classes FROM model_lstm ORDER BY id DESC LIMIT 1")
-            row = self.cursor.fetchone()
-            if row:
-                self.classes = pickle.loads(row[0])
-            else:
-                return
+        path = os.path.join(CONFIG["model_dir"], "lstm_dynamic_model.h5")
+        cls_path = os.path.join(CONFIG["model_dir"], "lstm_classes.pkl")
+        if os.path.exists(path) and os.path.exists(cls_path):
+            from tensorflow.keras.models import load_model
+            self.model = load_model(path)
+            with open(cls_path, 'rb') as f:
+                self.label_encoder.classes_ = pickle.load(f)
+            self.classes_ = self.label_encoder.classes_
+            self.model_trained = True
+            self.max_sequence_length = self.model.input_shape[1]
+            logger.info(f"Modelo LSTM carregado: {len(self.classes_)} classes")
+            return True
+        return False
 
-            # Agora cria modelo com número correto de classes
-            model = tf.keras.Sequential([
-                tf.keras.layers.Input(shape=(self.seq_len, 63)),
-                tf.keras.layers.LSTM(DYNAMIC_MODEL["lstm_units"], return_sequences=True),
-                tf.keras.layers.LSTM(DYNAMIC_MODEL["lstm_units"]),
-                tf.keras.layers.Dense(DYNAMIC_MODEL["dense_units"], activation='relu'),
-                tf.keras.layers.Dropout(DYNAMIC_MODEL["dropout"]),
-                tf.keras.layers.Dense(len(self.classes), activation='softmax')  # DINÂMICO
-            ])
-
-            classes = self.db.load_lstm_model(model)
-            if classes is not None:
-                self.model = model
-                self.model_trained = True
-                logging.info(f"LSTM carregado do banco com {len(self.classes)} classes")
-                print(f"[INFO] Modelo dinâmico carregado com {len(self.classes)} classes")
-        except Exception as e:
-            logging.error(f"Erro ao carregar LSTM: {e}")
+    def process_frame_recognition(self, image, landmarks):
+        if not self.model_trained or not landmarks:
+            return image
+        self.recognition_sequence.append(landmarks.copy())
+        if len(self.recognition_sequence) > self.max_sequence_length:
+            self.recognition_sequence.pop(0)
+        if len(self.recognition_sequence) >= CONFIG["min_frames"]:
+            seq = np.array(self.recognition_sequence)
+            padded = np.zeros((1, self.max_sequence_length, 63))
+            padded[0, :len(seq), :] = seq
+            prob = self.model.predict(padded, verbose=0)[0]
+            idx = np.argmax(prob)
+            if prob[idx] > 0.8:
+                label = self.label_encoder.classes_[idx]
+                cv2.putText(image, f"{label} ({prob[idx]:.2f})", (10, 100),
+                           cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+                self.recognition_sequence = []
+        return image
