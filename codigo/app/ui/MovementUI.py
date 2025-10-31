@@ -42,11 +42,11 @@ class MovementUI(BaseUI):
             cv2.LINE_AA,
         )
 
-        # Predição atual (modo teste) - CORREÇÃO APLICADA (opcional): Adicionar tipo estático/dinâmico
+        # Predição atual (modo teste) com tipo Estático/Dinâmico
         if core.mode == "teste" and core.current_prediction:
             confidence_color = (0, 255, 0) if core.prediction_confidence > 0.8 else (0, 255, 255)
-            type_text = 'Dinâmico' if core.is_dynamic else 'Estático'
-            prediction_text = f"Sinal Detectado: {core.current_prediction} ({core.prediction_confidence:.2f}) - {type_text}"
+            tipo = "DINÂMICO" if core.is_dynamic else "ESTÁTICO"
+            prediction_text = f"Sinal Detectado: {core.current_prediction} ({core.prediction_confidence:.2f}) - {tipo}"
             
             cv2.putText(
                 image,

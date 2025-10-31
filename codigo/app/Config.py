@@ -25,7 +25,7 @@ RESOLUTION_OPTIONS = [
 
 CONFIG = {
     "db_path": os.path.join(BASE_DIR, "data", "gestures.db"),
-    "confidence_threshold": 0.80,
+    "confidence_threshold": 0.70,
     "prediction_cooldown": 45,
     "camera_resolution": (1280, 720),
     "window_size": (window_width, window_height),
@@ -34,6 +34,27 @@ CONFIG = {
     "min_detection_confidence": 0.8,
     "knn_neighbors": 5,
     "log_file": os.path.join(BASE_DIR, "Logs", "Gesture_recognizer.log"),
+
+    # 🔥 NOVO: Sistema de modos para Libras
+    "recognition_modes": ["letras", "palavras", "frases"],
+    "current_recognition_mode": "letras",
+    
+    # Configurações para palavras/frases
+    "word_detection_timeout": 2.0,  # segundos entre palavras
+    "min_word_confidence": 0.65,
+    "sentence_end_delay": 3.0,  # segundos para finalizar frase
+    
+    # Dicionário de palavras comuns em Libras
+    "common_words": [
+        "OI", "OLA", "OBRIGADO", "POR FAVOR", "AJUDA", 
+        "AGUA", "COMIDA", "BANHEIRO", "SAUDE", "FAMILIA",
+        "AMIGO", "ESCOLA", "TRABALHO", "CASA", "TEMPO"
+    ],
+    
+    # Letras estáticas vs dinâmicas (mantido para soletração)
+    "static_letters": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", 
+                      "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"],
+    "dynamic_letters": ["J", "Z"],
     
     "train_fps": 30,
     "gesture_types": ["letter", "word", "movement", "libras"],

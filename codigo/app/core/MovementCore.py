@@ -1,20 +1,28 @@
 from .BaseCore import BaseCore
 from MovementTrainer import MovementTrainer
 from Config import CONFIG
-from Model_manager import ModelManager  # CORREÇÃO APLICADA: Import para modelo estático
+from Model_manager import ModelManager
 from collections import deque
-import numpy as np  # Para cálculos de displacement
+import numpy as np
+import logging
 
 class MovementCore(BaseCore):
     def __init__(self, db):
         super().__init__(db)
         self.trainer = MovementTrainer(db)
         
-        # Carregue modelo estático (KNN) - CORREÇÃO APLICADA: Para reconhecimento misto
+        # Carregue modelo estático (KNN)
         self.static_model = ModelManager(CONFIG["knn_neighbors"])
         self.static_labels, self.static_data, _ = self.db.load_gestures(gesture_type="letter")
         if self.static_labels:
             self.static_model.train(self.static_data, self.static_labels)
+        
+        # Estados para detecção de movimento
+        self.prev_features = None
+        self.movement_threshold = CONFIG.get("libras_movement_threshold", 0.1)  # Aumentado para evitar falsos dinâmicos
+        self.sequence_buffer = deque(maxlen=CONFIG["libras_sequence_length"])
+        self.is_dynamic = False
+        self.dynamic_cooldown = 0
         
         # Estados específicos para Libras
         self.new_movement_name = ""
@@ -23,77 +31,91 @@ class MovementCore(BaseCore):
         self.samples_count = 0
         self.current_prediction = ""
         self.prediction_confidence = 0.0
-        
-        # Estados para detecção de movimento - CORREÇÃO APLICADA: Para diferenciar estático/dinâmico
-        self.prev_landmarks = None
-        self.movement_threshold = CONFIG["libras_movement_threshold"]
-        self.sequence_buffer = deque(maxlen=CONFIG["libras_sequence_length"])
-        self.is_dynamic = False
 
     def process_frame(self, frame):
         image, landmarks_list = super().process_frame(frame)
         
-        if landmarks_list is None:
-            landmarks_list = []
-        
         if not landmarks_list:
-            self.current_prediction = ""
-            self.prediction_confidence = 0.0
-            self.current_word = ""  # CORREÇÃO APLICADA: Limpa se nada detectado
+            self._reset_prediction()
             return image, landmarks_list
         
         # Extrai features do frame atual
         current_features = self.trainer.extract_libras_features(landmarks_list)
         if current_features is None:
+            self._reset_prediction()
             return image, landmarks_list
         
-        # Detecção de movimento (comparar com frame anterior) - CORREÇÃO APLICADA
+        # Detecção de movimento
         displacement = 0.0
-        if self.prev_landmarks is not None:
-            displacement = np.sum(np.abs(np.array(current_features) - np.array(self.prev_landmarks)))
-            displacement /= len(current_features) if len(current_features) > 0 else 1
+        if self.prev_features is not None:
+            if len(current_features) == len(self.prev_features):
+                diff = np.abs(current_features - self.prev_features)
+                displacement = np.mean(diff)
         
-        self.prev_landmarks = current_features
+        self.prev_features = current_features
         
-        # Modo treino - coletar amostras
-        if self.mode == "treino" and self.is_recording:
-            if landmarks_list and len(landmarks_list) > 0:
-                success = self.trainer.add_training_sample(landmarks_list, self.new_movement_name)
-                if success:
-                    self.training_samples += 1
-                    self.samples_count = self.training_samples
-        
-        # Modo teste - fazer predição com lógica mista - CORREÇÃO APLICADA
-        elif self.mode == "teste":
-            if displacement < self.movement_threshold:
-                # Estático: Use modelo KNN
+        # MODO TESTE: Lógica híbrida
+        if self.mode == "teste":
+            if displacement < self.movement_threshold and self.dynamic_cooldown == 0:
+                # ESTÁTICO
                 self.is_dynamic = False
-                if self.static_model.trained:
-                    pred, prob = self.static_model.predict(np.array(current_features).flatten())  # Ajuste shape
-                    if pred and prob > CONFIG["confidence_threshold"]:
-                        self.current_prediction = pred
-                        self.prediction_confidence = prob
-                        self.current_word = pred
-                    else:
-                        self.current_word = ""
+                self.sequence_buffer.clear()
+                self._predict_static(current_features)
             else:
-                # Dinâmico: Colete sequência
+                # DINÂMICO: Coleta sequência, só prediz quando cheia
                 self.is_dynamic = True
+                self.dynamic_cooldown = CONFIG["libras_sequence_length"] // 2
                 self.sequence_buffer.append(current_features)
                 
                 if len(self.sequence_buffer) == CONFIG["libras_sequence_length"]:
-                    sequence_features = np.concatenate(list(self.sequence_buffer)).flatten()
-                    pred, confidence = self.trainer.predict(sequence_features)
-                    if pred and confidence > CONFIG["libras_confidence_threshold"]:
-                        self.current_prediction = pred
-                        self.prediction_confidence = confidence
-                        self.current_word = pred
-                    self.sequence_buffer.clear()
-            # CORREÇÃO APLICADA: Limpeza quando não detecta
-            if not self.current_prediction:
-                self.current_word = ""
+                    self._predict_dynamic()
+                    self.sequence_buffer.clear()  # Reseta após predição
+            
+            if self.dynamic_cooldown > 0:
+                self.dynamic_cooldown -= 1
+        
+        # MODO TREINO
+        elif self.mode == "treino" and self.is_recording:
+            success = self.trainer.add_training_sample(landmarks_list, self.new_movement_name)
+            if success:
+                self.training_samples += 1
+                self.samples_count = self.training_samples
 
         return image, landmarks_list
+
+    def _predict_static(self, features):
+        if not self.static_model.trained:
+            return
+        try:
+            features = features[:63]  # Usa apenas primeira mão para estáticos, se necessário
+            pred, prob = self.static_model.predict([features])
+            if pred and prob >= CONFIG["confidence_threshold"]:
+                self.current_prediction = pred
+                self.prediction_confidence = prob
+                self.current_word = pred
+            else:
+                self._reset_prediction()
+        except Exception as e:
+            logging.error(f"❌ Erro em predição estática: {e}")
+
+    def _predict_dynamic(self):
+        try:
+            seq = np.concatenate(list(self.sequence_buffer)).flatten()
+            pred, conf = self.trainer.predict(seq)
+            if pred and conf >= CONFIG["libras_confidence_threshold"]:
+                self.current_prediction = pred
+                self.prediction_confidence = conf
+                self.current_word = pred
+            else:
+                self._reset_prediction()
+        except Exception as e:
+            logging.error(f"❌ Erro em predição dinâmica: {e}")
+            self._reset_prediction()
+
+    def _reset_prediction(self):
+        self.current_prediction = ""
+        self.prediction_confidence = 0.0
+        self.current_word = ""
 
     def predict_movement(self, landmarks_list):
         if self.mode == "teste":
@@ -107,11 +129,9 @@ class MovementCore(BaseCore):
         return None
 
     def delete_movement(self, movement_name):
-        """Deleta um movimento do banco de dados"""
         if not movement_name:
             return "❌ Nome do movimento não fornecido"
             
-        # CORREÇÃO APLICADA: Mudar para _load_from_database
         self.trainer._load_from_database()
         
         success, message = self.trainer.delete_sign(movement_name)

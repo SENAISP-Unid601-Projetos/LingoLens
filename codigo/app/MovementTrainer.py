@@ -31,6 +31,9 @@ class MovementTrainer:
         self.training_labels = []
         self.current_sign_name = ""
         
+        # Buffer para sequências no treino
+        self.training_buffer = deque(maxlen=self.sequence_length)
+        
         # Caminho do modelo .pkl
         self.model_path = os.path.join(CONFIG["train_data_dir"], "libras_model.pkl")
         
@@ -114,113 +117,39 @@ class MovementTrainer:
                 'label_encoder': self.label_encoder
             }
             joblib.dump(model_data, self.model_path)
-            logging.info("💾 Cache do modelo salvo")
         except Exception as e:
-            logging.warning(f"⚠️ Não foi possível salvar cache: {e}")
+            logging.error(f"❌ Erro ao salvar cache: {e}")
 
     def _save_to_database(self):
-        """Salva dados no banco - FONTE PRIMÁRIA"""
+        """Salva dados no banco de dados"""
         try:
-            # 🔥 CORREÇÃO: Usar save_movements que agora não apaga outros tipos
             success = self.db.save_movements(self.training_labels, self.training_data)
             if success:
-                logging.info(f"💾 {len(self.training_data)} movimentos salvos no BANCO")
-            else:
-                logging.error("❌ Erro ao salvar movimentos no banco")
+                logging.info("✅ Dados salvos no banco com sucesso")
             return success
-            
         except Exception as e:
             logging.error(f"❌ Erro ao salvar no banco: {e}")
             return False
 
     def extract_libras_features(self, landmarks_list):
-        """Extrai features específicas para sinais de Libras"""
-        if landmarks_list is None:
-            return None
-            
-        if isinstance(landmarks_list, (list, tuple)) and len(landmarks_list) == 0:
-            return None
-            
-        if isinstance(landmarks_list, np.ndarray):
-            landmarks_list = [landmarks_list]
-
-        features = []
-        all_landmarks = []
-        
-        for landmarks in landmarks_list:
-            if landmarks is not None:
-                if hasattr(landmarks, '__len__') and len(landmarks) == 63:
-                    all_landmarks.extend(landmarks)
-                else:
-                    continue
-        
-        if len(all_landmarks) == 0:
-            return None
-            
-        landmarks_array = np.array(all_landmarks)
-        
-        # 1. Estatísticas básicas
-        features.extend([
-            np.mean(landmarks_array),
-            np.std(landmarks_array),
-            np.min(landmarks_array),
-            np.max(landmarks_array)
-        ])
-        
-        # 2. Features de posição relativa
-        if len(landmarks_list) >= 1:
-            hand1_features = self._extract_single_hand_features(landmarks_list[0], "m1")
-            if hand1_features is not None:
-                features.extend(hand1_features)
-            
-        if len(landmarks_list) >= 2:
-            hand2_features = self._extract_single_hand_features(landmarks_list[1], "m2")
-            if hand2_features is not None:
-                features.extend(hand2_features)
-            
-            interaction_features = self._extract_interaction_features(
-                landmarks_list[0], landmarks_list[1]
-            )
-            if interaction_features is not None:
-                features.extend(interaction_features)
-        
-        return np.array(features) if features else None
-
-    def _extract_single_hand_features(self, landmarks, hand_prefix):
-        if landmarks is None:
-            return None
-            
         try:
             features = []
-            landmarks_array = np.array(landmarks)
+            for landmarks in landmarks_list:
+                flat = np.array(landmarks).flatten()
+                features.extend(flat)
             
-            if landmarks_array.size != 63:
-                return None
-                
-            landmarks_reshaped = landmarks_array.reshape(-1, 3)
+            # Features de interação se duas mãos
+            if len(landmarks_list) == 2:
+                interaction = self.extract_interaction_features(landmarks_list[0], landmarks_list[1])
+                if interaction:
+                    features.extend(interaction)
             
-            finger_tips = [4, 8, 12, 16, 20]
-            palm_base = landmarks_reshaped[0]
-            
-            for tip_idx in finger_tips:
-                distance = np.linalg.norm(landmarks_reshaped[tip_idx] - palm_base)
-                features.append(distance)
-            
-            for i in range(len(finger_tips)-1):
-                dist = np.linalg.norm(landmarks_reshaped[finger_tips[i]] - landmarks_reshaped[finger_tips[i+1]])
-                features.append(dist)
-            
-            middle_mcp = landmarks_reshaped[9]
-            palm_vector = middle_mcp - palm_base
-            features.extend(palm_vector)
-            
-            return features
-            
+            return np.array(features)
         except Exception as e:
-            logging.error(f"❌ Erro ao extrair features da mão: {e}")
+            logging.error(f"❌ Erro ao extrair features: {e}")
             return None
 
-    def _extract_interaction_features(self, landmarks1, landmarks2):
+    def extract_interaction_features(self, landmarks1, landmarks2):
         try:
             features = []
             l1 = np.array(landmarks1).reshape(-1, 3)
@@ -240,9 +169,13 @@ class MovementTrainer:
     def add_training_sample(self, landmarks_list, sign_name):
         features = self.extract_libras_features(landmarks_list)
         if features is not None:
-            self.training_data.append(features)
-            self.training_labels.append(sign_name)
-            return True
+            self.training_buffer.append(features)
+            if len(self.training_buffer) == self.sequence_length:
+                seq_features = np.concatenate(list(self.training_buffer)).flatten()
+                self.training_data.append(seq_features)
+                self.training_labels.append(sign_name)
+                self.training_buffer.clear()
+                return True
         return False
 
     def train(self):
@@ -284,6 +217,7 @@ class MovementTrainer:
     def start_training_session(self, sign_name):
         self.current_sign_name = sign_name
         logging.info(f"🎬 Iniciando treino para sinal: {sign_name}")
+        self.training_buffer.clear()
 
     def save_training_session(self):
         if not self.training_data:
@@ -318,6 +252,7 @@ class MovementTrainer:
         self.training_data = []
         self.training_labels = []
         self.current_sign_name = ""
+        self.training_buffer.clear()
 
     def get_available_signs(self):
         if hasattr(self.label_encoder, 'classes_'):
