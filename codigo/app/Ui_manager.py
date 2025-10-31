@@ -5,7 +5,7 @@ import os
 class UIManager:
     def __init__(self):
         """Inicializa o gerenciador de interface do usuário com UI responsiva."""
-        self.instructions = "Q=Sair | C=Limpar | T=Treino Estático | M=Treino Dinâmico | R=Reconhecimento | S=Salvar | D=Excluir"
+        self.instructions = "Q=Sair |C=Limpar |T=Treino Estático |M=Treino Dinâmico |R=Reconhecimento |S=Salvar |D=Excluir"
         self.line_type = cv2.LINE_AA
 
     def _get_scaled_font(self, width, base_scale=0.5):
@@ -64,7 +64,7 @@ class UIManager:
                 draw_text(f"Capturando: {new_gesture_name} ({dynamic_sequence_length} frames)", y2, (255, 255, 0))
             elif mode == "recognize":
                 if current_word:
-                    draw_text(f"Palavra: {current_word}", y2, (0, 255, 0))
+                    draw_text(f"Letra: {current_word}", y2, (0, 255, 0))
                 if dynamic_status:
                     draw_text(dynamic_status, y2 + line_height, (255, 255, 0))
 

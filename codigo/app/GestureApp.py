@@ -9,6 +9,7 @@ from Model_manager import ModelManager
 from Ui_manager import UIManager
 from Preprocess_landmarks import preprocess_landmarks
 from Dynamic_gesture_recognizer import DynamicGestureRecognizer
+from Camera_thread import CameraThread  # NOVO
 from sklearn.utils import shuffle
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -49,12 +50,8 @@ class GestureApp:
             elif not self.labels:
                 logger.info("Nenhum gesto estático treinado ainda.")
 
-            self.cap = cv2.VideoCapture(0)
-            if not self.cap.isOpened():
-                raise RuntimeError("Não foi possível abrir a webcam")
-            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
-            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
-            self.cap.set(cv2.CAP_PROP_FPS, CONFIG["train_fps"])
+            # === THREAD DE CAPTURA ===
+            self.camera = CameraThread()
 
             self.hands = mp.solutions.hands.Hands(
                 max_num_hands=CONFIG["max_num_hands"],
@@ -90,12 +87,14 @@ class GestureApp:
 
     def normalize_landmarks(self, landmarks):
         try:
-            wrist = np.array(landmarks[0:3])
-            middle_finger_base = np.array(landmarks[27:30])
-            scale = np.linalg.norm(wrist - middle_finger_base)
+            arr = np.array(landmarks).reshape(-1, 3)
+            center = arr[0]
+            arr -= center
+            scale = np.linalg.norm(arr[9] - arr[0])
             if scale == 0:
-                return landmarks
-            return [coord / scale for coord in landmarks]
+                scale = 1.0
+            arr /= scale
+            return arr.flatten().tolist()
         except:
             return landmarks
 
@@ -119,17 +118,21 @@ class GestureApp:
             return self.variance < CONFIG["movement_threshold"]
         except:
             return False
+        
+    def get_dynamic_stable(self, landmarks):
+        return self.is_hand_stable(landmarks)    
 
     def run(self):
-        logger.info("Teclas: Q=Sair C=Limpar T=Treino Estático ou Treinar M=Treino Dinâmico R=Reconhecimento S=Salvar (segure para dinâmico) D=Excluir F=Tela Cheia W=Janela Padrão")
+        logger.info("Teclas: Q=Sair C=Limpar T=Treino Estático M=Treino Dinâmico R=Reconhecimento S=Salvar D=Excluir F=Tela Cheia W=Janela")
         cv2.namedWindow("GestureApp", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("GestureApp", 1000, 600)
 
         try:
             while True:
-                ret, frame = self.cap.read()
-                if not ret:
-                    break
+                # === CAPTURA COM THREAD ===
+                frame = self.camera.get_frame()
+                if frame is None:
+                    continue
 
                 self.frame_count += 1
                 if self.frame_count % (CONFIG["target_fps"] // CONFIG["train_fps"]) != 0 and self.mode in ["train_static", "train_dynamic"]:
@@ -154,16 +157,26 @@ class GestureApp:
                         if landmarks and len(landmarks) > 0:
                             normalized = self.normalize_landmarks(landmarks)
 
+                            # === GESTOS ESTÁTICOS COM LIMITE ===
                             if self.mode == "train_static" and self.new_gesture_name:
                                 self.hand_stable = self.is_hand_stable(normalized)
                                 if self.hand_stable:
-                                    self.new_gesture_data.append(normalized)
-                                    self.sample_count += 1
+                                    if len(self.new_gesture_data) < CONFIG["max_samples_per_gesture"]:
+                                        self.new_gesture_data.append(normalized)
+                                        self.sample_count += 1
+                                        cv2.putText(image, f"Amostras: {self.sample_count}/{CONFIG['max_samples_per_gesture']}", 
+                                                   (10, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+                                    else:
+                                        self.saving_status = f"LIMITE DE {CONFIG['max_samples_per_gesture']} ATINGIDO!"
+                                        h, w = image.shape[:2]
+                                        cv2.putText(image, self.saving_status, (50, h - 50), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
+                            # === GESTOS DINÂMICOS ===
                             elif self.mode == "train_dynamic" and self.new_gesture_name:
                                 if self.frame_count % 2 == 0:
                                     image = self.dynamic_recognizer.process_frame(image, normalized)
 
+                            # === RECONHECIMENTO ===
                             elif self.mode == "recognize":
                                 if self.model_manager.trained and self.is_hand_stable(normalized) and (time.time() - self.last_prediction_time) >= CONFIG["prediction_cooldown"]:
                                     pred, prob = self.model_manager.predict(normalized)
@@ -172,7 +185,8 @@ class GestureApp:
                                         cv2.putText(image, f"{pred} ({prob:.2f})", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                                         self.last_prediction_time = time.time()
                                 if self.dynamic_recognizer.model_trained:
-                                    image = self.dynamic_recognizer.process_frame_recognition(image, normalized)
+                                    image = self.dynamic_recognizer.process_frame_recognition(
+                                        image, normalized, get_stable_func=self.get_dynamic_stable)
 
                 status = f"Modo: {'Treino Estático' if self.mode == 'train_static' else 'Treino Dinâmico' if self.mode == 'train_dynamic' else 'Reconhecimento'}"
                 dynamic_status = self.dynamic_recognizer.status_message if self.mode in ["train_dynamic", "recognize"] else ""
@@ -194,9 +208,9 @@ class GestureApp:
                     canvas = image
 
                 cv2.imshow("GestureApp", canvas)
-
                 key = cv2.waitKey(1) & 0xFF
 
+                # === CONTROLES ===
                 if key == ord('f'):
                     cv2.setWindowProperty("GestureApp", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
                 elif key == ord('w'):
@@ -321,7 +335,7 @@ class GestureApp:
         except Exception as e:
             logger.error(f"Erro na execução: {e}")
         finally:
-            self.cap.release()
+            self.camera.stop()
             cv2.destroyAllWindows()
             self.db.close()
             logger.info("GestureApp encerrado")

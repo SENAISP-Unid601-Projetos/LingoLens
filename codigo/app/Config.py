@@ -38,10 +38,11 @@ CONFIG = {
     "max_num_hands": 1,
     "min_detection_confidence": 0.7,
     "min_samples_per_class": 10,
+    "max_samples_per_gesture": 100,
     "movement_threshold": 0.0005,
-    "prediction_cooldown": 1.0,
-    "confidence_threshold": 0.75,
-    "min_frames": 15,
+    "prediction_cooldown": 1.5,
+    "confidence_threshold": 0.85,
+    "min_frames": 20,
     "model_dir": MODEL_DIR
 }
 
