@@ -5,10 +5,12 @@ import logging
 
 log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
 os.makedirs(log_dir, exist_ok=True)
+# FORÇAR encoding utf-8 para evitar UnicodeEncodeError em Windows/terminals com cp1252
 logging.basicConfig(
     filename=os.path.join(log_dir, "Gesture_recognizer.log"),
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    encoding='utf-8'
 )
 
 class DatabaseManager:
@@ -87,6 +89,7 @@ class DatabaseManager:
             logging.error(f"Erro na conversão: {e}")
 
     def save_gestures(self, labels, data, gesture_name, is_dynamic=False):
+        # validações básicas
         if not labels or not data or not gesture_name:
             return False
         if not all(l == gesture_name for l in labels):
@@ -107,7 +110,9 @@ class DatabaseManager:
                         self.cursor.execute(f"INSERT INTO {table} (gesture_type, gesture_name, data) VALUES (?, ?, ?)",
                                           ("letter", gesture_name, serialized))
                     action = "criado"
-            print(f"[INFO] {gesture_name} {action} → {len(data)} amostras")
+            # usar '->' em vez de '→' para evitar problemas de encoding em alguns consoles
+            print(f"[INFO] {gesture_name} {action} -> {len(data)} amostras")
+            logging.info(f"{gesture_name} {action} -> {len(data)} amostras")
             return True
         except Exception as e:
             logging.error(f"Erro ao salvar {gesture_name}: {e}")
@@ -165,6 +170,7 @@ class DatabaseManager:
         deleted = self.cursor.rowcount > 0
         if deleted:
             print(f"[INFO] {gesture_name} deletado")
+            logging.info(f"{gesture_name} deletado")
         return deleted
 
     def close(self):

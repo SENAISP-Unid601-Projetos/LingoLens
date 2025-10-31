@@ -52,3 +52,40 @@
 2025-10-29 17:16:17,088 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
 2025-10-29 17:16:17,113 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
 2025-10-29 17:16:17,147 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 16:51:11,788 - INFO - RF treinado: (304, 67)
+2025-10-31 16:51:15,051 - INFO - LSTM treinado: (129, 12, 67)
+2025-10-31 17:02:10,313 - INFO - [ModelManager] RF treinado: (304, 67)
+2025-10-31 17:02:12,594 - INFO - [ModelManager] LSTM treinado: (129, 12, 67)
+2025-10-31 17:03:21,198 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:21,867 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:22,051 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:22,243 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:22,396 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:22,580 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,076 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,103 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,164 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,195 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,243 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,274 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,307 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,354 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,403 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,434 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,466 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:03:23,869 - ERROR - Erro ao salvar J: 'charmap' codec can't encode character '\u2192' in position 20: character maps to <undefined>
+2025-10-31 17:08:19,949 - INFO - [ModelManager] RF treinado: (304, 67)
+2025-10-31 17:08:22,268 - INFO - [ModelManager] LSTM treinado: (130, 12, 67)
+2025-10-31 17:08:52,121 - INFO - I criado -> 130 amostras
+2025-10-31 17:08:52,215 - INFO - [ModelManager] RF treinado: (434, 67)
+2025-10-31 17:08:53,142 - INFO - [ModelManager] LSTM treinado: (130, 12, 67)
+2025-10-31 17:09:36,278 - INFO - A atualizado -> 130 amostras
+2025-10-31 17:09:36,372 - INFO - [ModelManager] RF treinado: (564, 67)
+2025-10-31 17:09:37,314 - INFO - [ModelManager] LSTM treinado: (130, 12, 67)
+2025-10-31 17:15:16,773 - INFO - [ModelManager] RF treinado: (260, 67)
+2025-10-31 17:15:19,067 - INFO - [ModelManager] LSTM treinado: (130, 12, 67)
+2025-10-31 17:17:18,480 - INFO - [ModelManager] RF treinado: (260, 67)
+2025-10-31 17:17:20,710 - INFO - [ModelManager] LSTM treinado: (130, 12, 67)
+2025-10-31 17:19:54,651 - INFO - Y criado -> 122 amostras
+2025-10-31 17:19:54,726 - INFO - [ModelManager] RF treinado: (260, 67)
+2025-10-31 17:19:57,469 - INFO - [ModelManager] LSTM treinado: (252, 12, 67)
