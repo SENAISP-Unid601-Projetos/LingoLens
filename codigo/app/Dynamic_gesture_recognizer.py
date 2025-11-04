@@ -7,6 +7,8 @@ from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras.regularizers import l2
+from sklearn.utils import shuffle
+from tensorflow.keras.callbacks import EarlyStopping
 import os
 import time
 import pickle
@@ -120,7 +122,12 @@ class DynamicGestureRecognizer:
                 loss='categorical_crossentropy',
                 metrics=['accuracy']
             )
-            model.fit(X, y, epochs=80, batch_size=4, validation_split=0.3, verbose=0)
+
+            X, y = shuffle(X, y, random_state=42)
+
+            early_stop = EarlyStopping(monitor='val_loss', patience=15, Restaurar_best_weights=True)
+
+            model.fit(X, y, epochs=100, batch_size=8, validation_split=0.3, shuffle=True, callbacks=[early_stop], verbose=0)
             os.makedirs(CONFIG["model_dir"], exist_ok=True)
             model.save(os.path.join(CONFIG["model_dir"], "lstm_dynamic_model.h5"))
             with open(os.path.join(CONFIG["model_dir"], "lstm_classes.pkl"), 'wb') as f:
