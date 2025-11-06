@@ -6,281 +6,247 @@ import time
 from Config import CONFIG, validate_gesture_type
 from Database_manager import DatabaseManager
 from Model_manager import ModelManager
-from Ui_manager import UIManager
-# ****************************
 from Extract_landmarks import extract_landmarks
 from sklearn.utils import shuffle
-from collections import Counter 
+from collections import deque
+
 
 class GestureApp:
     def __init__(self, gesture_type="letter"):
         validate_gesture_type(gesture_type)
-        print("[INFO] Inicializando GestureApp...")
+        print("[INFO] Inicializando sistema de reconhecimento de Libras...")
+
         logging.basicConfig(
             filename=CONFIG["log_file"],
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(message)s"
+            level=logging.WARNING,
+            format="%(asctime)s - %(levelname)s - %(message)s",
+            encoding="utf-8"
         )
 
         try:
             self.db = DatabaseManager(CONFIG["db_path"])
             self.model_manager = ModelManager(gesture_type=gesture_type)
-            self.ui = UIManager()
             self.gesture_type = gesture_type.lower()
+            self.dynamic_letters = set([g.upper() for g in CONFIG.get("dynamic_letters", [])])
 
-            self.data_dict, self.labels, self.data, self.gesture_names = self.db.load_gestures(gesture_type=self.gesture_type)
-            if self.labels:
-                success = self.model_manager.train(self.data, self.labels)
-                if success:
-                    num_classes = len(set(self.labels))
-                    print(f"[INFO] Modelo carregado com {num_classes} gesto(s): {set(self.labels)}")
-                    if num_classes == 1:
-                        print(f"[INFO] Apenas 1 classe disponível. Predições serão não-discriminativas.")
-                else:
-                    print("[WARNING] Falha ao carregar modelo.")
-            else:
-                print("[INFO] Nenhum gesto treinado ainda.")
+            # Carregar dados
+            self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
+            self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
 
+            # Treinar modelos existentes
+            if self.static_labels or self.dyn_labels:
+                if self.static_labels:
+                    self.static_data, self.static_labels = shuffle(self.static_data, self.static_labels, random_state=42)
+                if self.dyn_labels:
+                    self.dyn_data, self.dyn_labels = shuffle(self.dyn_data, self.dyn_labels, random_state=42)
+                self.model_manager.train(
+                    static_data=self.static_data,
+                    static_labels=self.static_labels,
+                    dynamic_data=self.dyn_data,
+                    dynamic_labels=self.dyn_labels
+                )
+
+            # Configurar webcam
             self.cap = cv2.VideoCapture(0)
-            if not self.cap.isOpened():
-                logging.error("Não foi possível abrir a webcam")
-                raise RuntimeError("Não foi possível abrir a webcam")
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG["camera_resolution"][0])
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG["camera_resolution"][1])
-            self.cap.set(cv2.CAP_PROP_FPS, CONFIG["train_fps"])
 
+            # MediaPipe
             self.hands = mp.solutions.hands.Hands(
-                max_num_hands=CONFIG["max_num_hands"],
-                min_detection_confidence=CONFIG["min_detection_confidence"],
-                static_image_mode=False,
-                min_tracking_confidence=0.5
+                max_num_hands=1,
+                min_detection_confidence=CONFIG.get("min_detection_confidence", 0.5),
+                min_tracking_confidence=CONFIG.get("min_tracking_confidence", 0.5)
             )
             self.mp_drawing = mp.solutions.drawing_utils
             self.mp_hands = mp.solutions.hands
 
+            # Buffers e controle de movimento
+            self.sequence_buffer = deque(maxlen=CONFIG["sequence_length"])
+            self.prev_landmarks = None
+            self.motion_frames = 0
+            self.hand_still_frames = 0
+            self.in_motion = False
+            self.motion_threshold = 0.002  # sensibilidade do movimento
+            self.stable_threshold = 15      # frames estáveis para gesto estático
+
+            # Estado geral
             self.current_word = ""
             self.mode = "teste"
             self.new_gesture_name = ""
             self.new_gesture_data = []
-            self.input_text = ""
-            self.is_input_active = False
             self.sample_count = 0
-            self.frame_count = 0
-            self.prev_landmarks = None
+            self.is_input_active = False
             self.last_prediction_time = time.time()
-            self.delete_mode = False
-            self.gesture_list = []
-            self.selected_index = 0
+
+            # Comandos
+            self.commands = [
+                "T = Treinar novo gesto",
+                "S = Salvar gesto",
+                "C = Limpar palavra",
+                "Q = Sair"
+            ]
+
         except Exception as e:
-            logging.error(f"Erro na inicialização do GestureApp: {e}")
+            logging.error(f"Erro na inicialização: {e}")
             raise
 
-    def is_hand_stable(self, landmarks):
-        if self.prev_landmarks is None:
-            self.prev_landmarks = landmarks
-            return False
-        try:
-            variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks))
-            self.prev_landmarks = landmarks
-            return variance < 0.005
-        except Exception as e:
-            logging.error(f"Erro ao verificar estabilidade da mão: {e}")
-            return False
-
     def run(self):
-        print("[INFO] Teclas: Q=Sair C:Limpar T:Treino S:Gesto D:Excluir")
+        print("\n=== SISTEMA DE RECONHECIMENTO DE LIBRAS ===")
+        print("Comandos:")
+        for cmd in self.commands:
+            print("  " + cmd)
+        print("==========================================\n")
+
         try:
             while True:
                 ret, frame = self.cap.read()
                 if not ret:
-                    logging.warning("Falha ao capturar frame")
-                    print("[WARNING] Falha ao capturar frame")
                     break
 
-                self.frame_count += 1
-                if self.frame_count % (CONFIG["target_fps"] // CONFIG["train_fps"]) != 0 and self.mode == "treino":
-                    continue
-
-                image = cv2.flip(frame, 1)
-                rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                frame = cv2.flip(frame, 1)
+                rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = self.hands.process(rgb)
 
-                if results.multi_hand_landmarks and not self.delete_mode:
-                    for hand in results.multi_hand_landmarks:
-                        if self.mode == "treino":
-                            self.mp_drawing.draw_landmarks(
-                                image,
-                                hand,
-                                self.mp_hands.HAND_CONNECTIONS,
-                                self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=4),
-                                self.mp_drawing.DrawingSpec(color=(255, 0, 0), thickness=2)
-                            )
-                        landmarks = extract_landmarks(hand, image_shape=image.shape)
-                        if landmarks is not None and len(landmarks) > 0:
-                            if self.mode == "treino" and self.new_gesture_name and self.is_hand_stable(landmarks):
-                                self.new_gesture_data.append(landmarks)
-                                self.sample_count += 1
-                            elif self.mode == "teste" and self.labels and (time.time() - self.last_prediction_time) >= (CONFIG["prediction_cooldown"] / CONFIG["target_fps"]):
-                                pred, prob = self.model_manager.predict(landmarks)
-                                if pred and prob >= CONFIG["confidence_threshold"]:
-                                    self.current_word += pred
-                                    cv2.putText(image, f"Predição: {pred} ({prob:.2f})",
-                                                (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                                    logging.info(f"Predição: {pred} | Probabilidade: {prob:.2f}")
-                                    self.last_prediction_time = time.time()
-                                else:
-                                    logging.debug(f"Predição ignorada: {pred} com probabilidade {prob:.2f} < {CONFIG['confidence_threshold']}")
+                if results.multi_hand_landmarks:
+                    hand = results.multi_hand_landmarks[0]
+                    self.mp_drawing.draw_landmarks(frame, hand, self.mp_hands.HAND_CONNECTIONS)
+                    landmarks = extract_landmarks(hand, frame.shape)
+                    if not landmarks:
+                        continue
 
-                # Preparar dados para UI
-                status = f"Modo: {'Treino' if self.mode == 'treino' else 'Teste'} ({self.gesture_type})"
-                gesture_list = self.gesture_list if self.delete_mode else None
-                selected_index = self.selected_index if self.delete_mode else None
+                    self.sequence_buffer.append(landmarks)
+                    self._handle_motion_state(landmarks, frame)
 
-                self.ui.draw_ui(
-                    image, status, CONFIG["prediction_cooldown"] / CONFIG["target_fps"], 
-                    self.current_word, self.sample_count, self.input_text,
-                    self.is_input_active, self.new_gesture_name, gesture_list, selected_index
-                )
+                    if self.mode == "treino" and self.new_gesture_name:
+                        self._capture_training_sample(landmarks, frame)
 
-                cv2.imshow("GestureApp", image)
+                self._draw_ui(frame)
+
                 key = cv2.waitKey(1) & 0xFF
-
-                # Modo de exclusão
-                if self.delete_mode:
-                    if key == 27:  # ESC para sair do modo de exclusão
-                        self.delete_mode = False
-                        self.gesture_list = []
-                        self.selected_index = 0
-                        print("[INFO] Modo Excluir desativado")
-                    elif key == ord('n') or key == 40:  # N ou seta para baixo
-                        if self.gesture_list:
-                            self.selected_index = (self.selected_index + 1) % len(self.gesture_list)
-                    elif key == ord('p') or key == 38:  # P ou seta para cima
-                        if self.gesture_list:
-                            self.selected_index = (self.selected_index - 1) % len(self.gesture_list)
-                    elif key == 13 and self.gesture_list:  # Enter para confirmar exclusão
-                        gesture_to_delete = self.gesture_list[self.selected_index]
-                        print(f"[INFO] Tentando deletar: {gesture_to_delete}")
-                        if self.db.delete_gesture(self.gesture_type, gesture_to_delete):
-                            print(f"[INFO] Gesto '{gesture_to_delete}' deletado com sucesso")
-                            # Recarregar dados após exclusão
-                            self.data_dict, self.labels, self.data, self.gesture_names = self.db.load_gestures(self.gesture_type)
-                            self.gesture_list = self.db.list_gestures(self.gesture_type)
-                            if self.gesture_list:
-                                self.selected_index = min(self.selected_index, len(self.gesture_list) - 1)
-                            else:
-                                self.selected_index = 0
-                            if self.labels:
-                                success = self.model_manager.train(self.data, self.labels)
-                                if success:
-                                    print(f"[INFO] Modelo atualizado com {len(set(self.labels))} classe(s): {set(self.labels)}")
-                                else:
-                                    print("[ERROR] Falha ao atualizar modelo após exclusão")
-                            else:
-                                self.model_manager.trained = False
-                                print("[INFO] Nenhum gesto restante para treinar")
-                        else:
-                            print(f"[ERROR] Falha ao deletar gesto '{gesture_to_delete}'")
-                        if not self.gesture_list:
-                            self.delete_mode = False
-                            print("[INFO] Modo Excluir desativado: nenhum gesto restante")
-
-                # Modo de input ativo
-                elif self.is_input_active:
-                    if key == 13:  # Enter
-                        self.new_gesture_name = self.input_text.upper()
-                        self.is_input_active = False
-                        self.input_text = ""
-                        self.sample_count = 0
-                        if self.new_gesture_name:
-                            print(f"[INFO] Modo Treino ativado para '{self.new_gesture_name}'")
-                    elif key == 27:  # ESC
-                        self.is_input_active = False
-                        self.input_text = ""
-                        self.mode = "teste"
-                        print("[INFO] Entrada de texto cancelada. Retornando ao modo Teste")
-                    elif key == 8:  # Backspace
-                        self.input_text = self.input_text[:-1]
-                    elif 65 <= key <= 90 or 97 <= key <= 122:  # Letras A-Z, a-z
-                        self.input_text += chr(key).upper()
-                # Teclas normais
-                else:
-                    if key == ord("q"):
-                        print("[INFO] Saindo do aplicativo...")
-                        break
-                    elif key == ord("c"):
-                        self.current_word = ""
-                        self.new_gesture_data = []
-                        self.sample_count = 0
-                        print("[INFO] Palavra atual e dados de treino limpos")
-                    elif key == ord("t"):
-                        self.mode = "treino"
-                        self.is_input_active = True
-                        self.input_text = ""
-                        self.new_gesture_data = []
-                        self.sample_count = 0
-                        self.prev_landmarks = None
-                        print("[INFO] Modo de entrada de texto ativado. Digite na janela (ESC para cancelar)")
-                    elif key == ord("s"):
-                      if self.mode == "treino" and self.new_gesture_name and self.new_gesture_data:
-                        if len(self.new_gesture_data) < CONFIG["min_samples_per_class"]:
-                            print(f"[WARNING] Coletados poucos samples ({len(self.new_gesture_data)}). Recomenda-se {CONFIG['min_samples_per_class']}")
-
-                        # === NOVO: Adiciona os novos dados ===
-                        new_labels = [self.new_gesture_name] * len(self.new_gesture_data)
-                        new_gesture_types = [self.gesture_type] * len(self.new_gesture_data)
-
-                        self.labels.extend(new_labels)
-                        self.data.extend(self.new_gesture_data)
-
-                        # === EMBARALHAR ANTES DE TREINAR ===
-                        self.data, self.labels = shuffle(self.data, self.labels, random_state=42)
-
-                        # === LOG: Mostra distribuição ===
-                        print(f"[INFO] Dados embaralhados. Total: {len(self.labels)} amostras")
-                        print(f"Distribuição por letra: {dict(Counter(self.labels))}")
-
-                        # === Salva no banco (sem embaralhar aqui) ===
-                        self.db.save_gestures(new_labels, self.new_gesture_data, new_gesture_types)
-
-                        # === Treina com dados embaralhados ===
-                        success = self.model_manager.train(self.data, self.labels)
-                        if success:
-                            num_classes = len(set(self.labels))
-                            print(f"[SUCESSO] Modelo treinado com {num_classes} classe(s): {set(self.labels)}")
-                            if num_classes == 1:
-                                print(f"[INFO] Adicione mais letras para predições discriminativas.")
-                        else:
-                            print("[ERROR] Falha ao treinar modelo após salvar gestos.")
-
-                        # === Volta ao modo teste ===
-                        self.mode = "teste"
-                        self.new_gesture_name = ""
-                        self.new_gesture_data = []
-                        self.is_input_active = False
-                        self.sample_count = 0
-                        self.prev_landmarks = None
-                        self.landmark_history = []
-                        print("[INFO] Modo Teste ativado")
-
-                    elif self.mode == "treino" and not self.new_gesture_data:
-                        print("[WARNING] Nenhum dado de gesto capturado para salvar")
-                    elif key == ord("d"):
-                        self.delete_mode = True
-                        self.gesture_list = self.db.list_gestures(self.gesture_type)
-                        self.selected_index = 0
-                        if not self.gesture_list:
-                            print("[WARNING] Nenhum gesto encontrado para excluir")
-                            self.delete_mode = False
-                        else:
-                            print(f"[INFO] Modo Excluir ativado. {len(self.gesture_list)} gestos encontrados.")
-                            print("Use N (próximo), P (anterior), ENTER para excluir, ESC para sair")
+                if self._handle_key(key):
+                    break
 
         except Exception as e:
-            logging.error(f"Erro durante execução do GestureApp: {e}")
-            print(f"[ERROR] Erro durante execução: {e}")
+            logging.error(f"Erro: {e}")
         finally:
             self.cap.release()
             cv2.destroyAllWindows()
             self.db.close()
-            print("[INFO] GestureApp encerrado")
+
+    # ======================
+    # LÓGICA DE MOVIMENTO
+    # ======================
+    def _handle_motion_state(self, landmarks, frame):
+        variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
+        self.prev_landmarks = landmarks
+
+
+        if variance > self.motion_threshold:
+            self.motion_frames += 1
+            self.hand_still_frames = 0
+        else:
+            self.hand_still_frames += 1
+            self.motion_frames = max(0, self.motion_frames - 1)
+
+        # Início de movimento
+        if not self.in_motion and self.motion_frames > 3:
+            self.in_motion = True
+            self.sequence_buffer.clear()
+
+        # Fim de movimento (movimento dinâmico completo)
+        if self.in_motion and self.hand_still_frames > 5 and len(self.sequence_buffer) == CONFIG["sequence_length"]:
+            seq = list(self.sequence_buffer)
+            pred, prob = self.model_manager.predict(seq)
+            if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
+                self.current_word += pred
+                print(f"[DINÂMICO DETECTADO] {pred} ({prob:.2f})")
+            self._reset_motion_state()
+
+        # Reconhecimento estático (mão parada por tempo suficiente)
+        if not self.in_motion and self.hand_still_frames > self.stable_threshold:
+            if len(self.sequence_buffer) > 0:
+                frame_data = self.sequence_buffer[-1]
+                pred, prob = self.model_manager.predict(frame_data)
+                if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
+                    self.current_word += pred
+                    print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
+                    self.hand_still_frames = 0  # Evita repetição
+
+    def _reset_motion_state(self):
+        self.in_motion = False
+        self.motion_frames = 0
+        self.hand_still_frames = 0
+        self.sequence_buffer.clear()
+
+    # ======================
+    # CAPTURA DE TREINO
+    # ======================
+    def _capture_training_sample(self, landmarks, frame):
+        if self.new_gesture_name in self.dynamic_letters:
+            if len(self.sequence_buffer) == CONFIG["sequence_length"]:
+                seq = list(self.sequence_buffer)
+                self.new_gesture_data.append(seq)
+                self.sample_count += 1
+                print(f"[DINÂMICO] {self.sample_count} sequências coletadas")
+                self.sequence_buffer.clear()
+        else:
+            # gesto estático (só grava se estável)
+            variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
+            if variance < self.motion_threshold / 2:
+                self.new_gesture_data.append(landmarks)
+                self.sample_count += 1
+                if self.sample_count % 10 == 0:
+                    print(f"[ESTÁTICO] {self.sample_count} amostras coletadas")
+
+    # ======================
+    # INTERFACE E TECLAS
+    # ======================
+    def _draw_ui(self, frame):
+        cv2.putText(frame, f"Modo: {self.mode.upper()}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+        cv2.putText(frame, f"Palavra: {self.current_word}", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.imshow("Libras System", frame)
+
+    def _handle_key(self, key):
+        if key == ord("q") or key == ord("Q"):
+            print("[INFO] Saindo...")
+            return True
+
+        elif key == ord("c") or key == ord("C"):
+            self.current_word = ""
+            print("[INFO] Palavra limpa")
+
+        elif key == ord("t") or key == ord("T"):
+            self.mode = "treino"
+            self.is_input_active = True
+            self.new_gesture_name = input("Digite a letra (A-Z): ").upper()
+            self.new_gesture_data = []
+            self.sample_count = 0
+            self.sequence_buffer.clear()
+            print(f"[INFO] Coletando gesto {self.new_gesture_name}")
+
+        elif key == ord("s") or key == ord("S"):
+            if self.new_gesture_name and len(self.new_gesture_data) >= CONFIG.get("min_samples_per_class", 120):
+                is_dynamic = self.new_gesture_name in self.dynamic_letters
+                success = self.db.save_gestures(
+                    labels=[self.new_gesture_name] * len(self.new_gesture_data),
+                    data=self.new_gesture_data,
+                    gesture_name=self.new_gesture_name,
+                    is_dynamic=is_dynamic
+                )
+                if success:
+                    print(f"[SUCESSO] {self.new_gesture_name} salvo com {len(self.new_gesture_data)} amostras")
+                    self.model_manager.train(
+                        static_data=self.static_data + ([] if is_dynamic else self.new_gesture_data),
+                        static_labels=self.static_labels + ([] if is_dynamic else [self.new_gesture_name] * len(self.new_gesture_data)),
+                        dynamic_data=self.dyn_data + (self.new_gesture_data if is_dynamic else []),
+                        dynamic_labels=self.dyn_labels + ([self.new_gesture_name] * len(self.new_gesture_data) if is_dynamic else [])
+                    )
+                self.mode = "teste"
+                self.sample_count = 0
+                self.new_gesture_data = []
+                self.new_gesture_name = ""
+                self.sequence_buffer.clear()
+            else:
+                print("[ERRO] Poucas amostras ou nenhum gesto definido")
+
+        return False
