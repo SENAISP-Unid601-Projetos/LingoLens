@@ -99,3 +99,7 @@
 2025-10-23 16:34:48,447 - INFO - Modelo treinado com 36117 amostras e 20 classes: {'S', 'V', 'M', 'G', 'N', 'P', 'C', 'T', 'D', 'F', 'O', 'L', 'U', 'I', 'E', 'R', 'A', 'B', 'W', 'Q'}
 2025-10-23 16:35:01,078 - INFO - Predicao: M | Probabilidade: 0.87
 2025-10-23 16:35:10,676 - INFO - Predicao: M | Probabilidade: 0.95
+2025-11-07 13:45:23,930 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.01)
+2025-11-07 13:45:32,505 - INFO - Modelo treinado com 39155 amostras e 20 classes: {'C', 'W', 'E', 'F', 'A', 'N', 'B', 'O', 'D', 'S', 'V', 'G', 'T', 'L', 'M', 'Q', 'I', 'R', 'U', 'P'}
+2025-11-07 13:46:31,835 - INFO - Predição: A | Probabilidade: 0.72
+2025-11-07 13:46:59,078 - INFO - Predição: A | Probabilidade: 0.73
