@@ -1,0 +1,2 @@
+2025-11-10 16:44:28,577 - ERROR - [ModelManager] Erro no treino: module 'tensorflow' has no attribute 'keras'
+2025-11-10 16:56:00,441 - ERROR - [ModelManager] Erro no treino: module 'tensorflow' has no attribute 'keras'
