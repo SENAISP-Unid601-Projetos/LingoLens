@@ -1,0 +1,9 @@
+2025-11-10 16:21:29,383 - GestureApp.App - INFO - Inicializando GestureApp...
+2025-11-10 16:21:29,383 - GestureApp.Database - INFO - Banco aberto: c:\Users\Aluno\LingoLens\codigo\app\data\gestures.db
+2025-11-10 16:21:29,383 - GestureApp.App - INFO - Nenhum modelo estático treinado ainda.
+2025-11-10 16:21:29,383 - GestureApp.App - INFO - Modelo LSTM não encontrado. Treine gestos dinâmicos.
+2025-11-10 16:21:29,383 - GestureApp.Model - INFO - ESTÁTICO: RF | 100 amostras | 1 classe | Sem validação cruzada
+2025-11-10 16:21:29,465 - GestureApp.App - INFO - Modelo estático treinado com 1 classes
+2025-11-10 16:21:33,368 - GestureApp.App - INFO - Teclas: Q=Sair C=Limpar T=Treino Estático M=Treino Dinâmico R=Reconhecimento S=Salvar D=Excluir F=Tela Cheia W=Janela
+2025-11-10 16:21:40,730 - GestureApp.App - INFO - Modo Reconhecimento
+2025-11-10 16:21:44,600 - GestureApp.App - INFO - Dados limpos
