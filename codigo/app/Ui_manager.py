@@ -25,14 +25,16 @@ class UIManager:
         cv2.addWeighted(overlay, 0.6, image, 0.4, 0, image)
 
         # Status com contador de samples e tipo de gesto
+                # Status com contador de samples e tipo de gesto
         gesture_type = status.split('(')[-1].strip(')') if '(' in status else "letter"
         if "Treino" in status:
             status_text = f"Modo: Treino | Tipo: {gesture_type} | Samples: {sample_count}/{CONFIG['min_samples_per_class']}"
         elif gesture_list is not None:
             status_text = f"Modo: Excluir | Tipo: {gesture_type} | Selecione: {selected_index + 1 if gesture_list else 0}/{len(gesture_list)}"
         else:
-            status_text = f"Modo: Teste | Tipo: {gesture_type} | Palavra: {word}"
-        
+            status_text = f"Modo: Teste | Tipo: {gesture_type}"
+
+        # === DESENHA STATUS NORMAL (PEQUENO) ===
         cv2.putText(image, status_text,
                     (int(10 * self.ui_scale), int(35 * self.ui_scale)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9 * self.ui_scale,
@@ -42,12 +44,30 @@ class UIManager:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9 * self.ui_scale,
                     text_color, 2, cv2.LINE_AA)
 
-        # Gesto atual (se definido)
-        if current_letter:
-            cv2.putText(image, f"Gesto: {current_letter}",
-                        (10, 70),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3, cv2.LINE_AA)
+        # === DESENHA "PALAVRA: ABC" GIGANTE (SÓ NO MODO TESTE) ===
+        if "Teste" in status and word:
+            big_text = f"Palavra: {word}"
+            font = cv2.FONT_HERSHEY_TRIPLEX
+            scale = 2.0 * self.ui_scale      # TAMANHO GIGANTE
+            thickness = 5
+            color = (0, 255, 255)            # AMARELO BRILHANTE
 
+            # Calcula tamanho e centraliza
+            (text_width, text_height), baseline = cv2.getTextSize(big_text, font, scale, thickness)
+            x = (width - text_width) // 2
+            y = height - 80  # Parte inferior
+
+            # Fundo preto semitransparente
+            overlay = image.copy()
+            padding = 20
+            cv2.rectangle(overlay,
+                          (x - padding, y - text_height - padding),
+                          (x + text_width + padding, y + baseline + padding),
+                          (0, 0, 0), -1)
+            cv2.addWeighted(overlay, 0.7, image, 0.3, 0, image)
+
+            # Texto gigante
+            cv2.putText(image, big_text, (x, y), font, scale, color, thickness, cv2.LINE_AA)
         # Barra de progresso para gestos dinâmicos
         if gesture_type in ["word", "movement"] and hasattr(self, 'sequence_buffer'):
             progress = len(self.sequence_buffer) / CONFIG["max_sequence_length"] * 100

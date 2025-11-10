@@ -124,8 +124,25 @@ class GestureApp:
                                 pred, prob = self.model_manager.predict(landmarks)
                                 if pred and prob >= CONFIG["confidence_threshold"]:
                                     self.current_word += pred
-                                    cv2.putText(image, f"Predição: {pred} ({prob:.2f})",
-                                                (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                                
+                                    # === TEXTO GIGANTE E CENTRALIZADO ===
+                                    text = f"Predição: {pred} ({prob:.2f})"
+                                    font = cv2.FONT_HERSHEY_TRIPLEX
+                                    scale = 1.6
+                                    thickness = 4
+                                    color = (0, 255, 255)  # Amarelo
+                                
+                                    (text_width, text_height), baseline = cv2.getTextSize(text, font, scale, thickness)
+                                    x = (image.shape[1] - text_width) // 2
+                                    y = 80
+                                
+                                    # Fundo preto semitransparente
+                                    overlay = image.copy()
+                                    cv2.rectangle(overlay, (x - 10, y - text_height - 10), (x + text_width + 10, y + baseline + 10), (0, 0, 0), -1)
+                                    cv2.addWeighted(overlay, 0.6, image, 0.4, 0, image)
+                                
+                                    cv2.putText(image, text, (x, y), font, scale, color, thickness, cv2.LINE_AA)
+                                
                                     logging.info(f"Predição: {pred} | Probabilidade: {prob:.2f}")
                                     self.last_prediction_time = time.time()
                                 else:
