@@ -23,11 +23,19 @@ def extract_landmarks(hand_landmarks, image_shape=None):
     finger_tips = [4, 8, 12, 16, 20]
     distances = [np.linalg.norm(translated[i]) for i in finger_tips]
     scale = np.mean(distances) if distances else 1.0
-    if scale == 0: scale = 1.0
+    if scale == 0:
+        scale = 1.0
     normalized = translated / scale
 
     # 4 distâncias extras → 63 + 4 = 67
     key_pairs = [(4, 8), (8, 12), (12, 16), (16, 20)]
     extra = [np.linalg.norm(normalized[p1] - normalized[p2]) for p1, p2 in key_pairs]
 
-    return np.concatenate([normalized.flatten(), extra]).tolist()
+    # 🔹 Ângulo de orientação da palma da mão
+    # Usa o vetor do pulso (0) ao mindinho (20)
+    pinky = normalized[20]
+    hand_vector = pinky[:2]  # apenas x e y
+    angle = np.arctan2(hand_vector[1], hand_vector[0])  # ângulo em radianos (-pi a pi)
+
+    # Retorna todos os pontos + distâncias extras + ângulo → total = 68 valores
+    return np.concatenate([normalized.flatten(), extra, [angle]]).tolist()
