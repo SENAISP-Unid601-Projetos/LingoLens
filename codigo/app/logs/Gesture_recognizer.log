@@ -247,3 +247,21 @@
 2025-11-10 17:25:48,141 - INFO - Predição: N | Probabilidade: 0.78
 2025-11-10 17:25:49,670 - INFO - Predição: A | Probabilidade: 1.00
 2025-11-10 17:25:51,259 - INFO - Predição: I | Probabilidade: 0.75
+2025-11-12 13:50:52,824 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.01)
+2025-11-12 13:50:58,813 - INFO - Modelo treinado com 45291 amostras e 20 classes: {'E', 'O', 'M', 'N', 'T', 'P', 'G', 'F', 'S', 'I', 'L', 'A', 'C', 'V', 'U', 'D', 'W', 'R', 'Q', 'B'}
+2025-11-12 13:54:44,453 - INFO - Predição: A | Probabilidade: 0.92
+2025-11-12 13:54:46,807 - INFO - Predição: E | Probabilidade: 0.70
+2025-11-12 13:55:21,155 - INFO - Gestos salvos para letter
+2025-11-12 13:55:49,532 - INFO - Precisão media CV (Random Forest): 1.00 (+/- 0.00)
+2025-11-12 13:55:55,969 - INFO - Modelo treinado com 45442 amostras e 20 classes: {'E', 'O', 'M', 'N', 'T', 'P', 'G', 'F', 'S', 'I', 'L', 'A', 'C', 'V', 'U', 'D', 'W', 'R', 'Q', 'B'}
+2025-11-12 13:56:13,761 - INFO - Predição: A | Probabilidade: 0.74
+2025-11-12 13:56:15,283 - INFO - Predição: E | Probabilidade: 0.97
+2025-11-12 13:56:17,176 - INFO - Predição: C | Probabilidade: 0.73
+2025-11-12 13:57:42,516 - INFO - Predição: A | Probabilidade: 0.74
+2025-11-12 13:57:44,045 - INFO - Predição: E | Probabilidade: 0.89
+2025-11-12 13:57:45,584 - INFO - Predição: C | Probabilidade: 0.71
+2025-11-12 13:57:47,117 - INFO - Predição: B | Probabilidade: 0.78
+2025-11-12 13:57:55,422 - INFO - Predição: V | Probabilidade: 0.70
+2025-11-12 13:58:01,018 - INFO - Predição: V | Probabilidade: 0.82
+2025-11-12 13:58:02,852 - INFO - Predição: A | Probabilidade: 0.86
+2025-11-12 13:58:04,388 - INFO - Predição: E | Probabilidade: 0.97
