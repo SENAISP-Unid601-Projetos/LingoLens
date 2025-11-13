@@ -328,15 +328,23 @@ class GestureApp:
                     gesture_name=self.new_gesture_name,
                     is_dynamic=is_dynamic
                 )
+
                 if success:
                     self._show_message(f"{self.new_gesture_name} salvo!")
                     print(f"[SUCESSO] {self.new_gesture_name} salvo com {len(self.new_gesture_data)} amostras")
+
+                    # 🔹 Recarrega todos os dados do banco
+                    self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
+                    self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
+
+                    # 🔹 Reentreina com tudo junto
                     self.model_manager.train(
-                        static_data=self.static_data + ([] if is_dynamic else self.new_gesture_data),
-                        static_labels=self.static_labels + ([] if is_dynamic else [self.new_gesture_name] * len(self.new_gesture_data)),
-                        dynamic_data=self.dyn_data + (self.new_gesture_data if is_dynamic else []),
-                        dynamic_labels=self.dyn_labels + ([self.new_gesture_name] * len(self.new_gesture_data) if is_dynamic else [])
+                        static_data=self.static_data,
+                        static_labels=self.static_labels,
+                        dynamic_data=self.dyn_data,
+                        dynamic_labels=self.dyn_labels
                     )
+
                 self.mode = "teste"
                 self.sample_count = 0
                 self.new_gesture_data = []
@@ -345,6 +353,7 @@ class GestureApp:
             else:
                 self._show_message("Poucas amostras!")
                 print("[ERRO] Poucas amostras ou nenhum gesto definido")
+
 
         return False
 
