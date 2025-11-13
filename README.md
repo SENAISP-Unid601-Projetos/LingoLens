@@ -18,7 +18,11 @@ O script faz automaticamente:
 
 ## ⌨️ Atalhos no Programa
 
-- **Desenvolvendo...**
+- T: Treinar gesto que nao contem movimento
+- R: Reconhecer gestos
+- C: Limpar texto
+- D: Excluir gesto
+- ...🤔 
 
 ---
 
