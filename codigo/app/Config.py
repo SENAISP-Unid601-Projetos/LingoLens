@@ -1,7 +1,8 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
+#deded
+#dwd
 os.makedirs(os.path.join(BASE_DIR, "logs"), exist_ok=True)
 os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
 
