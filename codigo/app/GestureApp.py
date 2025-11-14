@@ -33,6 +33,16 @@ class GestureApp:
             self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
             self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
 
+            
+            # Treino automático ao iniciar
+            self.model_manager.train(
+                static_data=self.static_data,
+                static_labels=self.static_labels,
+                dynamic_data=self.dyn_data,
+                dynamic_labels=self.dyn_labels
+            )
+            print("[INFO] Modelos re-treinados ao iniciar o aplicativo.")
+
             # Treinar modelos se houver dados
             if self.static_labels or self.dyn_labels:
                 if self.static_labels:
@@ -65,9 +75,12 @@ class GestureApp:
             self.prev_landmarks = None
             self.motion_frames = 0
             self.hand_still_frames = 0
-            self.in_motion = False
-            self.motion_threshold = 0.002
-            self.stable_threshold = 15
+            self.in_motion = False 
+            # --- Suavização dos landmarks ---
+            self.smooth_landmarks = None
+            self.smoothing_factor = 0.65  # 65% do frame atual + 35% do anterior
+            self.motion_threshold = 0.004
+            self.stable_threshold = 10
 
             # Estado geral
             self.current_word = ""
@@ -123,6 +136,19 @@ class GestureApp:
                     landmarks = extract_landmarks(hand, frame.shape)
                     if not landmarks:
                         continue
+                    # ===== SUAVIZAÇÃO DOS LANDMARKS =====
+                    lm = np.array(landmarks, dtype=float)
+
+                    if self.smooth_landmarks is None:
+                        self.smooth_landmarks = lm
+                    else:
+                        self.smooth_landmarks = (
+                            self.smoothing_factor * lm +
+                            (1 - self.smoothing_factor) * self.smooth_landmarks
+                        )
+
+                    landmarks = self.smooth_landmarks.tolist()
+                        # =====================================
 
                     self.sequence_buffer.append(landmarks)
 
@@ -157,11 +183,11 @@ class GestureApp:
             self.hand_still_frames += 1
             self.motion_frames = max(0, self.motion_frames - 1)
 
-        if not self.in_motion and self.motion_frames > 3:
+        if not self.in_motion and self.motion_frames > 6:
             self.in_motion = True
             self.sequence_buffer.clear()
 
-        if self.in_motion and self.hand_still_frames > 5 and len(self.sequence_buffer) == CONFIG["sequence_length"]:
+        if self.in_motion and self.hand_still_frames > 10 and len(self.sequence_buffer) == CONFIG["sequence_length"]:
             seq = list(self.sequence_buffer)
             pred, prob = self.model_manager.predict(seq)
             if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
