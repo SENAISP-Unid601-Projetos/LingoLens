@@ -87,33 +87,29 @@ class ModelManager:
             print(f"[ERRO] Erro no treino: {e}")
 
     # ===========================================================
+    
     def predict(self, data):
-        """Predição compatível com 69 features"""
+        """Predição compatível com 69 features + sequence_length=30"""
         try:
             if isinstance(data, list):
                 data = np.array(data, dtype=np.float32)
-
-            # --- Gesto dinâmico (sequência completa) ---
-            if data.ndim == 2 and data.shape == (CONFIG.get("sequence_length", 30), 69) and self.lstm_model:
-                seq = np.expand_dims(data, axis=0)  # (1, seq_len, 69)
+            seq_len = CONFIG.get("sequence_length", 30)
+            # --- Gesto dinâmico: sequência completa (30, 69) ---
+            if (data.ndim == 2 and data.shape == (seq_len, 69) and self.lstm_model):
+                seq = np.expand_dims(data, axis=0)  # (1, 30, 69)
                 preds = self.lstm_model.predict(seq, verbose=0)[0]
                 label_index = int(np.argmax(preds))
                 prob = float(np.max(preds))
-
                 label = self.dynamic_labels_list[label_index] if label_index < len(self.dynamic_labels_list) else "?"
                 return label, prob
-
-            # --- Gesto estático (frame único) ---
-            elif data.ndim == 1 and len(data) == 69 and self.rf_model:
+            # --- Gesto estático: frame único (69,) ---
+            elif (data.ndim == 1 and len(data) == 69 and self.rf_model):
                 pred = self.rf_model.predict([data])[0]
                 prob = float(np.max(self.rf_model.predict_proba([data])[0]))
                 return pred, prob
-
             else:
-                print(f"[ERRO] Shape inesperado na predição: {data.shape}")
+                print(f"[ERRO] Shape inesperado na predição: {data.shape} (esperado: (30,69) ou (69,))")
                 return None, 0.0
-
         except Exception as e:
-            logging.error(f"[ModelManager] Erro na predição: {e}")
             print(f"[ERRO] Erro na predição: {e}")
             return None, 0.0
