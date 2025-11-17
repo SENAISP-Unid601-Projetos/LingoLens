@@ -84,6 +84,8 @@ class GestureApp:
 
             # Estado geral
             self.current_word = ""
+            self.last_pred_time = 0
+            self.word_pause_threshold = 1.0
             self.mode = "teste"
             self.new_gesture_name = ""
             self.new_gesture_data = []
@@ -199,12 +201,21 @@ class GestureApp:
             if len(self.sequence_buffer) > 0:
                 frame_data = self.sequence_buffer[-1]
                 pred, prob = self.model_manager.predict(frame_data)
+
                 if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
+                    now = time.time()
+
+                    # Se passou mais de 1 segundo desde a última letra → adiciona espaço
+                    if now - self.last_pred_time > self.word_pause_threshold:
+                        self.current_word += " "
+
                     self.current_word += pred
+                    self.last_pred_time = now
+
                     print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
                     self.hand_still_frames = 0
 
-    def _reset_motion_state(self):
+    def _reset_motion_state(self):  
         self.in_motion = False
         self.motion_frames = 0
         self.hand_still_frames = 0
@@ -294,6 +305,9 @@ class GestureApp:
                 self._show_message(f"Letra {letra} não encontrada.")
                 print(f"[AVISO] Letra '{letra}' não encontrada nas bases.")
 
+            self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
+            self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
+
             return False
 
 
@@ -316,6 +330,9 @@ class GestureApp:
 
         elif key == ord("c") or key == ord("C"):
             self.current_word = ""
+            self.last_pred_time = time.time()
+            self.word_pause_threshold = 1.0  # 1 segundo
+
             print("[INFO] Palavra limpa")
 
         elif key == ord("t") or key == ord("T"):
@@ -362,6 +379,9 @@ class GestureApp:
                     # 🔹 Recarrega todos os dados do banco
                     self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
                     self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
+
+                    self.static_labels = [l for l in self.static_labels]
+                    self.dyn_labels = [l for l in self.dyn_labels]
 
                     # 🔹 Reentreina com tudo junto
                     self.model_manager.train(
