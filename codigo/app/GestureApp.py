@@ -232,7 +232,7 @@ class GestureApp:
                 seq = list(self.sequence_buffer)
                 self.new_gesture_data.append(seq)
                 self.sample_count += 1
-                print(f"[DINÂMICO] {self.sample_count} sequências coletadas")
+                print(f"[DINÂMICO] {self.sample_count} sequencias coletadas")
                 self.sequence_buffer.clear()
         else:
             variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks))
@@ -300,10 +300,10 @@ class GestureApp:
 
             if deleted_static or deleted_dynamic:
                 self._show_message(f"Letra {letra} deletada!")
-                print(f"[SUCESSO] Letra '{letra}' removida (estática/dinâmica).")
+                print(f"[SUCESSO] Letra '{letra}' removida (estatica/dinamica).")
             else:
-                self._show_message(f"Letra {letra} não encontrada.")
-                print(f"[AVISO] Letra '{letra}' não encontrada nas bases.")
+                self._show_message(f"Letra {letra} nao encontrada.")
+                print(f"[AVISO] Letra '{letra}' nao encontrada nas bases.")
 
             self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
             self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
@@ -320,8 +320,8 @@ class GestureApp:
                 self.new_gesture_name = ""
                 self.sample_count = 0
                 self.sequence_buffer.clear()
-                self._show_message("Ação cancelada!")
-                print("[INFO] Ação cancelada.")
+                self._show_message("Acao cancelada!")
+                print("[INFO] Acao cancelada.")
             return False
 
         if key == ord("q") or key == ord("Q"):

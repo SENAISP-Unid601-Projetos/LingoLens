@@ -21,7 +21,7 @@ CONFIG = {
     "rf_estimators": 100,
     "lstm_units": 64,
     "lstm_layers": 2,
-    "sequence_length": 12,
+    "sequence_length": 30,
     "min_samples_per_class": 120,
     "gesture_types": ["letter"],
     "log_file": os.path.join(BASE_DIR, "logs", "Gesture_recognizer.log"),
