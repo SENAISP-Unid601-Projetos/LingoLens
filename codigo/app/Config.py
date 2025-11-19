@@ -11,7 +11,7 @@ CONFIG = {
     "static_confidence_boost": 0.05,
     "smoothing_factor": 0.65,
     "db_path": os.path.join(BASE_DIR, "data", "gestures.db"),
-    "confidence_threshold": 0.7,
+    "confidence_threshold": 0.6,
     "prediction_cooldown": 50,
     "camera_resolution": (1280, 720),
     "target_fps": 30,

@@ -49,7 +49,7 @@ class ModelManager:
                         class_weight="balanced"
                     )
                     self.rf_model.fit(X_static, y_static)
-                    print(f"[ModelManager] RF treinado → {X_static.shape}")
+                    print(f"[ModelManager] RF treinado -> {X_static.shape}")
                 else:
                     print(f"[ERRO] Shape inválido para RF: {X_static.shape} (esperado: (*, 69))")
 
