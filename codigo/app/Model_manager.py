@@ -17,7 +17,7 @@ class ModelManager:
     # ===========================================================
     def _build_lstm(self, n_classes):
         lstm_units = CONFIG.get("lstm_units", 64)
-        seq_len = CONFIG.get("sequence_length", 30)  # Agora usa o valor real do Config
+        seq_len = 38  # Agora usa o valor real do Config
         model = tf.keras.Sequential([
             tf.keras.layers.LSTM(lstm_units, return_sequences=True, input_shape=(seq_len, 69)),
             tf.keras.layers.LSTM(lstm_units),
@@ -93,7 +93,7 @@ class ModelManager:
         try:
             if isinstance(data, list):
                 data = np.array(data, dtype=np.float32)
-            seq_len = CONFIG.get("sequence_length", 30)
+            seq_len = 38  # ← também aqui, pra predição usar 38
             # --- Gesto dinâmico: sequência completa (30, 69) ---
             if (data.ndim == 2 and data.shape == (seq_len, 69) and self.lstm_model):
                 seq = np.expand_dims(data, axis=0)  # (1, 30, 69)

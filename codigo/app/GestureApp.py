@@ -71,7 +71,7 @@ class GestureApp:
             self.mp_hands = mp.solutions.hands
 
             # Buffers e controle
-            self.sequence_buffer = deque(maxlen=CONFIG["sequence_length"])
+            self.sequence_buffer = deque(maxlen=38)
             self.prev_landmarks = None
             self.motion_frames = 0
             self.hand_still_frames = 0
@@ -176,7 +176,7 @@ class GestureApp:
     # ===========================================================
     def _handle_motion_state(self, landmarks, frame):
         variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
-        self.prev_landmarks = landmarks
+        self.prev_landmarks = landmarks.copy()
 
         if variance > self.motion_threshold:
             self.motion_frames += 1
@@ -189,31 +189,30 @@ class GestureApp:
             self.in_motion = True
             self.sequence_buffer.clear()
 
-        if self.in_motion and self.hand_still_frames > 10 and len(self.sequence_buffer) == CONFIG["sequence_length"]:
-            seq = list(self.sequence_buffer)
+        # === DETECÇÃO DINÂMICA (prioridade absoluta + threshold dedicado) ===
+        if self.in_motion and self.hand_still_frames > 10 and len(self.sequence_buffer) >= 38:
+            seq = list(self.sequence_buffer)[-38:]
             pred, prob = self.model_manager.predict(seq)
-            if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
+            thresh_dyn = CONFIG.get("confidence_threshold_dynamic", 0.62)
+            if pred and prob >= thresh_dyn:
                 self.current_word += pred
                 print(f"[DINÂMICO DETECTADO] {pred} ({prob:.2f})")
             self._reset_motion_state()
+            return                                          # ← bloqueia estático 100%
 
+        # === DETECÇÃO ESTÁTICA (só quando realmente parado) ===
         if not self.in_motion and self.hand_still_frames > self.stable_threshold:
-            if len(self.sequence_buffer) > 0:
-                frame_data = self.sequence_buffer[-1]
-                pred, prob = self.model_manager.predict(frame_data)
-
-                if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
-                    now = time.time()
-
-                    # Se passou mais de 1 segundo desde a última letra → adiciona espaço
-                    if now - self.last_pred_time > self.word_pause_threshold:
-                        self.current_word += " "
-
-                    self.current_word += pred
-                    self.last_pred_time = now
-
-                    print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
-                    self.hand_still_frames = 0
+            frame_data = self.sequence_buffer[-1]
+            pred, prob = self.model_manager.predict(frame_data)
+            thresh_static = CONFIG.get("confidence_threshold_static", 0.78)
+            if pred and prob >= thresh_static:
+                now = time.time()
+                if now - self.last_pred_time > self.word_pause_threshold:
+                    self.current_word += " "
+                self.current_word += pred
+                self.last_pred_time = now
+                print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
+                self.hand_still_frames = 0
 
     def _reset_motion_state(self):  
         self.in_motion = False
@@ -223,25 +222,34 @@ class GestureApp:
 
     # ===========================================================
     def _capture_training_sample(self, landmarks, frame):
-        if self.prev_landmarks is None:
-            self.prev_landmarks = landmarks
-            return
-
-        if self.new_gesture_name in self.dynamic_letters:
-            if len(self.sequence_buffer) == CONFIG["sequence_length"]:
-                seq = list(self.sequence_buffer)
-                self.new_gesture_data.append(seq)
-                self.sample_count += 1
-                print(f"[DINÂMICO] {self.sample_count} sequencias coletadas")
-                self.sequence_buffer.clear()
-        else:
-            variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks))
-            self.prev_landmarks = landmarks
-            if variance < self.motion_threshold * 2:
+        # ==================== GESTOS ESTÁTICOS ====================
+        if self.new_gesture_name not in self.dynamic_letters:
+            variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
+            self.prev_landmarks = landmarks.copy()
+            if variance < 0.012:
                 self.new_gesture_data.append(landmarks)
                 self.sample_count += 1
                 if self.sample_count % 10 == 0:
                     print(f"[ESTÁTICO] {self.sample_count} amostras coletadas")
+            return
+
+                # ==================== GESTOS DINÂMICOS – VERSÃO FINAL 1000% PRÁTICA ====================
+        if self.new_gesture_name in self.dynamic_letters:
+            self.sequence_buffer.append(landmarks)
+
+            # Quando completar 38 frames → salva e LIMPA IMEDIATAMENTE (não precisa parar a mão!)
+            if len(self.sequence_buffer) == 38:
+                seq = list(self.sequence_buffer)
+                self.new_gesture_data.append(seq)
+                self.sample_count += 1
+                print(f"[DINÂMICO] {self.sample_count} sequências coletadas → 38 frames")
+                
+                # LIMPEZA FORÇADA — você pode continuar o movimento ou já começar o próximo gesto
+                self.sequence_buffer.clear()
+                self.hand_still_frames = 0
+
+            self.prev_landmarks = landmarks.copy()
+            return
 
     # ===========================================================
     def _draw_ui(self, frame):
