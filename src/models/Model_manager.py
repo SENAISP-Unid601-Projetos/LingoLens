@@ -3,7 +3,7 @@ import tensorflow as tf
 import logging
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from Config import CONFIG
+from config.Config import CONFIG
 
 
 class ModelManager:

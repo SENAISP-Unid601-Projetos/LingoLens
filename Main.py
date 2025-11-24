@@ -3,12 +3,12 @@ import mediapipe as mp
 import logging
 import time
 import numpy as np
-from Config import CONFIG, validate_gesture_type
-from Database_manager import DatabaseManager
-from Model_manager import ModelManager
-from Ui_manager import UIManager
-from Extract_landmarks import extract_landmarks
-from GestureApp import GestureApp
+from config.Config import CONFIG, validate_gesture_type
+from src.database.Database_manager import DatabaseManager
+from src.models.Model_manager import ModelManager
+from src.utils.Ui_manager import UIManager
+from src.utils.Extract_landmarks import extract_landmarks
+from src.core.GestureApp import GestureApp
 
 if __name__ == "__main__":
     try:
