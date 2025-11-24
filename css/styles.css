@@ -147,6 +147,21 @@ h3, .h3 {
   }
 }
 
+.video-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5rem;
+}
+
+.video-container iframe,
+.video-container video {
+  width: 80%;
+  height: 400px;
+  border-radius: 15px;
+  border: none;
+}
+
 h4, .h4 {
   font-size: calc(1.275rem + 0.3vw);
 }
