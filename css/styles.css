@@ -156,8 +156,8 @@ h3, .h3 {
 
 .video-container iframe,
 .video-container video {
-  width: 80%;
-  height: 400px;
+  width: 97%;
+  height: 600px;
   border-radius: 15px;
   border: none;
 }
