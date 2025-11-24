@@ -16,20 +16,43 @@ class ModelManager:
 
     # ===========================================================
     def _build_lstm(self, n_classes):
-        lstm_units = CONFIG.get("lstm_units", 64)
-        seq_len = 38  # Agora usa o valor real do Config
-        model = tf.keras.Sequential([
-            tf.keras.layers.LSTM(lstm_units, return_sequences=True, input_shape=(seq_len, 69)),
-            tf.keras.layers.LSTM(lstm_units),
-            tf.keras.layers.Dropout(0.3),  # Evita overfitting em dinâmicas
-            tf.keras.layers.Dense(max(32, lstm_units // 2), activation="relu"),
-            tf.keras.layers.Dense(n_classes, activation="softmax")
-        ])
-        model.compile(
-            optimizer="adam",
-            loss="sparse_categorical_crossentropy",
-            metrics=["accuracy"]
-        )
+        # Força no mínimo 2 classes internamente para evitar o bug do softmax(1)
+        if n_classes == 1:
+            # Caso raro: só uma letra dinâmica → usa binary classification
+            model = tf.keras.Sequential([
+                tf.keras.layers.Input(shape=(38, 69)),
+                tf.keras.layers.LSTM(256, return_sequences=True, dropout=0.2, recurrent_dropout=0.2),
+                tf.keras.layers.LSTM(128, dropout=0.2, recurrent_dropout=0.2),
+                tf.keras.layers.Dense(256, activation='relu'),
+                tf.keras.layers.Dropout(0.4),
+                tf.keras.layers.Dense(128, activation='relu'),
+                tf.keras.layers.Dropout(0.3),
+                tf.keras.layers.Dense(64, activation='relu'),
+                tf.keras.layers.Dense(1, activation='sigmoid')  # ← 1 neurônio + sigmoid
+            ])
+            model.compile(
+                optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+                loss='binary_crossentropy',
+                metrics=['accuracy']
+            )
+        else:
+            # Caso normal (2 ou mais classes)
+            model = tf.keras.Sequential([
+                tf.keras.layers.Input(shape=(38, 69)),
+                tf.keras.layers.LSTM(256, return_sequences=True, dropout=0.2, recurrent_dropout=0.2),
+                tf.keras.layers.LSTM(128, dropout=0.2, recurrent_dropout=0.2),
+                tf.keras.layers.Dense(256, activation='relu'),
+                tf.keras.layers.Dropout(0.4),
+                tf.keras.layers.Dense(128, activation='relu'),
+                tf.keras.layers.Dropout(0.3),
+                tf.keras.layers.Dense(64, activation='relu'),
+                tf.keras.layers.Dense(n_classes, activation='softmax')
+            ])
+            model.compile(
+                optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+                loss='sparse_categorical_crossentropy',
+                metrics=['accuracy']
+            )
         return model
 
     # ===========================================================
@@ -71,11 +94,18 @@ class ModelManager:
                         X_dyn, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded
                     )
 
+                    callback = tf.keras.callbacks.EarlyStopping(
+                        monitor='val_accuracy',
+                        patience=20,           # era 12 ou menos
+                        restore_best_weights=True,
+                        verbose=1
+                    )
                     self.lstm_model.fit(
                         X_train, y_train,
                         validation_data=(X_test, y_test),
-                        epochs=CONFIG.get("epochs", 15),
-                        batch_size=CONFIG.get("batch_size", 16),
+                        epochs=150,            # força até 150 épocas
+                        batch_size=16,
+                        callbacks=[callback],
                         verbose=1
                     )
                     print(f"[ModelManager] LSTM treinado → {X_dyn.shape} | Classes: {labels}")
