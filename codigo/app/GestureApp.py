@@ -33,18 +33,14 @@ class GestureApp:
             self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
             self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
 
-            # Treinar modelos se houver dados
-            if self.static_labels or self.dyn_labels:
-                if self.static_labels:
-                    self.static_data, self.static_labels = shuffle(self.static_data, self.static_labels, random_state=42)
-                if self.dyn_labels:
-                    self.dyn_data, self.dyn_labels = shuffle(self.dyn_data, self.dyn_labels, random_state=42)
-                self.model_manager.train(
-                    static_data=self.static_data,
-                    static_labels=self.static_labels,
-                    dynamic_data=self.dyn_data,
-                    dynamic_labels=self.dyn_labels
-                )
+            # Treino automático ao iniciar
+            self.model_manager.train(
+                static_data=self.static_data,
+                static_labels=self.static_labels,
+                dynamic_data=self.dyn_data,
+                dynamic_labels=self.dyn_labels
+            )
+            print("[INFO] Modelos re-treinados ao iniciar o aplicativo.")
 
             # Webcam
             self.cap = cv2.VideoCapture(0)
@@ -61,40 +57,38 @@ class GestureApp:
             self.mp_hands = mp.solutions.hands
 
             # Buffers e controle
-            self.sequence_buffer = deque(maxlen=CONFIG["sequence_length"])
+            self.sequence_buffer = deque(maxlen=38)
             self.prev_landmarks = None
             self.motion_frames = 0
             self.hand_still_frames = 0
-            self.in_motion = False
-            self.motion_threshold = 0.002
-            self.stable_threshold = 15
+            self.in_motion = False 
+            self.smooth_landmarks = None
+            self.smoothing_factor = 0.65
+            self.motion_threshold = 0.004
+            self.stable_threshold = 10
+
+            # NOVO SISTEMA TOGGLE T (GRAVAÇÃO DINÂMICA)
+            self.is_recording_dynamic = False
+            self.recording_buffer = []
+            self.last_toggle_time = 0
+            self.toggle_debounce = 0.4
 
             # Estado geral
             self.current_word = ""
+            self.last_pred_time = 0
+            self.word_pause_threshold = 1.0
             self.mode = "teste"
             self.new_gesture_name = ""
             self.new_gesture_data = []
             self.sample_count = 0
             self.is_input_active = False
 
-            # Mensagens visuais
+            # Mensagens
             self.message = ""
             self.message_time = 0
-
-            # Letras treinadas (exibição com L)
             self.show_letters = False
             self.show_letters_time = 0
             self.letters_text = ""
-
-            self.commands = [
-                "T = Treinar novo gesto",
-                "S = Salvar gesto",
-                "C = Limpar palavra",
-                "L = Listar letras treinadas",
-                "D = Deletar letra",
-                "ESC = Cancelar ação",
-                "Q = Sair"
-            ]
 
         except Exception as e:
             logging.error(f"Erro na inicialização: {e}")
@@ -102,10 +96,9 @@ class GestureApp:
 
     # ===========================================================
     def run(self):
-        print("\n=== SISTEMA DE RECONHECIMENTO DE LIBRAS ===")
-        for cmd in self.commands:
-            print("  " + cmd)
-        print("==========================================\n")
+        print("\n=== SISTEMA LIBRAS 2025 - TOGGLE T + DELETE 100% FUNCIONAL ===")
+        print("  T = Gravar dinâmico (toggle) | S = Salvar | D = Deletar | L = Listar | Q = Sair")
+        print("=============================================================\n")
 
         try:
             while True:
@@ -124,9 +117,19 @@ class GestureApp:
                     if not landmarks:
                         continue
 
+                    # Suavização
+                    lm = np.array(landmarks, dtype=float)
+                    if self.smooth_landmarks is None:
+                        self.smooth_landmarks = lm
+                    else:
+                        self.smooth_landmarks = (
+                            self.smoothing_factor * lm +
+                            (1 - self.smoothing_factor) * self.smooth_landmarks
+                        )
+                    landmarks = self.smooth_landmarks.tolist()
+
                     self.sequence_buffer.append(landmarks)
 
-                    # Pausa reconhecimento durante treino/delete
                     if self.mode == "treino" and self.new_gesture_name:
                         self._capture_training_sample(landmarks, frame)
                     elif self.mode == "teste":
@@ -148,7 +151,7 @@ class GestureApp:
     # ===========================================================
     def _handle_motion_state(self, landmarks, frame):
         variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
-        self.prev_landmarks = landmarks
+        self.prev_landmarks = landmarks.copy()
 
         if variance > self.motion_threshold:
             self.motion_frames += 1
@@ -157,26 +160,32 @@ class GestureApp:
             self.hand_still_frames += 1
             self.motion_frames = max(0, self.motion_frames - 1)
 
-        if not self.in_motion and self.motion_frames > 3:
+        if not self.in_motion and self.motion_frames > 6:
             self.in_motion = True
             self.sequence_buffer.clear()
 
-        if self.in_motion and self.hand_still_frames > 5 and len(self.sequence_buffer) == CONFIG["sequence_length"]:
-            seq = list(self.sequence_buffer)
+        if self.in_motion and self.hand_still_frames > 10 and len(self.sequence_buffer) >= 38:
+            seq = list(self.sequence_buffer)[-38:]
             pred, prob = self.model_manager.predict(seq)
-            if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
+            thresh_dyn = CONFIG.get("confidence_threshold_dynamic", 0.62)
+            if pred and prob >= thresh_dyn:
                 self.current_word += pred
                 print(f"[DINÂMICO DETECTADO] {pred} ({prob:.2f})")
             self._reset_motion_state()
+            return
 
         if not self.in_motion and self.hand_still_frames > self.stable_threshold:
-            if len(self.sequence_buffer) > 0:
-                frame_data = self.sequence_buffer[-1]
-                pred, prob = self.model_manager.predict(frame_data)
-                if pred and prob >= CONFIG.get("confidence_threshold", 0.7):
-                    self.current_word += pred
-                    print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
-                    self.hand_still_frames = 0
+            frame_data = self.sequence_buffer[-1]
+            pred, prob = self.model_manager.predict(frame_data)
+            thresh_static = CONFIG.get("confidence_threshold_static", 0.78)
+            if pred and prob >= thresh_static:
+                now = time.time()
+                if now - self.last_pred_time > self.word_pause_threshold:
+                    self.current_word += " "
+                self.current_word += pred
+                self.last_pred_time = now
+                print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
+                self.hand_still_frames = 0
 
     def _reset_motion_state(self):
         self.in_motion = False
@@ -186,169 +195,169 @@ class GestureApp:
 
     # ===========================================================
     def _capture_training_sample(self, landmarks, frame):
-        if self.prev_landmarks is None:
-            self.prev_landmarks = landmarks
-            return
-
-        if self.new_gesture_name in self.dynamic_letters:
-            if len(self.sequence_buffer) == CONFIG["sequence_length"]:
-                seq = list(self.sequence_buffer)
-                self.new_gesture_data.append(seq)
-                self.sample_count += 1
-                print(f"[DINÂMICO] {self.sample_count} sequências coletadas")
-                self.sequence_buffer.clear()
-        else:
-            variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks))
-            self.prev_landmarks = landmarks
-            if variance < self.motion_threshold * 2:
+        if self.new_gesture_name not in self.dynamic_letters:
+            # ESTÁTICO
+            variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
+            self.prev_landmarks = landmarks.copy()
+            if variance < 0.012:
                 self.new_gesture_data.append(landmarks)
                 self.sample_count += 1
                 if self.sample_count % 10 == 0:
                     print(f"[ESTÁTICO] {self.sample_count} amostras coletadas")
+            return
+
+        # DINÂMICO — TOGGLE T
+        status_text = "APERTE T PARA GRAVAR"
+        color = (0, 255, 255)
+
+        if self.is_recording_dynamic:
+            status_text = f"GRAVANDO: {len(self.recording_buffer)}/38"
+            color = (0, 0, 255)
+            self.recording_buffer.append(landmarks)
+
+            if len(self.recording_buffer) >= 38:
+                seq = self.recording_buffer[-38:]
+                self.new_gesture_data.append(seq)
+                self.sample_count += 1
+                print(f"[DINÂMICO] {self.sample_count} sequências coletadas → 38 frames")
+                self.recording_buffer.clear()
+                self.is_recording_dynamic = False
+
+        cv2.putText(frame, status_text, (10, 160), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+        self.prev_landmarks = landmarks.copy()
 
     # ===========================================================
     def _draw_ui(self, frame):
-        cv2.putText(frame, f"Modo: {self.mode.upper()}", (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-        cv2.putText(frame, f"Palavra: {self.current_word}", (10, 70),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(frame, f"Modo: {self.mode.upper()}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+        cv2.putText(frame, f"Palavra: {self.current_word}", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-        if self.is_input_active and self.mode == "treino":
-            cv2.putText(frame, "Digite a letra (A-Z)", (10, 120),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
+        if self.is_input_active:
+            cv2.putText(frame, "Digite a letra (A-Z)", (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
         elif self.mode == "treino" and self.new_gesture_name:
             total_min = CONFIG.get("min_samples_per_class", 120)
-            cv2.putText(frame,
-                        f"Gravando {self.new_gesture_name}... {self.sample_count}/{total_min}",
-                        (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 165, 255), 2)
-        elif self.is_input_active and self.mode == "delete":
-            cv2.putText(frame, "Digite a letra para apagar (A-Z)", (10, 120),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 100, 255), 2)
+            cv2.putText(frame, f"Gravando {self.new_gesture_name} → {self.sample_count}/{total_min}", (10, 120),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 165, 255), 2)
 
-        # Mostra mensagens temporárias
         if self.message and (time.time() - self.message_time) < 2:
-            cv2.putText(frame, self.message, (10, 160),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+            cv2.putText(frame, self.message, (10, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
-        # Mostra lista de letras treinadas (por 4s)
         if self.show_letters and (time.time() - self.show_letters_time) < 4:
-            cv2.putText(frame, self.letters_text, (10, 200),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
-        else:
-            self.show_letters = False
+            cv2.putText(frame, self.letters_text, (10, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
 
-        cv2.imshow("Libras System", frame)
+        cv2.imshow("Libras 2025 - TOGGLE T + DELETE OK", frame)
 
     # ===========================================================
     def _handle_key(self, key):
-        # Entrada de letra em modo treino
-        if self.is_input_active and self.mode == "treino" and (65 <= key <= 90 or 97 <= key <= 122):
-            self.new_gesture_name = chr(key).upper()
-            self.is_input_active = False
-            self.mode = "treino"
-            self.new_gesture_data = []
-            self.sample_count = 0
-            print(f"[INFO] Coletando gesto: {self.new_gesture_name}")
-            return False
-
-        # Entrada de letra em modo delete
-       # 🔧 Entrada de letra em modo delete (corrigido: apaga estática e dinâmica)
-        if self.is_input_active and self.mode == "delete" and (65 <= key <= 90 or 97 <= key <= 122):
+        # Digitar letra (treino ou delete)
+        if self.is_input_active and (65 <= key <= 90 or 97 <= key <= 122):
             letra = chr(key).upper()
+            if self.mode == "treino":
+                self.new_gesture_name = letra
+                self.new_gesture_data = []
+                self.sample_count = 0
+                self.is_recording_dynamic = False
+                self.recording_buffer.clear()
+                print(f"[INFO] Coletando gesto: {letra}")
+            elif self.mode == "delete":
+                # === DELETAR CORRETO (estática + dinâmica) ===
+                deleted_static = self.db.delete_gesture(letra, is_dynamic=False)
+                deleted_dynamic = self.db.delete_gesture(letra, is_dynamic=True)
+
+                if deleted_static or deleted_dynamic:
+                    self._show_message(f"Letra {letra} apagada!")
+                    print(f"[SUCESSO] '{letra}' removida do banco")
+                else:
+                    self._show_message(f"Letra {letra} não encontrada")
+                    print(f"[AVISO] '{letra}' não existe")
+
+                # Recarrega tudo e retreina
+                self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
+                self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
+                self.model_manager.train(
+                    static_data=self.static_data, static_labels=self.static_labels,
+                    dynamic_data=self.dyn_data, dynamic_labels=self.dyn_labels
+                )
+
+                self.mode = "teste"
             self.is_input_active = False
-            self.mode = "teste"
-
-            deleted_static = self.db.delete_gesture(letra, is_dynamic=False)
-            deleted_dynamic = self.db.delete_gesture(letra, is_dynamic=True)
-
-            if deleted_static or deleted_dynamic:
-                self._show_message(f"Letra {letra} deletada!")
-                print(f"[SUCESSO] Letra '{letra}' removida (estática/dinâmica).")
-            else:
-                self._show_message(f"Letra {letra} não encontrada.")
-                print(f"[AVISO] Letra '{letra}' não encontrada nas bases.")
-
             return False
 
-
-        # ======= COMANDOS =======
         if key == 27:  # ESC
             self.is_input_active = False
-            if self.mode in ["treino", "delete"]:
-                self.mode = "teste"
-                self.new_gesture_data = []
-                self.new_gesture_name = ""
-                self.sample_count = 0
-                self.sequence_buffer.clear()
-                self._show_message("Ação cancelada!")
-                print("[INFO] Ação cancelada.")
+            self.mode = "teste"
+            self.new_gesture_name = ""
+            self.new_gesture_data = []
+            self.sample_count = 0
+            self.is_recording_dynamic = False
+            self.recording_buffer.clear()
+            self._show_message("Cancelado")
             return False
 
         if key == ord("q") or key == ord("Q"):
             print("[INFO] Saindo...")
             return True
 
-        elif key == ord("c") or key == ord("C"):
+        if key == ord("c") or key == ord("C"):
             self.current_word = ""
             print("[INFO] Palavra limpa")
 
-        elif key == ord("t") or key == ord("T"):
-            self.mode = "treino"
-            self.is_input_active = True
-            self.new_gesture_name = ""
-            self.new_gesture_data = []
-            self.sample_count = 0
-            self.sequence_buffer.clear()
-            print("[INFO] Digite a letra (A-Z)")
+        if key == ord("t") or key == ord("T"):
+            if self.new_gesture_name and self.new_gesture_name in self.dynamic_letters:
+                current_time = time.time()
+                if current_time - self.last_toggle_time > self.toggle_debounce:
+                    self.last_toggle_time = current_time
+                    self.is_recording_dynamic = not self.is_recording_dynamic
+                    if self.is_recording_dynamic:
+                        self.recording_buffer.clear()
+                        print("[GRAVANDO] → Iniciado (T novamente ou 38 frames)")
+                    else:
+                        print("[GRAVANDO] → Parado")
+            elif not self.new_gesture_name:
+                self.mode = "treino"
+                self.is_input_active = True
+                print("[INFO] Digite a letra (A-Z)")
 
-        elif key == ord("l") or key == ord("L"):
-            static_gestures = sorted(set(self.static_labels))
-            dynamic_gestures = sorted(set(self.dyn_labels))
-            static_text = ", ".join(static_gestures) if static_gestures else "Nenhuma"
-            dynamic_text = ", ".join(dynamic_gestures) if dynamic_gestures else "Nenhuma"
-            self.letters_text = f"Estaticas: {static_text} | Dinamicas: {dynamic_text}"
+        if key == ord("l") or key == ord("L"):
+            static = sorted(set(self.static_labels)) if self.static_labels else []
+            dynamic = sorted(set(self.dyn_labels)) if self.dyn_labels else []
+            self.letters_text = f"E: {', '.join(static) if static else 'Nenhuma'} | D: {', '.join(dynamic) if dynamic else 'Nenhuma'}"
             self.show_letters = True
             self.show_letters_time = time.time()
-            print("\n=== Letras treinadas ===")
-            print(f"Estaticas: {static_text}")
-            print(f"Dinamicas: {dynamic_text}")
-            print("========================\n")
 
-        elif key == ord("d") or key == ord("D"):
+        if key == ord("d") or key == ord("D"):
             self.mode = "delete"
             self.is_input_active = True
-            print("[INFO] Digite a letra que deseja apagar (A-Z)")
+            print("[INFO] Digite a letra para apagar")
 
-        elif key == ord("s") or key == ord("S"):
-            if self.new_gesture_name and len(self.new_gesture_data) >= CONFIG.get("min_samples_per_class", 120):
-                is_dynamic = self.new_gesture_name in self.dynamic_letters
+        if key == ord("s") or key == ord("S"):
+            if self.new_gesture_name and len(self.new_gesture_data) >= 120:
+                is_dyn = self.new_gesture_name in self.dynamic_letters
                 success = self.db.save_gestures(
                     labels=[self.new_gesture_name] * len(self.new_gesture_data),
                     data=self.new_gesture_data,
                     gesture_name=self.new_gesture_name,
-                    is_dynamic=is_dynamic
+                    is_dynamic=is_dyn
                 )
                 if success:
                     self._show_message(f"{self.new_gesture_name} salvo!")
-                    print(f"[SUCESSO] {self.new_gesture_name} salvo com {len(self.new_gesture_data)} amostras")
+                    print(f"[SUCESSO] {self.new_gesture_name} salvo ({len(self.new_gesture_data)} amostras)")
+                    # Recarrega e retreina
+                    self.static_dict, self.static_labels, self.static_data, self.static_names = self.db.load_gestures(is_dynamic=False)
+                    self.dyn_dict, self.dyn_labels, self.dyn_data, self.dyn_names = self.db.load_gestures(is_dynamic=True)
                     self.model_manager.train(
-                        static_data=self.static_data + ([] if is_dynamic else self.new_gesture_data),
-                        static_labels=self.static_labels + ([] if is_dynamic else [self.new_gesture_name] * len(self.new_gesture_data)),
-                        dynamic_data=self.dyn_data + (self.new_gesture_data if is_dynamic else []),
-                        dynamic_labels=self.dyn_labels + ([self.new_gesture_name] * len(self.new_gesture_data) if is_dynamic else [])
+                        static_data=self.static_data, static_labels=self.static_labels,
+                        dynamic_data=self.dyn_data, dynamic_labels=self.dyn_labels
                     )
                 self.mode = "teste"
-                self.sample_count = 0
-                self.new_gesture_data = []
                 self.new_gesture_name = ""
-                self.sequence_buffer.clear()
+                self.new_gesture_data = []
+                self.sample_count = 0
+                self.is_recording_dynamic = False
             else:
                 self._show_message("Poucas amostras!")
-                print("[ERRO] Poucas amostras ou nenhum gesto definido")
 
         return False
 
-    # ===========================================================
     def _show_message(self, text):
         self.message = text
         self.message_time = time.time()
