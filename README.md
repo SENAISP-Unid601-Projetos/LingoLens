@@ -6,7 +6,7 @@
 
 ## Guia do Alfabeto Libras (Datilologia)
 
-![Alfabeto Libras Completo](assets/alfabeto_libras.jpeg)
+![Alfabeto Libras Completo](assets/Alfabeto_libras.jpeg)
 
 *(Guia visual do alfabeto completo da Libras brasileira – alta qualidade para referência rápida)*
 
