@@ -33,25 +33,24 @@ Clique duas vezes em `start.bat` → instala dependências e abre o programa.
 
 
 **Qualquer sistema:**  
+
 ```bash
 python main.py
-
----
-
+```
 ## Autores
 
 **LingoLens – Tradutor de Datilologia Libras em Tempo Real**  
 Projeto desenvolvido pelo grupo:
 
-- **[Samuel Junior Casseta]**  
-- **[Gabriel da Silva Rodrigues dos Santos]**  
-- **[Abner Firmino Cerqueira]**
-- **[Carlos Gabriel Evangelista Silva]**  
-- **[Gustavo Ferreira Nunes]**  
+- **Samuel Junior Casseta**  
+- **Gabriel da Silva Rodrigues dos Santos**  
+- **Abner Firmino Cerqueira**
+- **Carlos Gabriel Evangelista Silva**  
+- **Gustavo Ferreira Nunes**  
 
 
-**Curso:** [Técnico Desenvolvimento de Sistemas]  
-**Instituição:** [Faculdade de Tecnologia e Escola SENAI Antonio Adolpho Lobbe]  
+**Curso:** Técnico Desenvolvimento de Sistemas  
+**Instituição:** Faculdade de Tecnologia e Escola SENAI Antonio Adolpho Lobbe  
 **Ano:** 2025
 
 ---
