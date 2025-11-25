@@ -3,15 +3,6 @@
 **LingoLens** reconhece em tempo real o alfabeto manual da Língua Brasileira de Sinais (datilologia A–Z), incluindo as letras dinâmicas: **H · J · K · X · Y · Z**.
 
 ---
-
-## Guia do Alfabeto Libras (Datilologia)
-
-![Alfabeto Libras Completo](assets/alfabeto_libras.jpeg)
-
-*(Guia visual do alfabeto completo da Libras brasileira – alta qualidade para referência rápida)*
-
----
-
 ## Funcionalidades
 
 - Reconhecimento em tempo real das 26 letras  
