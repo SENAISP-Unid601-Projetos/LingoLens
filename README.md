@@ -1,6 +1,6 @@
 # LingoLens – Tradutor de Datilologia Libras em Tempo Real
 
-**LingoLens** reconhece em tempo real o alfabeto manual da Língua Brasileira de Sinais (datilologia A–Z), incluindo as letras dinâmicas: **H · J · K · X · Y · Z**.
+**LingoLens** reconhece em tempo real o alfabeto manual da Língua Brasileira de Sinais (datilologia A–Z), incluindo as letras com movimento: **H · J · K · X · Y · Z**.
 
 ---
 ## Funcionalidades
