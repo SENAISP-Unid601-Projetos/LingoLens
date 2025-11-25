@@ -19,7 +19,6 @@
 
 **Windows (mais fácil):**  
 Clique duas vezes em `start.bat` → instala dependências e abre o programa.
-=======
 - T: Treinar gesto que nao contem movimento
 - R: Reconhecer gestos
 - C: Limpar texto
