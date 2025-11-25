@@ -3,10 +3,10 @@ import mediapipe as mp
 import logging
 import numpy as np
 import time
-from Config import CONFIG, validate_gesture_type
-from Database_manager import DatabaseManager
-from Model_manager import ModelManager
-from Extract_landmarks import extract_landmarks
+from config.Config import CONFIG, validate_gesture_type
+from src.database.Database_manager import DatabaseManager
+from src.models.Model_manager import ModelManager
+from src.utils.Extract_landmarks import extract_landmarks
 from sklearn.utils import shuffle
 from collections import deque
 

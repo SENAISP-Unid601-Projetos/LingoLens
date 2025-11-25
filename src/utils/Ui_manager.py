@@ -1,6 +1,6 @@
 import cv2
 import time
-from Config import CONFIG
+from config.Config import CONFIG
 
 class UIManager:
     def __init__(self, ui_scale=1.0):

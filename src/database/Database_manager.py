@@ -2,15 +2,18 @@ import sqlite3
 import pickle
 import os
 import logging
+from config.Config import CONFIG
 
-log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
+log_dir = os.path.dirname(CONFIG["log_file"])
 os.makedirs(log_dir, exist_ok=True)
-# FORÇAR encoding utf-8 para evitar UnicodeEncodeError em Windows/terminals com cp1252
+
+# Configura o logging usando o mesmo arquivo da raiz
 logging.basicConfig(
-    filename=os.path.join(log_dir, "Gesture_recognizer.log"),
+    filename=CONFIG["log_file"],
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    encoding='utf-8'
+    encoding='utf-8',
+    force=True  # força reconfiguração mesmo se já existir
 )
 
 class DatabaseManager:

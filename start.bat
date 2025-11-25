@@ -17,7 +17,7 @@ if exist "%PROJECT_DIR%requirements.txt" (
 )
 
 REM Roda o Main.py usando o Python do venv
-python "%PROJECT_DIR%codigo\app\Main.py"
+python "%PROJECT_DIR%Main.py"
 
 REM Desativa o venv no final
 deactivate
