@@ -13,20 +13,53 @@
 - Arquitetura modular e profissional
 
 ---
+## Atalhos do programa
+
+- T: Treinar gesto 
+- C: Limpar texto
+- D: Excluir gesto
+- L: Listar letras salvas 
+- S: Salvar treino
+
+---
 
 ## Como Executar
 
 
 **Windows:**  
 Clique duas vezes em `start.bat` → instala dependências e abre o programa.
-- T: Treinar gesto 
-- C: Limpar texto
-- D: Excluir gesto
-- L: Listar letras salvas 
-- S: Salvar treino
+
 ---
 
 
 **Qualquer sistema:**  
 ```bash
 python main.py
+
+---
+
+## Autores
+
+**LingoLens – Tradutor de Datilologia Libras em Tempo Real**  
+Projeto desenvolvido pelo grupo:
+
+- **[Samuel Junior Casseta]**  
+- **[Gabriel da Silva Rodrigues dos Santos]**  
+- **[Abner Firmino Cerqueira]**
+- **[Carlos Gabriel Evangelista Silva]**  
+- **[Gustavo Ferreira Nunes]**  
+
+
+**Curso:** [Técnico Desenvolvimento de Sistemas]  
+**Instituição:** [Faculdade de Tecnologia e Escola SENAI Antonio Adolpho Lobbe]  
+**Ano:** 2025
+
+---
+
+## Licença
+
+Este projeto está licenciado sob a **GNU General Public License v3.0** (GPLv3).  
+Qualquer modificação ou distribuição deve manter a mesma licença e disponibilizar o código-fonte.
+
+Veja o arquivo completo em [`LICENSE`](LICENSE)  
+Mais informações: https://www.gnu.org/licenses/gpl-3.0.html
