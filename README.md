@@ -17,13 +17,13 @@
 ## Como Executar
 
 
-**Windows (mais fácil):**  
+**Windows:**  
 Clique duas vezes em `start.bat` → instala dependências e abre o programa.
 - T: Treinar gesto 
 - C: Limpar texto
 - D: Excluir gesto
 - L: Listar letras salvas 
-
+- S: Salvar treino
 ---
 
 
