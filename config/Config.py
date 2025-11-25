@@ -1,7 +1,9 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR agora aponta SEMPRE para a RAIZ do projeto (não importa onde o arquivo esteja)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Cria as pastas na RAIZ do projeto (nunca mais dentro de config/)
 os.makedirs(os.path.join(BASE_DIR, "logs"), exist_ok=True)
 os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
 
@@ -28,7 +30,7 @@ CONFIG = {
     "log_file": os.path.join(BASE_DIR, "logs", "Gesture_recognizer.log"),
     "train_data_dir": os.path.join(BASE_DIR, "data", "train"),
     "use_lstm_for_dynamic": True,
-    "dynamic_letters": ["H", "J", "K", "X", "Y", "Z"],  # DINÂMICAS"stable_threshold": 10,
+    "dynamic_letters": ["H", "J", "K", "X", "Y", "Z"],
     "motion_threshold": 0.004,
 }
 

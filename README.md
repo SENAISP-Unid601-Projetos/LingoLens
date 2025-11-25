@@ -1,24 +1,28 @@
-# 🖐️ LingoLens – Tradutor de Libras em Tempo Real
+# LingoLens – Tradutor de Datilologia Libras em Tempo Real
 
-O **LingoLens** é um tradutor de **Libras (alfabeto A-Z)** em tempo real. Ele captura gestos via câmera, processa os **landmarks da mão** e converte os sinais em texto, exibindo a letra formada diretamente na tela.
+**LingoLens** é um sistema de reconhecimento em tempo real da **datilologia da Língua Brasileira de Sinais (Libras)** — o alfabeto manual de A a Z.
 
----
-
-## ▶️ Como Executar
-
-Basta executar o arquivo **`start.bat`** no Windows.  
-
-O script faz automaticamente:
-
-- Verificação do Python e dependências necessárias.  
-- Download/instalação de bibliotecas que não estiverem presentes.  
-- Inicialização do aplicativo com interface gráfica para reconhecimento de gestos.  
+O projeto identifica com alta precisão tanto as letras estáticas quanto as seis letras que possuem movimento obrigatório na Libras: **H · J · K · X · Y · Z**.
 
 ---
 
-## ⌨️ Atalhos no Programa
+## Funcionalidades Principais
 
-- **Desenvolvendo...**
+- Reconhecimento em tempo real das 26 letras do alfabeto datilológico  
+- Suporte completo às letras dinâmicas (H, J, K, X, Y, Z) com coleta via toggle (tecla T)  
+- Treinamento interativo diretamente na câmera  
+- Persistência automática dos gestos (SQLite + pickle)  
+- Interface intuitiva com feedback visual em tempo real  
+- Arquitetura limpa e modular (pronta para expansão futura)
 
 ---
 
+## Como Executar
+
+### Windows (recomendado)
+Clique duas vezes no arquivo **`start.bat`**  
+→ Ele instala todas as dependências automaticamente e inicia o programa.
+
+### Qualquer sistema
+```bash
+python main.py
