@@ -71,6 +71,10 @@ class GestureApp:
             self.is_recording_dynamic = False
             self.recording_buffer = []
             self.last_toggle_time = 0
+            self.last_displayed_letter = None          
+            self.last_letter_change_time = 0           
+            self.min_time_between_same_letter = 1.5     
+            self.min_time_between_any_letter = 0.8
             self.toggle_debounce = 0.4
 
             # Estado geral
@@ -82,6 +86,11 @@ class GestureApp:
             self.new_gesture_data = []
             self.sample_count = 0
             self.is_input_active = False
+
+            # === BARRA DE PROGRESSO (adiciona aqui) ===
+            self.training_in_progress = False
+            self.training_progress = 0.0
+            self.training_status_text = ""
 
             # Mensagens
             self.message = ""
@@ -153,6 +162,9 @@ class GestureApp:
         variance = np.var(np.array(landmarks) - np.array(self.prev_landmarks)) if self.prev_landmarks is not None else 0
         self.prev_landmarks = landmarks.copy()
 
+        current_time = time.time()
+
+        # Detecção de movimento
         if variance > self.motion_threshold:
             self.motion_frames += 1
             self.hand_still_frames = 0
@@ -160,32 +172,49 @@ class GestureApp:
             self.hand_still_frames += 1
             self.motion_frames = max(0, self.motion_frames - 1)
 
+        # Início de gesto dinâmico
         if not self.in_motion and self.motion_frames > 6:
             self.in_motion = True
             self.sequence_buffer.clear()
 
+        # === RECONHECIMENTO DINÂMICO ===
         if self.in_motion and self.hand_still_frames > 10 and len(self.sequence_buffer) >= 38:
             seq = list(self.sequence_buffer)[-38:]
             pred, prob = self.model_manager.predict(seq)
             thresh_dyn = CONFIG.get("confidence_threshold_dynamic", 0.62)
             if pred and prob >= thresh_dyn:
-                self.current_word += pred
-                print(f"[DINÂMICO DETECTADO] {pred} ({prob:.2f})")
+                # Filtro: só adiciona se for diferente da última OU se passou tempo suficiente
+                if (self.last_displayed_letter != pred or 
+                    current_time - self.last_letter_change_time > self.min_time_between_same_letter):
+                    
+                    if current_time - self.last_letter_change_time > self.min_time_between_any_letter:
+                        self.current_word += pred
+                        self.last_displayed_letter = pred
+                        self.last_letter_change_time = current_time
+                        print(f"[DINÂMICO] {pred} ({prob:.2f})")
             self._reset_motion_state()
             return
 
+        # === RECONHECIMENTO ESTÁTICO ===
         if not self.in_motion and self.hand_still_frames > self.stable_threshold:
             frame_data = self.sequence_buffer[-1]
             pred, prob = self.model_manager.predict(frame_data)
             thresh_static = CONFIG.get("confidence_threshold_static", 0.78)
             if pred and prob >= thresh_static:
-                now = time.time()
-                if now - self.last_pred_time > self.word_pause_threshold:
-                    self.current_word += " "
-                self.current_word += pred
-                self.last_pred_time = now
-                print(f"[ESTÁTICO DETECTADO] {pred} ({prob:.2f})")
-                self.hand_still_frames = 0
+                # Filtro inteligente: evita repetição rápida da mesma letra
+                if (self.last_displayed_letter != pred or 
+                    current_time - self.last_letter_change_time > self.min_time_between_same_letter):
+                    
+                    if current_time - self.last_letter_change_time > self.min_time_between_any_letter:
+                        # Adiciona espaço só se não for a primeira letra após pausa
+                        if self.current_word and current_time - self.last_pred_time > self.word_pause_threshold:
+                            self.current_word += " "
+                        self.current_word += pred
+                        self.last_displayed_letter = pred
+                        self.last_letter_change_time = current_time
+                        self.last_pred_time = current_time
+                        print(f"[ESTÁTICO] {pred} ({prob:.2f})")
+                        self.hand_still_frames = 0  # evita repetição imediata
 
     def _reset_motion_state(self):
         self.in_motion = False
