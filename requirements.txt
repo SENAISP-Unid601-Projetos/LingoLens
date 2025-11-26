@@ -3,3 +3,5 @@ opencv-python==4.8.1.78
 mediapipe==0.10.21
 scikit-learn==1.7.2
 tensorflow>=2.14.0
+streamlit
+pyngrok
