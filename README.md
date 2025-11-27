@@ -20,6 +20,7 @@
 - D: Excluir gesto
 - L: Listar letras salvas 
 - S: Salvar treino
+- Q: Fechar programa
 
 ---
 
