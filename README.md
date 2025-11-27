@@ -25,12 +25,30 @@
 
 ## Como Executar
 
+### 1-Para qualquer pessoa (recomendado)
 
-**Windows:**  
-Clique duas vezes em `start.bat` → instala dependências e abre o programa.
+## Download do Executável (Windows)
 
----
+Link direto para o executável único (≈660 MB):  
+[LingoLens-TCC-2025.exe – Google Drive](https://drive.google.com/file/d/1Njw8qRXg81pQZ-laUqlxQykUj3GDAOT1/view?usp=sharing)
 
+Como usar:
+1. Clique no link acima
+2. Baixe o arquivo `LingoLens-TCC-2025.exe`
+3. Dê dois cliques → abre a câmera e já funciona!
+
+Funciona em qualquer Windows 10/11
+
+### 2-Para quem quer ver o código(Clonar repositório)
+→ Dê dois cliques em `start.bat` (cria tudo automaticamente)
+
+### 3- Forma Manual
+```bash
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python Main.py
+```
 
 **Qualquer sistema:**  
 
