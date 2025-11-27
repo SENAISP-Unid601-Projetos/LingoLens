@@ -149,9 +149,9 @@ class GestureApp:
                         self._handle_motion_state(landmarks, frame)
 
                 self._draw_ui(frame)
-                #key = cv2.waitKey(1) & 0xFF
-                #if self._handle_key(key):
-                #    break
+                key = cv2.waitKey(1) & 0xFF
+                if self._handle_key(key):
+                    break
 
         except Exception as e:
             logging.error(f"Erro: {e}")
@@ -277,7 +277,7 @@ class GestureApp:
         if self.show_letters and (time.time() - self.show_letters_time) < 4:
             cv2.putText(frame, self.letters_text, (10, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
 
-       # cv2.imshow("Libras 2025 - TOGGLE T + DELETE OK", frame)
+        cv2.imshow("Libras 2025 - TOGGLE T + DELETE OK", frame)
 
     # ===========================================================
     def _handle_key(self, key):
