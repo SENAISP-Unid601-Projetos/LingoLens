@@ -101,7 +101,7 @@ class GestureApp:
 
             # Força modo teste e predição mais rápida na web
             self.mode = "teste"
-            self.min_time_between_any_letter = 0.1   # era 1.0 → agora prediz muito mais rápido
+            self.min_time_between_any_letter = 0.30   # era 1.0 → agora prediz muito mais rápido
 
         except Exception as e:
             logging.error(f"Erro na inicialização: {e}")
