@@ -252,7 +252,7 @@ class GestureApp:
                 seq = self.recording_buffer[-38:]
                 self.new_gesture_data.append(seq)
                 self.sample_count += 1
-                print(f"[DINÂMICO] {self.sample_count} sequências coletadas → 38 frames")
+                print(f"[DINÂMICO] {self.sample_count} sequências coletadas -> 38 frames")
                 self.recording_buffer.clear()
                 self.is_recording_dynamic = False
 
