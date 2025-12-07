@@ -20,10 +20,15 @@
 - D: Excluir gesto
 - L: Listar letras salvas 
 - S: Salvar treino
+- Esc: Cancelar ação
 
 ---
 
 ## Como Executar
+
+ Necessário Python 3.12.0 estar instalado [`Python 3.12.0`](https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe)
+ 
+   Obs: Garantir que esta adicionado ao "Path", em variáveis do sistema.
 
 
 **Windows:**  
