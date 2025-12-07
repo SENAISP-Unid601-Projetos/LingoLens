@@ -21,27 +21,17 @@
 - L: Listar letras salvas 
 - S: Salvar treino
 - Q: Fechar programa
+- Esc: Cancelar ação
 
 ---
 
 ## Como Executar
 
-### 1-Para qualquer pessoa (recomendado)
-
-## Download do Executável (Windows)
-
-Link direto para o executável único (≈660 MB):  
-[LingoLens-TCC-2025.exe – Google Drive](https://drive.google.com/file/d/1Njw8qRXg81pQZ-laUqlxQykUj3GDAOT1/view?usp=sharing)
-
-Como usar:
-1. Clique no link acima
-2. Baixe o arquivo `LingoLens-TCC-2025.exe`
-3. Dê dois cliques → abre a câmera e já funciona!
-
+Necessário Python 3.12.0 estar instalado [`Python 3.12.0`](https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe) 
+    
+  Obs: Garantir que esta adicionado ao "Path", em variáveis do sistema.
+  
 Funciona em qualquer Windows 10/11
-
-### 2-Para quem quer ver o código(Clonar repositório)
-→ Dê dois cliques em `start.bat` (cria tudo automaticamente)
 
 ### 3- Forma Manual
 ```bash
