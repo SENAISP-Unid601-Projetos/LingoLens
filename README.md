@@ -27,19 +27,16 @@
 
 ## Como Executar
 
-Necessário Python 3.12.0 estar instalado [`Python 3.12.0`](https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe) 
-    
-  Obs: Garantir que esta adicionado ao "Path", em variáveis do sistema.
-  
-Funciona em qualquer Windows 10/11
+ Necessário Python 3.12.0 estar instalado [`Python 3.12.0`](https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe)
+ 
+   Obs: Garantir que esta adicionado ao "Path", em variáveis do sistema.
 
-### 3- Forma Manual
-```bash
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-python Main.py
-```
+
+**Windows:**  
+Clique duas vezes em `start.bat` → instala dependências e abre o programa.
+
+---
+
 
 **Qualquer sistema:**  
 
