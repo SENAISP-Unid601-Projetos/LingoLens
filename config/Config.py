@@ -31,7 +31,7 @@ CONFIG = {
     "train_data_dir": os.path.join(BASE_DIR, "data", "train"),
     "use_lstm_for_dynamic": True,
     "dynamic_letters": ["H", "J", "K", "X", "Y", "Z"],
-    "motion_threshold": 0.004,
+    "motion_threshold": 0.010,
 }
 
 if CONFIG["train_fps"] > CONFIG["target_fps"]:

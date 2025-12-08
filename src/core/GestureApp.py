@@ -99,6 +99,10 @@ class GestureApp:
             self.show_letters_time = 0
             self.letters_text = ""
 
+            # Força modo teste e predição mais rápida na web
+            self.mode = "teste"
+            self.min_time_between_any_letter = 0.30   # era 1.0 → agora prediz muito mais rápido
+
         except Exception as e:
             logging.error(f"Erro na inicialização: {e}")
             raise
@@ -248,7 +252,7 @@ class GestureApp:
                 seq = self.recording_buffer[-38:]
                 self.new_gesture_data.append(seq)
                 self.sample_count += 1
-                print(f"[DINÂMICO] {self.sample_count} sequências coletadas → 38 frames")
+                print(f"[DINÂMICO] {self.sample_count} sequências coletadas -> 38 frames")
                 self.recording_buffer.clear()
                 self.is_recording_dynamic = False
 

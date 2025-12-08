@@ -39,10 +39,3 @@ build/
 # Jupyter / IPython
 # -------------------------
 .ipynb_checkpoints/
-
-# -------------------------
-# Others
-# -------------------------
-#*.sqlite3
-#*.db
-#*.pyc
